@@ -1533,29 +1533,6 @@ useEffect(() => {
         setShowWelcomePopup(true);
     }
 
-<<<<<<< HEAD
-        // Track page view
-        trackEvent('page_view', { page_title: 'Wine Top 100' });
-
-        // Check for shared wine or list in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const sharedWineId = urlParams.get('wine');
-        const sharedTastedList = urlParams.get('tasted');
-
-        if (sharedWineId) {
-            const wine = wines.find(w => w.id === parseInt(sharedWineId));
-            if (wine) {
-                setSelectedWine(wine);
-                trackEvent('view_shared_wine', { wine_id: sharedWineId });
-            }
-        }
-
-        if (sharedTastedList) {
-            const wineIds = sharedTastedList.split(',');
-            trackEvent('view_shared_list', { wine_count: wineIds.length });
-        }
-    }, []);
-=======
     // Track page view
     trackEvent('page_view', { page_title: 'Wine Top 100' });
 
@@ -1590,7 +1567,6 @@ useEffect(() => {
         setShowTastingPanel(true);
     }
 }, []);
->>>>>>> a4f0abd (Describe what you changed)
 
     useEffect(() => {
         localStorage.setItem('tastingRecord', JSON.stringify(tastingRecord));
