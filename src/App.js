@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
 import './App.css';
-import winesData from './wines-2024.json';
+import winesData from './data/wines-2024.json';
 
 // Lazy Loading Image Component - SIMPLIFIED VERSION
 const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jpg' }) => {
