@@ -1393,129 +1393,16 @@ body {
 .share-list-button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.5rem;
   width: 100%;
   margin-top: 0.5rem;
-}
-  justify-content: space-between;
-}
-
-.ai-chat-header h3 {
-  color: white;
-  font-weight: 600;
-}
-
-.ai-close-btn {
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: white;
 }
 
 .icon-small {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-}
-
-.ai-chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: 400px;
-}
-
-.ai-message {
-  max-width: 80%;
-  word-wrap: break-word;
-}
-
-.ai-message.user {
-  align-self: flex-end;
-  background: #f0f0f0;
-  padding: 12px 16px;
-  border-radius: 18px 18px 4px 18px;
-}
-
-.ai-message.assistant {
-  align-self: flex-start;
-  background: #8c0004;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 18px 18px 18px 4px;
-}
-
-.ai-message p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.typing-indicator {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-}
-
-.typing-indicator span {
-  width: 8px;
-  height: 8px;
-  background: #cbd5e0;
-  border-radius: 50%;
-  animation: bounce 1s infinite;
-}
-
-.typing-indicator span:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.typing-indicator span:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.typing-indicator span:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-  }
-  50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
-}
-
-.ai-chat-input {
-  padding: 16px;
-  border-top: 1px solid #e5e5e5;
-}
-
-.ai-chat-input input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 24px;
-  outline: none;
-  font-size: 14px;
-}
-
-.ai-chat-input input:focus {
-  border-color: #8c0004;
-  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
-}
-
-.ai-chat-input input:disabled {
-  background: #f7fafc;
-  cursor: not-allowed;
 }
 
 /* Pagination */
