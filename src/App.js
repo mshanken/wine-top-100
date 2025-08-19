@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
 import './App.css';
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import winesData from './wines-2024.json';
 
 // Lazy Loading Image Component - SIMPLIFIED VERSION
@@ -1232,126 +1231,6 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }
     );
 };
 
-// AI Assistant Component
-const AIAssistant = ({ wines }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [input, setInput] = useState('');
-    const [isTyping, setIsTyping] = useState(false);
-    const messagesEndRef = useRef(null);
-    const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hello! I'm Dr. Vinny, your AI sommelier. How can I help you explore the Top 100 wines?" }
-    ]);
-
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, isTyping]);
-
-    const handleSend = async () => {
-        if (!input.trim() || isTyping) return;
-
-        const currentInput = input;
-        const userMessage = { role: 'user', content: currentInput };
-        const newMessages = [...messages, userMessage];
-        
-        setMessages(newMessages);
-        setInput('');
-        setIsTyping(true);
-
-        trackEvent('ai_chat_message', { message_type: 'user' });
-
-        const history = newMessages.slice(-6).map(msg => 
-            `${msg.role === 'user' ? 'User' : 'Dr. Vinny'}: ${msg.content}`
-        ).join('\n');
-
-        const fullPrompt = `You are an expert AI Wine Sommelier for Wine Spectator named Dr. Vinny. 
-        Your knowledge is strictly limited to the provided JSON data about the Top 100 wines. 
-        Answer the user's question based on this data. Be friendly, helpful, and concise.
-        
-        Here is the full list of wines: 
-        ${JSON.stringify(wines)}
-
-        Here is the recent conversation history for context:
-        ${history}
-        
-        Based on all this information, please provide a response to the user's latest message: "${currentInput}"`;
-
-        try {
-            const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GEMINI_API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-            
-            const result = await model.generateContent(fullPrompt);
-            const response = await result.response;
-            const aiText = response.text();
-
-            setMessages(prev => [...prev, { role: 'assistant', content: aiText }]);
-            trackEvent('ai_chat_message', { message_type: 'assistant' });
-        } catch (error) {
-            console.error("Gemini API Error:", error);
-            setMessages(prev => [...prev, { 
-                role: 'assistant', 
-                content: "I'm sorry, an error occurred with the API request. Please ensure your API key is valid and has no restrictions." 
-            }]);
-        } finally {
-            setIsTyping(false);
-        }
-    };
-
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') handleSend();
-    };
-
-    useEffect(() => {
-        if (isOpen) {
-            trackEvent('ai_assistant_opened');
-        }
-    }, [isOpen]);
-
-    return (
-        <Fragment>
-            <button onClick={() => setIsOpen(!isOpen)} className="ai-assistant-btn">
-                <img src={process.env.PUBLIC_URL + '/vinny.png'} alt="Dr. Vinny AI Sommelier" />
-            </button>
-            {isOpen && (
-                <div className="ai-chat-window">
-                    <div className="ai-chat-header">
-                        <h3>Dr. Vinny</h3>
-                        <button onClick={() => setIsOpen(false)} className="ai-close-btn">
-                            <Icons.X className="icon-small" />
-                        </button>
-                    </div>
-                    <div className="ai-chat-messages">
-                        {messages.map((message, index) => (
-                            <div key={index} className={`ai-message ${message.role}`}>
-                                <p dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br />') }} />
-                            </div>
-                        ))}
-                        {isTyping && (
-                            <div className="ai-message assistant">
-                                <div className="typing-indicator">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                            </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
-                    <div className="ai-chat-input">
-                        <input 
-                            type="text" 
-                            placeholder="Ask about pairings, regions, etc..." 
-                            value={input} 
-                            onChange={(e) => setInput(e.target.value)} 
-                            onKeyPress={handleKeyPress} 
-                            disabled={isTyping} 
-                        />
-                    </div>
-                </div>
-            )}
-        </Fragment>
-    );
-};
-
 const Navigation = () => {
     const [scrolled, setScrolled] = useState(false);
     
@@ -1722,7 +1601,6 @@ useEffect(() => {
                 isOpen={showComparisonModal}
                 onClose={() => setShowComparisonModal(false)}
             />
-            <AIAssistant wines={wines} />
             <WelcomePopup 
                 isOpen={showWelcomePopup} 
                 onClose={() => setShowWelcomePopup(false)} 
