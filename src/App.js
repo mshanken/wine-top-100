@@ -45,8 +45,8 @@ const trackWineView = (wine) => {
         value: wine.price,
         items: [{
             item_id: wine.id,
-            item_name: wine.name,
-            item_category: wine.type,
+            item_name: wine.wine_full,
+            item_category: wine.color,
             price: wine.price,
             quantity: 1
         }]
@@ -56,7 +56,7 @@ const trackWineView = (wine) => {
 const trackTastingAction = (wine, action) => {
     trackEvent('wine_tasting_action', {
         wine_id: wine.id,
-        wine_name: wine.name,
+        wine_name: wine.wine_full,
         action: action,
         wine_price: wine.price,
         wine_score: wine.score
@@ -202,11 +202,11 @@ const ExportButton = ({ tastingRecord, wines }) => {
         const data = Object.entries(tastingRecord).map(([wineId, status]) => {
             const wine = wines.find(w => w.id === parseInt(wineId));
             return {
-                Rank: wine.rank,
-                Wine: wine.name,
-                Winery: wine.winery,
+                Rank: wine.top100_rank ? parseInt(wine.top100_rank, 10) : 0,
+                Wine: wine.wine_full,
+                Winery: wine.winery_full,
                 Vintage: wine.vintage,
-                Type: wine.type,
+                Type: wine.color,
                 Region: wine.region,
                 Country: wine.country,
                 Status: status === 'tasted' ? 'Tasted' : 'Want to Taste',
@@ -297,7 +297,7 @@ const ShareButton = ({ wine }) => {
     const [copied, setCopied] = useState(false);
 
     const shareUrl = `${window.location.origin}${window.location.pathname}?wine=${wine.id}`;
-    const shareText = `Check out this amazing wine: ${wine.name} from ${wine.winery} (${wine.vintage}) - Rated ${wine.score} points!`;
+    const shareText = `Check out this amazing wine: ${wine.wine_full} from ${wine.winery_full} (${wine.vintage}) - Rated ${wine.score} points!`;
 
     const copyToClipboard = async () => {
         try {
@@ -619,13 +619,13 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                 {tastedWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
                                         <img 
-                                            src={wine.image || '/placeholder-wine.jpg'} 
-                                            alt={wine.name}
+                                            src={wine.label_url || '/placeholder-wine.jpg'} 
+                                            alt={wine.wine_full}
                                             className="mini-wine-image"
                                         />
                                         <div className="mini-wine-info">
-                                            <h5>{wine.name}</h5>
-                                            <p>{wine.winery}</p>
+                                            <h5>{wine.wine_full}</h5>
+                                            <p>{wine.winery_full}</p>
                                             <span className="mini-wine-price">${wine.price}</span>
                                         </div>
                                         <button 
@@ -649,13 +649,13 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                 {wantToTasteWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
                                         <img 
-                                            src={wine.image || '/placeholder-wine.jpg'} 
-                                            alt={wine.name}
+                                            src={wine.label_url || '/placeholder-wine.jpg'} 
+                                            alt={wine.wine_full}
                                             className="mini-wine-image"
                                         />
                                         <div className="mini-wine-info">
-                                            <h5>{wine.name}</h5>
-                                            <p>{wine.winery}</p>
+                                            <h5>{wine.wine_full}</h5>
+                                            <p>{wine.winery_full}</p>
                                             <span className="mini-wine-price">${wine.price}</span>
                                         </div>
                                         <button 
@@ -712,9 +712,9 @@ const ComparisonBar = ({ compareWines, onRemove, onCompare }) => {
                 <div className="comparison-wines">
                     {compareWines.map(wine => (
                         <div key={wine.id} className="comparison-wine-item">
-                            <img src={wine.image || '/placeholder-wine.jpg'} alt={wine.name} />
+                            <img src={wine.label_url || '/placeholder-wine.jpg'} alt={wine.wine_full} />
                             <div className="comparison-wine-info">
-                                <span className="wine-name">{wine.name}</span>
+                                <span className="wine-name">{wine.wine_full}</span>
                                 <span className="wine-vintage">{wine.vintage}</span>
                             </div>
                             <button 
@@ -755,56 +755,64 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
                 </div>
 
                 <div className="comparison-grid">
-                    {wines.map(wine => (
-                        <div key={wine.id} className="comparison-column">
-                            <div className="comparison-wine-header">
-                                <img 
-                                    src={wine.image || '/placeholder-wine.jpg'} 
-                                    alt={wine.name}
-                                    className="comparison-wine-image"
-                                />
-                                <h3>{wine.name}</h3>
-                                <p className="comparison-winery">{wine.winery}</p>
-                            </div>
+                    {wines.map(wine => {
+                        // Extract rank from the top100_rank property or use the id as fallback
+                        const rank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
+                        
+                        // Extract price and score with fallbacks
+                        const price = wine.price || 0;
+                        const score = wine.score || 0;
+                        
+                        return (
+                            <div key={wine.id} className="comparison-column">
+                                <div className="comparison-wine-header">
+                                    <img 
+                                        src={wine.label_url || '/placeholder-wine.jpg'} 
+                                        alt={wine.wine_full}
+                                        className="comparison-wine-image"
+                                    />
+                                    <h3>{wine.wine_full}</h3>
+                                    <p className="comparison-winery">{wine.winery_full}</p>
+                                </div>
 
-                            <div className="comparison-details">
-                                <div className="detail-row">
-                                    <span className="detail-label">Rank</span>
-                                    <span className="detail-value">#{wine.rank}</span>
+                                <div className="comparison-details">
+                                    <div className="detail-row">
+                                        <span className="detail-label">Rank</span>
+                                        <span className="detail-value">#{rank}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Score</span>
+                                        <span className="detail-value score">{score} pts</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Price</span>
+                                        <span className="detail-value price">${price}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Type</span>
+                                        <span className="detail-value">{wine.color}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Vintage</span>
+                                        <span className="detail-value">{wine.vintage}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Region</span>
+                                        <span className="detail-value">{wine.region || 'Unknown Region'}</span>
+                                    </div>
+                                    <div className="detail-row">
+                                        <span className="detail-label">Country</span>
+                                        <span className="detail-value">{wine.country}</span>
+                                    </div>
                                 </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Score</span>
-                                    <span className="detail-value score">{wine.score} pts</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Price</span>
-                                    <span className="detail-value price">${wine.price}</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Type</span>
-                                    <span className="detail-value">{wine.type}</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Vintage</span>
-                                    <span className="detail-value">{wine.vintage}</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Region</span>
-                                    <span className="detail-value">{wine.region}</span>
-                                </div>
-                                <div className="detail-row">
-                                    <span className="detail-label">Country</span>
-                                    <span className="detail-value">{wine.country}</span>
-                                </div>
-                            </div>
 
-                            <div className="comparison-description">
-                                <h4>Tasting Notes</h4>
-                                <p>{wine.description}</p>
+                                <div className="comparison-description">
+                                    <h4>Tasting Notes</h4>
+                                    <p>{wine.note || 'No tasting note available.'}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        );
+                    })}                 </div>
             </div>
         </div>
     );
@@ -853,13 +861,11 @@ const EnhancedSearch = ({ wines, onSearch, filters }) => {
         const searchLower = term.toLowerCase();
         return wines.filter(wine => {
             return (
-                wine.name.toLowerCase().includes(searchLower) ||
-                wine.winery.toLowerCase().includes(searchLower) ||
-                wine.region.toLowerCase().includes(searchLower) ||
-                wine.country.toLowerCase().includes(searchLower) ||
-                wine.type.toLowerCase().includes(searchLower) ||
-                wine.vintage.toString().includes(searchLower) ||
-                wine.price.toString().includes(searchLower)
+                (wine.wine_full && wine.wine_full.toLowerCase().includes(searchLower)) ||
+                (wine.winery_full && wine.winery_full.toLowerCase().includes(searchLower)) ||
+                (wine.region && wine.region.toLowerCase().includes(searchLower)) ||
+                (wine.country && wine.country.toLowerCase().includes(searchLower)) ||
+                (wine.vintage && wine.vintage.toString().includes(searchLower))
             );
         }).slice(0, 8); // Limit to 8 suggestions
     };
@@ -887,11 +893,11 @@ const EnhancedSearch = ({ wines, onSearch, filters }) => {
 
     // Handle suggestion click
     const handleSuggestionClick = (wine) => {
-        setSearchTerm(wine.name);
+        setSearchTerm(wine.wine_full);
         setShowSuggestions(false);
-        saveRecentSearch(wine.name);
-        onSearch({ ...filters, search: wine.name });
-        trackEvent('search_suggestion_clicked', { wine_id: wine.id, wine_name: wine.name });
+        saveRecentSearch(wine.wine_full);
+        onSearch({ ...filters, search: wine.wine_full });
+        trackEvent('search_suggestion_clicked', { wine_id: wine.id, wine_name: wine.wine_full });
     };
 
     // Handle recent search click
@@ -1005,14 +1011,14 @@ const EnhancedSearch = ({ wines, onSearch, filters }) => {
                                     onMouseEnter={() => setSelectedIndex(index)}
                                 >
                                     <img 
-                                        src={wine.image || '/placeholder-wine.jpg'} 
-                                        alt={wine.name}
+                                        src={wine.label_url || '/placeholder-wine.jpg'} 
+                                        alt={wine.wine_full}
                                         className="suggestion-image"
                                     />
                                     <div className="suggestion-info">
-                                        <div className="suggestion-name">{wine.name}</div>
+                                        <div className="suggestion-name">{wine.wine_full}</div>
                                         <div className="suggestion-details">
-                                            {wine.winery} • {wine.vintage} • {wine.region}
+                                            {wine.winery_full} • {wine.vintage} • {wine.region || 'Unknown Region'}
                                         </div>
                                         <div className="suggestion-meta">
                                             <span className="suggestion-price">${wine.price}</span>
@@ -1066,6 +1072,13 @@ const Pagination = ({ winesPerPage, totalWines, paginate, currentPage }) => {
 
 const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, onCompareToggle, isCondensed }) => {
     const isInComparison = compareWines.some(w => w.id === wine.id);
+    
+    // Extract rank from the top100_rank property or use the id as fallback
+    const rank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
+    
+    // Extract price and score with fallbacks
+    const price = wine.price || 0;
+    const score = wine.score || 0;
 
     const getRankColor = (rank) => {
         if (rank === 1) return 'rank-gold';
@@ -1086,13 +1099,13 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
     if (isCondensed) {
         return (
             <div className="wine-card-condensed">
-                <div className={`wine-rank-condensed ${getRankColor(wine.rank)}`}>{wine.rank}</div>
+                <div className={`wine-rank-condensed ${getRankColor(rank)}`}>{rank}</div>
                 <div className="wine-image-condensed" onClick={() => onSelect(wine)}>
-                    <LazyImage src={wine.image} alt={wine.name} className="wine-bottle-image" />
+                    <LazyImage src={wine.label_url || ''} alt={wine.wine_full} className="wine-bottle-image" />
                 </div>
                 <div className="wine-info-condensed" onClick={() => onSelect(wine)}>
-                    <h3>{wine.name}</h3>
-                    <p>{wine.winery}</p>
+                    <h3>{wine.wine_full}</h3>
+                    <p>{wine.winery_full}</p>
                     <div className="tasting-options-condensed">
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
@@ -1100,8 +1113,8 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
                 </div>
                 <div className="wine-details-condensed">
                     <div className="price-score-row">
-                        <span className="wine-price">${wine.price}</span>
-                        <span className="wine-score-condensed">{wine.score} pts</span>
+                        <span className="wine-price">${price}</span>
+                        <span className="wine-score-condensed">{score} pts</span>
                     </div>
                     <button
                         className={`compare-btn-small ${isInComparison ? 'active' : ''}`}
@@ -1117,9 +1130,9 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
 
     return (
         <div className="wine-card-modern">
-            <div className={`wine-rank ${getRankColor(wine.rank)}`}>{wine.rank}</div>
+            <div className={`wine-rank ${getRankColor(rank)}`}>{rank}</div>
             <div className="wine-score-badge">
-                <span className="score-value">{wine.score}</span>
+                <span className="score-value">{score}</span>
                 <span className="score-label">points</span>
             </div>
             {isInComparison && (
@@ -1128,10 +1141,10 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
                 </div>
             )}
             <div className="wine-image" onClick={() => onSelect(wine)}>
-                {wine.image ? (
+                {wine.label_url ? (
                     <LazyImage 
-                        src={wine.image} 
-                        alt={`Bottle of ${wine.name}`} 
+                        src={wine.label_url} 
+                        alt={`Bottle of ${wine.wine_full}`} 
                         className="wine-bottle-image" 
                     />
                 ) : (
@@ -1140,21 +1153,21 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
             </div>
             <div className="wine-content">
                 <div>
-                    <h3 onClick={() => onSelect(wine)}>{wine.name}</h3>
-                    <p className="wine-winery" onClick={() => onSelect(wine)}>{wine.winery}</p>
+                    <h3 onClick={() => onSelect(wine)}>{wine.wine_full}</h3>
+                    <p className="wine-winery" onClick={() => onSelect(wine)}>{wine.winery_full}</p>
                 </div>
                 <div className="wine-metadata">
                     <div className="wine-tags">
                         <span className="wine-tag">{wine.vintage}</span>
-                        <span className={`wine-tag ${getTypeColor(wine.type)}`}>{wine.type}</span>
-                        <span className="wine-tag">{wine.region}</span>
+                        <span className={`wine-tag ${getTypeColor(wine.color)}`}>{wine.color}</span>
+                        <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
                     </div>
                     <div className="tasting-options">
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                     </div>
                     <div className="wine-footer">
-                        <span className="wine-price-large">${wine.price}</span>
+                        <span className="wine-price-large">${price}</span>
                         <div className="wine-actions">
                             <button className="btn-modern btn-small" onClick={() => onSelect(wine)}>View Details</button>
                             <button 
@@ -1182,6 +1195,13 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }
     }, [isOpen, wine]);
 
     if (!isOpen || !wine) return null;
+    
+    // Extract rank from the top100_rank property or use the id as fallback
+    const rank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
+    
+    // Extract price and score with fallbacks
+    const price = wine.price || 0;
+    const score = wine.score || 0;
 
     return (
         <div className="modal-overlay">
@@ -1192,29 +1212,29 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }
                 </button>
                 <div className="wine-detail-grid">
                     <div className="wine-detail-image">
-                        {wine.image ? (
-                            <img src={wine.image} alt={`Bottle of ${wine.name}`} />
+                        {wine.label_url ? (
+                            <img src={wine.label_url} alt={`Bottle of ${wine.wine_full}`} />
                         ) : (
                             <Icons.Wine className="wine-placeholder-large" />
                         )}
                     </div>
                     <div className="wine-detail-info">
-                        <h2>{wine.name}</h2>
-                        <p className="wine-subtitle">{wine.winery} • {wine.vintage}</p>
+                        <h2>{wine.wine_full}</h2>
+                        <p className="wine-subtitle">{wine.winery_full} • {wine.vintage}</p>
                         <div className="wine-tags">
                             <span className="wine-tag">{wine.country}</span>
-                            <span className="wine-tag">{wine.region}</span>
-                            <span className="wine-tag type-tag">{wine.type}</span>
+                            <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
+                            <span className="wine-tag type-tag">{wine.color}</span>
                         </div>
                         <h4>Tasting Note</h4>
-                        <p className="wine-description">{wine.description}</p>
+                        <p className="wine-description">{wine.note || 'No tasting note available.'}</p>
                         <div className="tasting-section">
                             <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
                             <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                         </div>
                         <div className="wine-detail-footer">
-                            <span className="wine-price-xl">${wine.price}</span>
-                            <span className="wine-score-xl">{wine.score} Points</span>
+                            <span className="wine-price-xl">${price}</span>
+                            <span className="wine-score-xl">{score} Points</span>
                         </div>
                         
                         {/* Add Share Button */}
@@ -1224,7 +1244,7 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }
                 
                 {/* Add Personal Notes Section */}
                 <div className="wine-detail-notes">
-                    <PersonalNotes wineId={wine.id} wineName={wine.name} />
+                    <PersonalNotes wineId={wine.id} wineName={wine.wine_full} />
                 </div>
             </div>
         </div>
@@ -1277,7 +1297,7 @@ const Hero = () => (
 );
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange }) => {
-    const allTypes = [...new Set(wines.map(wine => wine.type))].filter(Boolean);
+    const allTypes = [...new Set(wines.map(wine => wine.color))].filter(Boolean);
     const allCountries = [...new Set(wines.map(wine => wine.country))].filter(Boolean);
     
     const handleFilterChange = (filterType, value) => {
@@ -1379,13 +1399,52 @@ const Footer = () => (
                 </div>
             </div>
             <div className="footer-bottom">
-                <p>© {new Date().getFullYear()} Wine Spectator. All rights reserved.</p>
+                <p> 2024 Wine Spectator. All rights reserved.</p>
             </div>
         </div>
     </footer>
 );
 
 const App = () => {
+    const [selectedYear, setSelectedYear] = useState(2024);
+    const [wines, setWines] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    
+    // Load wine data when selectedYear changes
+    useEffect(() => {
+        const loadWineData = async () => {
+            try {
+                setIsLoading(true);
+                // Use dynamic import for loading from src/data
+                let wineData;
+                if (selectedYear === 2024) {
+                    // For 2024, we already have the data imported at the top
+                    wineData = winesData;
+                } else {
+                    try {
+                        // For other years, try dynamic import
+                        const module = await import(`./data/wines-${selectedYear}.json`);
+                        wineData = module.default;
+                    } catch (importError) {
+                        console.error(`Failed to import data for ${selectedYear}:`, importError);
+                        // Fallback to 2024 data if the selected year's data doesn't exist
+                        wineData = winesData;
+                    }
+                }
+                
+                // Set the wine data directly
+                setWines(wineData);
+            } catch (error) {
+                console.error('Error loading wine data:', error);
+                setWines([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        loadWineData();
+    }, [selectedYear]);
+
     const [selectedWine, setSelectedWine] = useState(null);
     const [filters, setFilters] = useState({ search: '', type: 'All', country: 'All' });
     const [isCondensed, setIsCondensed] = useState(false);
@@ -1404,48 +1463,47 @@ const App = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const winesPerPage = 12;
 
-// Initialize
-useEffect(() => {
-    // Check if welcome popup should be shown
-    const hidePopup = localStorage.getItem('hideWelcomePopup');
-    if (!hidePopup) {
-        setShowWelcomePopup(true);
-    }
-
-    // Track page view
-    trackEvent('page_view', { page_title: 'Wine Top 100' });
-
-    // Check for shared wine or list in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const sharedWineId = urlParams.get('wine');
-    const sharedTastedList = urlParams.get('tasted');
-
-    if (sharedWineId) {
-        // Open specific wine
-        const wine = wines.find(w => w.id === parseInt(sharedWineId));
-        if (wine) {
-            setSelectedWine(wine);
-            trackEvent('view_shared_wine', { wine_id: sharedWineId });
+    useEffect(() => {
+        // Check if welcome popup should be shown
+        const hidePopup = localStorage.getItem('hideWelcomePopup');
+        if (!hidePopup) {
+            setShowWelcomePopup(true);
         }
-    }
 
-    if (sharedTastedList) {
-        // Import shared tasting list
-        const wineIds = sharedTastedList.split(',');
-        const newTastingRecord = {};
-        wineIds.forEach(id => {
-            newTastingRecord[id] = 'tasted';
-        });
-        setTastingRecord(prevRecord => ({...prevRecord, ...newTastingRecord}));
-        trackEvent('view_shared_list', { wine_count: wineIds.length });
-        
-        // Show a notification
-        alert(`Imported ${wineIds.length} wines to your tasting list!`);
-        
-        // Open the tasting panel to show the imported wines
-        setShowTastingPanel(true);
-    }
-}, []);
+        // Track page view
+        trackEvent('page_view', { page_title: 'Wine Top 100' });
+
+        // Check for shared wine or list in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedWineId = urlParams.get('wine');
+        const sharedTastedList = urlParams.get('tasted');
+
+        if (sharedWineId) {
+            // Open specific wine
+            const wine = wines.find(w => w.id === parseInt(sharedWineId));
+            if (wine) {
+                setSelectedWine(wine);
+                trackEvent('view_shared_wine', { wine_id: sharedWineId });
+            }
+        }
+
+        if (sharedTastedList) {
+            // Import shared tasting list
+            const wineIds = sharedTastedList.split(',');
+            const newTastingRecord = {};
+            wineIds.forEach(id => {
+                newTastingRecord[id] = 'tasted';
+            });
+            setTastingRecord(prevRecord => ({...prevRecord, ...newTastingRecord}));
+            trackEvent('view_shared_list', { wine_count: wineIds.length });
+            
+            // Show a notification
+            alert(`Imported ${wineIds.length} wines to your tasting list!`);
+            
+            // Open the tasting panel to show the imported wines
+            setShowTastingPanel(true);
+        }
+    }, [wines]);
 
     useEffect(() => {
         localStorage.setItem('tastingRecord', JSON.stringify(tastingRecord));
@@ -1476,10 +1534,10 @@ useEffect(() => {
         setCompareWines(prev => {
             const isInList = prev.some(w => w.id === wine.id);
             if (isInList) {
-                trackEvent('remove_from_comparison', { wine_id: wine.id, wine_name: wine.name });
+                trackEvent('remove_from_comparison', { wine_id: wine.id, wine_name: wine.wine_full });
                 return prev.filter(w => w.id !== wine.id);
             } else if (prev.length < 3) {
-                trackEvent('add_to_comparison', { wine_id: wine.id, wine_name: wine.name });
+                trackEvent('add_to_comparison', { wine_id: wine.id, wine_name: wine.wine_full });
                 return [...prev, wine];
             }
             return prev;
@@ -1502,13 +1560,13 @@ useEffect(() => {
     const filteredWines = useMemo(() => {
         return wines.filter(wine => {
             const matchesSearch = !filters.search || 
-                wine.name.toLowerCase().includes(filters.search.toLowerCase()) || 
-                (wine.winery && wine.winery.toLowerCase().includes(filters.search.toLowerCase()));
-            const matchesType = filters.type === 'All' || wine.type === filters.type;
+                wine.wine_full.toLowerCase().includes(filters.search.toLowerCase()) || 
+                (wine.winery_full && wine.winery_full.toLowerCase().includes(filters.search.toLowerCase()));
+            const matchesType = filters.type === 'All' || wine.color === filters.type;
             const matchesCountry = filters.country === 'All' || wine.country === filters.country;
             return matchesSearch && matchesType && matchesCountry;
         });
-    }, [filters]);
+    }, [filters, wines]);
 
     const indexOfLastWine = currentPage * winesPerPage;
     const indexOfFirstWine = indexOfLastWine - winesPerPage;
@@ -1531,9 +1589,22 @@ useEffect(() => {
             <main>
                 <section id="wines" className="wines-section">
                     <div className="container">
-                        <div className="section-header reveal">
-                            <h2>The Collection</h2>
-                            <p>Discover extraordinary wines from renowned vineyards</p>
+                        <div className="section-header">
+                            <h2>Wine Explorer</h2>
+                            <p>Discover the finest wines from around the world</p>
+                            <div className="year-selector-container">
+                                <select 
+                                    value={selectedYear}
+                                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                    className="year-selector"
+                                >
+                                    {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
+                                        <option key={year} value={year}>
+                                            {year} Vintage
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                         <FilterBar 
                             filters={filters} 
@@ -1542,36 +1613,43 @@ useEffect(() => {
                             onViewChange={setIsCondensed} 
                         />
                         <div id="wine-list-container" className="wine-list-container">
-                            {isCondensed ? (
-                                <div className="wine-list-condensed">
-                                    {currentWines.map((wine) => (
-                                        <WineCard 
-                                            key={wine.id} 
-                                            wine={wine} 
-                                            onSelect={setSelectedWine} 
-                                            isCondensed={true} 
-                                            tastingRecord={tastingRecord} 
-                                            onTasteChange={handleTasteChange}
-                                            compareWines={compareWines}
-                                            onCompareToggle={handleCompareToggle}
-                                        />
-                                    ))}
+                            {isLoading ? (
+                                <div className="loading-container">
+                                    <div className="spinner"></div>
+                                    <p>Loading {selectedYear} vintage...</p>
                                 </div>
                             ) : (
-                                <div className="wine-grid">
-                                    {currentWines.map((wine) => (
-                                        <WineCard 
-                                            key={wine.id} 
-                                            wine={wine} 
-                                            onSelect={setSelectedWine} 
-                                            isCondensed={false} 
-                                            tastingRecord={tastingRecord} 
-                                            onTasteChange={handleTasteChange}
-                                            compareWines={compareWines}
-                                            onCompareToggle={handleCompareToggle}
-                                        />
-                                    ))}
-                                </div>
+                                isCondensed ? (
+                                    <div className="wine-list-condensed">
+                                        {currentWines.map((wine) => (
+                                            <WineCard 
+                                                key={wine.id} 
+                                                wine={wine} 
+                                                onSelect={setSelectedWine} 
+                                                isCondensed={true} 
+                                                tastingRecord={tastingRecord} 
+                                                onTasteChange={handleTasteChange}
+                                                compareWines={compareWines}
+                                                onCompareToggle={handleCompareToggle}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="wine-grid">
+                                        {currentWines.map((wine) => (
+                                            <WineCard 
+                                                key={wine.id} 
+                                                wine={wine} 
+                                                onSelect={setSelectedWine} 
+                                                isCondensed={false} 
+                                                tastingRecord={tastingRecord} 
+                                                onTasteChange={handleTasteChange}
+                                                compareWines={compareWines}
+                                                onCompareToggle={handleCompareToggle}
+                                            />
+                                        ))}
+                                    </div>
+                                )
                             )}
                         </div>
                         <Pagination 

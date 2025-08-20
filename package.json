@@ -2,7 +2,7 @@
   "name": "wine-top-100",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mcapace.github.io/wine-top-100",
+  "homepage": "/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -25,7 +25,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy-github": "gh-pages -d build",
+    "deploy:staging": "aws s3 sync build/ s3://staging-top100list.winespectator.com --delete",
+    "deploy:production": "aws s3 sync build/ s3://top100list.winespectator.com --delete"
   },
   "eslintConfig": {
     "extends": [
