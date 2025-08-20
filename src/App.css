@@ -744,23 +744,29 @@ body {
   text-transform: uppercase;
 }
 
-.rank-gold {
+/* Wine color-based rank badges */
+.rank-red {
+  background: #8c0004;
+  color: white;
+}
+
+.rank-white {
   background: #f6e05e;
   color: black;
 }
 
-.rank-silver {
-  background: #e2e8f0;
+.rank-rose {
+  background: #ff9a9e;
   color: black;
 }
 
-.rank-bronze {
-  background: #ed8936;
-  color: white;
+.rank-sparkling {
+  background: #ffeaa7;
+  color: black;
 }
 
 .rank-default {
-  background: #8c0004;
+  background: #718096;
   color: white;
 }
 

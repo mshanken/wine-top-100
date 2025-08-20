@@ -1080,10 +1080,12 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
     const price = wine.price || 0;
     const score = wine.score || 0;
 
-    const getRankColor = (rank) => {
-        if (rank === 1) return 'rank-gold';
-        if (rank === 2) return 'rank-silver';
-        if (rank === 3) return 'rank-bronze';
+    const getRankColor = () => {
+        const color = wine.color ? wine.color.toLowerCase() : '';
+        if (color === 'red') return 'rank-red';
+        if (color === 'white') return 'rank-white';
+        if (color === 'rosé' || color === 'rose') return 'rank-rose';
+        if (color === 'sparkling') return 'rank-sparkling';
         return 'rank-default';
     };
 
@@ -1099,7 +1101,7 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
     if (isCondensed) {
         return (
             <div className="wine-card-condensed">
-                <div className={`wine-rank-condensed ${getRankColor(rank)}`}>{rank}</div>
+                <div className={`wine-rank-condensed ${getRankColor()}`}>{rank}</div>
                 <div className="wine-image-condensed" onClick={() => onSelect(wine)}>
                     <LazyImage src={wine.label_url || ''} alt={wine.wine_full} className="wine-bottle-image" />
                 </div>
@@ -1130,7 +1132,7 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
 
     return (
         <div className="wine-card-modern">
-            <div className={`wine-rank ${getRankColor(rank)}`}>{rank}</div>
+            <div className={`wine-rank ${getRankColor()}`}>{rank}</div>
             <div className="wine-score-badge">
                 <span className="score-value">{score}</span>
                 <span className="score-label">points</span>
