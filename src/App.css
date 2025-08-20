@@ -765,6 +765,11 @@ body {
   color: black;
 }
 
+.rank-dessert {
+  background: #9b5de5;
+  color: white;
+}
+
 .rank-default {
   background: #718096;
   color: white;

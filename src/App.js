@@ -1084,8 +1084,9 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
         const color = wine.color ? wine.color.toLowerCase() : '';
         if (color === 'red') return 'rank-red';
         if (color === 'white') return 'rank-white';
-        if (color === 'rosé' || color === 'rose') return 'rank-rose';
-        if (color === 'sparkling') return 'rank-sparkling';
+        if (color === 'rosé' || color === 'rose' || color === 'blush') return 'rank-rose';
+        if (color === 'sparkling' || color === 'champagne') return 'rank-sparkling';
+        if (color === 'dessert') return 'rank-dessert';
         return 'rank-default';
     };
 
@@ -1197,9 +1198,6 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }
     }, [isOpen, wine]);
 
     if (!isOpen || !wine) return null;
-    
-    // Extract rank from the top100_rank property or use the id as fallback
-    const rank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
     
     // Extract price and score with fallbacks
     const price = wine.price || 0;
@@ -1437,8 +1435,33 @@ const App = () => {
                     }
                 }
                 
-                // Set the wine data directly
-                setWines(wineData);
+                // Normalize wine data before setting it
+                const normalizedWineData = wineData.map(wine => {
+                    // Create a copy to avoid mutating the original data
+                    const normalizedWine = { ...wine };
+                    
+                    // Normalize wine color/type
+                    if (normalizedWine.color) {
+                        const color = normalizedWine.color.toLowerCase();
+                        // Standardize color names
+                        if (color === 'blush' || color.includes('rosé') || color.includes('rose')) {
+                            normalizedWine.color = 'Rosé';
+                        } else if (color.includes('red')) {
+                            normalizedWine.color = 'Red';
+                        } else if (color.includes('white')) {
+                            normalizedWine.color = 'White';
+                        } else if (color.includes('sparkling') || color.includes('champagne')) {
+                            normalizedWine.color = 'Sparkling';
+                        } else if (color.includes('dessert')) {
+                            normalizedWine.color = 'Dessert';
+                        }
+                    }
+                    
+                    return normalizedWine;
+                });
+                
+                // Set normalized wines data and stop loading
+                setWines(normalizedWineData);
             } catch (error) {
                 console.error('Error loading wine data:', error);
                 setWines([]);
@@ -1600,7 +1623,11 @@ const App = () => {
                             <div className="year-selector-container">
                                 <select 
                                     value={selectedYear}
-                                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                                    onChange={(e) => {
+                                        setSelectedYear(parseInt(e.target.value));
+                                        // Reset all filters to prevent empty results when switching years
+                                        setFilters({ search: '', type: 'All', country: 'All' });
+                                    }}
                                     className="year-selector"
                                 >
                                     {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
