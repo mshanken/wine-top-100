@@ -1282,9 +1282,12 @@ const Navigation = () => {
 const Hero = () => (
     <section className="hero-modern">
         <div className="hero-overlay" />
-        <video autoPlay loop muted playsInline className="hero-video">
-            <source src={process.env.PUBLIC_URL + '/corks.mp4'} type="video/mp4" />
-        </video>
+        <div 
+            className="hero-image"
+            style={{
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${process.env.PUBLIC_URL}/placeholder-wine.jpg)`
+            }}
+        ></div>
         <div className="hero-content">
             <h1 className="hero-title stagger-in">
                 <span className="hero-title-line">Top 100</span>
@@ -1296,9 +1299,9 @@ const Hero = () => (
     </section>
 );
 
-const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange }) => {
-    const allTypes = [...new Set(wines.map(wine => wine.color))].filter(Boolean);
-    const allCountries = [...new Set(wines.map(wine => wine.country))].filter(Boolean);
+const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
+    const allTypes = [...new Set(currentWines.map(wine => wine.color))].filter(Boolean);
+    const allCountries = [...new Set(currentWines.map(wine => wine.country))].filter(Boolean);
     
     const handleFilterChange = (filterType, value) => {
         onFiltersChange({ ...filters, [filterType]: value });
@@ -1609,7 +1612,8 @@ const App = () => {
                         <FilterBar 
                             filters={filters} 
                             onFiltersChange={setFilters} 
-                            isCondensed={isCondensed} 
+                            isCondensed={isCondensed}
+                            currentWines={wines} 
                             onViewChange={setIsCondensed} 
                         />
                         <div id="wine-list-container" className="wine-list-container">
