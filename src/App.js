@@ -1263,12 +1263,14 @@ const Navigation = () => {
     return (
         <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
-                <a href="/">
-                    <img 
-                        src={process.env.PUBLIC_URL + (scrolled ? '/logo-black.png' : '/logo.png')} 
-                        alt="Wine Spectator Logo" 
-                        className="navbar-logo"
-                    />
+                <a href="/" className="logo-container">
+                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : 'rgba(0, 0, 0, 0.3)' }}>
+                        <img 
+                            src={process.env.PUBLIC_URL + (scrolled ? '/logo-black.png' : '/logo.png')} 
+                            alt="Wine Spectator Logo" 
+                            className="navbar-logo"
+                        />
+                    </div>
                 </a>
                 <div className="navbar-menu">
                     <a href="#wines" className={scrolled ? 'nav-link-dark' : 'nav-link-light'}>Top 100</a>
@@ -1279,25 +1281,6 @@ const Navigation = () => {
     );
 };
 
-const Hero = () => (
-    <section className="hero-modern">
-        <div className="hero-overlay" />
-        <div 
-            className="hero-image"
-            style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${process.env.PUBLIC_URL}/placeholder-wine.jpg)`
-            }}
-        ></div>
-        <div className="hero-content">
-            <h1 className="hero-title stagger-in">
-                <span className="hero-title-line">Top 100</span>
-                <span className="hero-title-line">Wines of 2024</span>
-            </h1>
-            <p className="hero-subtitle stagger-in">A curated selection of the world's finest wines.</p>
-            <a href="#wines" className="btn-modern btn-hero stagger-in">Explore The List</a>
-        </div>
-    </section>
-);
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
     const allTypes = [...new Set(currentWines.map(wine => wine.color))].filter(Boolean);
@@ -1613,12 +1596,11 @@ const App = () => {
     return (
         <Fragment>
             <Navigation />
-            <Hero />
             <main>
                 <section id="wines" className="wines-section">
                     <div className="container">
                         <div className="section-header">
-                            <h2>Wine Explorer</h2>
+                            <h2>Wine Spectator's Top 100 Lists</h2>
                             <p>Discover the finest wines from around the world</p>
                             <div className="year-selector-container">
                                 <select 

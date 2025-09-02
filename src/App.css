@@ -159,6 +159,17 @@ body {
   height: 64px;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-background {
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
 .navbar-logo {
   height: 32px;
   transition: all 0.3s ease;
@@ -535,9 +546,8 @@ body {
   border-radius: 12px;
   border: 1px solid #e2e8f0;
   margin-bottom: 3rem;
-  position: sticky;
-  top: 80px;
-  z-index: 20;
+  position: relative;
+  z-index: 10;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
