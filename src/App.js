@@ -295,9 +295,27 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
 const ShareButton = ({ wine }) => {
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [copied, setCopied] = useState(false);
+    const menuRef = useRef(null);
 
     const shareUrl = `${window.location.origin}${window.location.pathname}?wine=${wine.id}`;
     const shareText = `Check out this amazing wine: ${wine.wine_full} from ${wine.winery_full} (${wine.vintage}) - Rated ${wine.score} points!`;
+    
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowShareMenu(false);
+            }
+        };
+        
+        if (showShareMenu) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showShareMenu]);
 
     const copyToClipboard = async () => {
         try {
@@ -323,9 +341,9 @@ const ShareButton = ({ wine }) => {
     };
 
     return (
-        <div className="share-button-container">
+        <div className="share-button-container" ref={menuRef}>
             <button 
-                className="btn-modern share-button"
+                className="share-button"
                 onClick={() => setShowShareMenu(!showShareMenu)}
             >
                 <span className="share-icon">🔗</span>
@@ -1153,9 +1171,9 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 )}
             </div>
             <div className="wine-content">
-                <div>
-                    <h3 onClick={() => onSelect(wine)}>{wine.wine_full}</h3>
-                    <p className="wine-winery" onClick={() => onSelect(wine)}>{wine.winery_full}</p>
+                <div className="wine-header">
+                    <h3 className="wine-winery-name" onClick={() => onSelect(wine)}>{wine.winery_full}</h3>
+                    <h2 className="wine-name" onClick={() => onSelect(wine)}>{wine.wine_full}</h2>
                 </div>
                 <div className="wine-metadata">
                     <div className="wine-tags">
