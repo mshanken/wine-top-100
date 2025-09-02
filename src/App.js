@@ -1070,11 +1070,11 @@ const Pagination = ({ winesPerPage, totalWines, paginate, currentPage }) => {
     );
 };
 
-const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, onCompareToggle, isCondensed }) => {
+const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord, onTasteChange, isCondensed, onAddToPWL }) => {
     const isInComparison = compareWines.some(w => w.id === wine.id);
     
     // Extract rank from the top100_rank property or use the id as fallback
-    const rank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
+    const wineRank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
     
     // Extract price and score with fallbacks
     const price = wine.price || 0;
@@ -1102,7 +1102,7 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
     if (isCondensed) {
         return (
             <div className="wine-card-condensed">
-                <div className={`wine-rank-condensed ${getRankColor()}`}>{rank}</div>
+                <div className={`wine-rank-condensed ${getRankColor()}`}>{wineRank}</div>
                 <div className="wine-image-condensed" onClick={() => onSelect(wine)}>
                     <LazyImage src={wine.label_url || ''} alt={wine.wine_full} className="wine-bottle-image" />
                 </div>
@@ -1116,16 +1116,14 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
                 </div>
                 <div className="wine-details-condensed">
                     <div className="price-score-row">
-                        <span className="wine-price">${price}</span>
                         <span className="wine-score-condensed">{score} pts</span>
+                        <button
+                            className="btn-pwl btn-pwl-small"
+                            onClick={() => onAddToPWL(wine)}
+                        >
+                            Add to PWL
+                        </button>
                     </div>
-                    <button
-                        className={`compare-btn-small ${isInComparison ? 'active' : ''}`}
-                        onClick={() => onCompareToggle(wine)}
-                        title={isInComparison ? 'Remove from comparison' : 'Add to comparison'}
-                    >
-                        <Icons.Compare className="icon-small" />
-                    </button>
                 </div>
             </div>
         );
@@ -1133,7 +1131,7 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
 
     return (
         <div className="wine-card-modern">
-            <div className={`wine-rank ${getRankColor()}`}>{rank}</div>
+            <div className={`wine-rank ${getRankColor()}`}>{wineRank}</div>
             <div className="wine-score-badge">
                 <span className="score-value">{score}</span>
                 <span className="score-label">points</span>
@@ -1170,19 +1168,13 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                     </div>
                     <div className="wine-footer">
-                        <span className="wine-price-large">${price}</span>
-                        <div className="wine-actions">
-                            <button className="btn-modern btn-small" onClick={() => onSelect(wine)}>View Details</button>
-                            <button 
-                                className={`btn-compare ${isInComparison ? 'active' : ''}`}
-                                onClick={() => onCompareToggle(wine)}
-                                disabled={!isInComparison && compareWines.length >= 3}
-                                title={isInComparison ? 'Remove from comparison' : 'Add to comparison'}
-                            >
-                                <Icons.Compare className="icon-small" />
-                                {isInComparison ? 'Remove' : 'Compare'}
-                            </button>
-                        </div>
+                        <button className="btn-modern btn-small" onClick={() => {onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id });}}>View Details</button>
+                        <button 
+                            className="btn-pwl"
+                            onClick={() => onAddToPWL(wine)}
+                        >
+                            Add to PWL
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1190,7 +1182,53 @@ const WineCard = ({ wine, onSelect, tastingRecord, onTasteChange, compareWines, 
     );
 };
 
-const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange }) => {
+// PWL Response Modal for displaying PWL response
+const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
+    if (!isOpen) return null;
+    
+    return (
+        <div className="modal-backdrop pwl-modal-backdrop">
+            <div className="modal pwl-modal">
+                <div className="modal-header">
+                    <h3>Add to Personal Wine List</h3>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
+                </div>
+                <div className="modal-content">
+                    <h4>{wineName}</h4>
+                    
+                    {!responseData ? (
+                        <div className="loading-spinner">
+                            <div className="spinner"></div>
+                            <p>Adding to your Personal Wine List...</p>
+                        </div>
+                    ) : responseData.success ? (
+                        <div className="pwl-success">
+                            <p>Successfully added to your Personal Wine List!</p>
+                            <div className="pwl-response">
+                                <p><strong>Wine ID:</strong> {responseData.wineId}</p>
+                                <div className="response-preview">
+                                    <p><strong>Response Preview:</strong></p>
+                                    <pre>{responseData.response}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="pwl-error">
+                            <p>Error adding to Personal Wine List:</p>
+                            <p className="error-message">{responseData.error}</p>
+                            <p><strong>Wine ID:</strong> {responseData.wineId}</p>
+                        </div>
+                    )}
+                </div>
+                <div className="modal-footer">
+                    <button className="btn-modern" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, onAddNote }) => {
     useEffect(() => {
         if (isOpen && wine) {
             trackWineView(wine);
@@ -1473,6 +1511,71 @@ const App = () => {
     });
     const [currentPage, setCurrentPage] = useState(1);
     const winesPerPage = 12;
+    const [pwlModalOpen, setPwlModalOpen] = useState(false);
+    const [pwlResponseData, setPwlResponseData] = useState(null);
+    const [pwlWineName, setPwlWineName] = useState('');
+
+    // Helper function to create URL-safe wine name
+    const createUrlSafeName = (name) => {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+            .replace(/\s+/g, '-')         // Replace spaces with hyphens
+            .replace(/-+/g, '-');         // Replace multiple hyphens with a single hyphen
+    };
+    
+    // Handle Add to PWL button click
+    const handleAddToPWL = (wine) => {
+        // Set the wine name for display in the modal
+        setPwlWineName(wine.wine_full);
+        
+        // Reset response data and open modal
+        setPwlResponseData(null);
+        setPwlModalOpen(true);
+        
+        // Construct the URL
+        const url = 'https://www.winespectator.com/pwl/additem';
+        
+        // Create form data for the payload
+        const formData = new FormData();
+        formData.append('wineid[]', wine.id);
+        
+        // Make the POST request
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Set the response data
+                setPwlResponseData({ 
+                    success: true, 
+                    url, 
+                    wineId: wine.id,
+                    response: data.substring(0, 500) + (data.length > 500 ? '...' : '') 
+                });
+                
+                // Track the event
+                trackEvent('add_to_pwl', { wine_id: wine.id, wine_name: wine.wine_full });
+            })
+            .catch(error => {
+                console.error('Error adding to PWL:', error);
+                setPwlResponseData({ 
+                    success: false, 
+                    error: error.message, 
+                    url,
+                    wineId: wine.id 
+                });
+            });
+    };
 
     useEffect(() => {
         // Check if welcome popup should be shown
@@ -1565,6 +1668,20 @@ const App = () => {
             setShowComparisonModal(true);
         }
     };
+    
+    const handleAddNote = (wineId, note, rating) => {
+        // This function will be passed to the WineDetailModal
+        // and will handle adding notes to wines
+        const wine = wines.find(w => w.id === wineId);
+        if (wine) {
+            trackEvent('wine_note_added', {
+                wine_id: wineId,
+                wine_name: wine.wine_full,
+                has_rating: rating > 0,
+                has_text: note && note.trim().length > 0
+            });
+        }
+    };
 
     useScrollAnimation();
 
@@ -1582,8 +1699,9 @@ const App = () => {
     const indexOfLastWine = currentPage * winesPerPage;
     const indexOfFirstWine = indexOfLastWine - winesPerPage;
     const currentWines = filteredWines.slice(indexOfFirstWine, indexOfLastWine);
+    const totalPages = Math.ceil(filteredWines.length / winesPerPage);
     
-    const paginate = pageNumber => {
+    const handlePageChange = pageNumber => {
         setCurrentPage(pageNumber);
         const wineListElement = document.getElementById('wine-list-container');
         if (wineListElement) {
@@ -1646,6 +1764,7 @@ const App = () => {
                                                 onTasteChange={handleTasteChange}
                                                 compareWines={compareWines}
                                                 onCompareToggle={handleCompareToggle}
+                                                onAddToPWL={handleAddToPWL}
                                             />
                                         ))}
                                     </div>
@@ -1661,43 +1780,44 @@ const App = () => {
                                                 onTasteChange={handleTasteChange}
                                                 compareWines={compareWines}
                                                 onCompareToggle={handleCompareToggle}
+                                                onAddToPWL={handleAddToPWL}
                                             />
                                         ))}
                                     </div>
                                 )
                             )}
+                            
+                            {/* Pagination */}
+                            <Pagination 
+                                currentPage={currentPage} 
+                                totalPages={totalPages} 
+                                onPageChange={handlePageChange} 
+                            />
                         </div>
-                        <Pagination 
-                            winesPerPage={winesPerPage} 
-                            totalWines={filteredWines.length} 
-                            paginate={paginate} 
-                            currentPage={currentPage} 
-                        />
                     </div>
                 </section>
             </main>
-            <Footer />
-            <ComparisonBar 
-                compareWines={compareWines}
-                onRemove={handleRemoveFromComparison}
-                onCompare={handleCompare}
+            
+            {/* PWL Response modal */}
+            <PWLResponseModal
+                isOpen={pwlModalOpen}
+                onClose={() => setPwlModalOpen(false)}
+                wineName={pwlWineName}
+                responseData={pwlResponseData}
             />
-            <WineDetailModal 
-                wine={selectedWine} 
-                isOpen={!!selectedWine} 
-                onClose={() => setSelectedWine(null)} 
-                tastingRecord={tastingRecord} 
-                onTasteChange={handleTasteChange} 
-            />
-            <ComparisonModal 
-                wines={compareWines}
-                isOpen={showComparisonModal}
-                onClose={() => setShowComparisonModal(false)}
-            />
-            <WelcomePopup 
-                isOpen={showWelcomePopup} 
-                onClose={() => setShowWelcomePopup(false)} 
-            />
+            
+            {/* Wine detail modal */}
+            {selectedWine && (
+                <WineDetailModal 
+                    wine={selectedWine} 
+                    isOpen={!!selectedWine} 
+                    onClose={() => setSelectedWine(null)}
+                    tastingRecord={tastingRecord}
+                    onTasteChange={handleTasteChange}
+                    onAddNote={handleAddNote}
+                />
+            )}
+            
             <TastingTrackerPanel 
                 isOpen={showTastingPanel}
                 onToggle={() => setShowTastingPanel(!showTastingPanel)}
