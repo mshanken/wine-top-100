@@ -291,81 +291,6 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
     );
 };
 
-// Share Button Component
-const ShareButton = ({ wine }) => {
-    const [showShareMenu, setShowShareMenu] = useState(false);
-    const [copied, setCopied] = useState(false);
-    const menuRef = useRef(null);
-
-    const shareUrl = `${window.location.origin}${window.location.pathname}?wine=${wine.id}`;
-    const shareText = `Check out this amazing wine: ${wine.wine_full} from ${wine.winery_full} (${wine.vintage}) - Rated ${wine.score} points!`;
-    
-    // Close menu when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setShowShareMenu(false);
-            }
-        };
-        
-        if (showShareMenu) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [showShareMenu]);
-
-    const copyToClipboard = async () => {
-        try {
-            await navigator.clipboard.writeText(shareUrl);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-            trackEvent('share_wine', { method: 'copy_link', wine_id: wine.id });
-        } catch (err) {
-            console.error('Failed to copy:', err);
-        }
-    };
-
-    const shareToTwitter = () => {
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
-        window.open(twitterUrl, '_blank');
-        trackEvent('share_wine', { method: 'twitter', wine_id: wine.id });
-    };
-
-    const shareToFacebook = () => {
-        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-        window.open(facebookUrl, '_blank');
-        trackEvent('share_wine', { method: 'facebook', wine_id: wine.id });
-    };
-
-    return (
-        <div className="share-button-container" ref={menuRef}>
-            <button 
-                className="share-button"
-                onClick={() => setShowShareMenu(!showShareMenu)}
-            >
-                <span className="share-icon">🔗</span>
-                Share This Wine
-            </button>
-            
-            {showShareMenu && (
-                <div className="share-menu">
-                    <button onClick={copyToClipboard} className="share-option">
-                        {copied ? '✓ Copied!' : '📋 Copy Link'}
-                    </button>
-                    <button onClick={shareToTwitter} className="share-option">
-                        𝕏 Share on X
-                    </button>
-                    <button onClick={shareToFacebook} className="share-option">
-                        f Share on Facebook
-                    </button>
-                </div>
-            )}
-        </div>
-    );
-};
 
 // Share Tasting List Component
 const ShareTastingList = ({ tastingRecord, wines }) => {
@@ -442,139 +367,6 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
                 </div>
             )}
         </>
-    );
-};
-
-// Personal Notes Component
-const PersonalNotes = ({ wineId, wineName }) => {
-    const [notes, setNotes] = useState(() => {
-        const saved = localStorage.getItem(`wine-notes-${wineId}`);
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [newNote, setNewNote] = useState('');
-    const [rating, setRating] = useState(0);
-    const [hoverRating, setHoverRating] = useState(0);
-
-    const saveNote = () => {
-        if (!newNote.trim() && rating === 0) return;
-
-        const note = {
-            id: Date.now(),
-            text: newNote,
-            rating: rating,
-            date: new Date().toISOString(),
-        };
-
-        const updatedNotes = [note, ...notes];
-        setNotes(updatedNotes);
-        localStorage.setItem(`wine-notes-${wineId}`, JSON.stringify(updatedNotes));
-        
-        // Reset form
-        setNewNote('');
-        setRating(0);
-
-        // Track the event
-        trackEvent('wine_note_added', {
-            wine_id: wineId,
-            wine_name: wineName,
-            has_rating: rating > 0,
-            has_text: newNote.trim().length > 0
-        });
-    };
-
-    const deleteNote = (noteId) => {
-        const updatedNotes = notes.filter(note => note.id !== noteId);
-        setNotes(updatedNotes);
-        localStorage.setItem(`wine-notes-${wineId}`, JSON.stringify(updatedNotes));
-    };
-
-    const StarRating = ({ interactive = true }) => {
-        const currentRating = interactive ? (hoverRating || rating) : rating;
-        
-        return (
-            <div className="star-rating">
-                {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                        key={star}
-                        type="button"
-                        className={`star ${star <= currentRating ? 'filled' : ''}`}
-                        onClick={() => interactive && setRating(star)}
-                        onMouseEnter={() => interactive && setHoverRating(star)}
-                        onMouseLeave={() => interactive && setHoverRating(0)}
-                        disabled={!interactive}
-                    >
-                        ★
-                    </button>
-                ))}
-            </div>
-        );
-    };
-
-    return (
-        <div className="personal-notes">
-            <h4>My Tasting Notes</h4>
-            
-            {/* Add new note form */}
-            <div className="add-note-form">
-                <div className="rating-section">
-                    <label>My Rating:</label>
-                    <StarRating />
-                </div>
-                <textarea
-                    value={newNote}
-                    onChange={(e) => setNewNote(e.target.value)}
-                    placeholder="Add your tasting notes, food pairings, or memories..."
-                    rows="4"
-                    className="note-textarea"
-                />
-                <button 
-                    onClick={saveNote}
-                    className="btn-modern btn-small"
-                    disabled={!newNote.trim() && rating === 0}
-                >
-                    Save Note
-                </button>
-            </div>
-
-            {/* Display existing notes */}
-            {notes.length > 0 && (
-                <div className="notes-history">
-                    <h5>Previous Notes</h5>
-                    {notes.map(note => (
-                        <div key={note.id} className="note-item">
-                            <div className="note-header">
-                                <span className="note-date">
-                                    {new Date(note.date).toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                    })}
-                                </span>
-                                {note.rating > 0 && (
-                                    <div className="note-rating">
-                                        {[...Array(5)].map((_, i) => (
-                                            <span key={i} className={`star ${i < note.rating ? 'filled' : ''}`}>
-                                                ★
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                                <button 
-                                    onClick={() => deleteNote(note.id)}
-                                    className="note-delete"
-                                    title="Delete note"
-                                >
-                                    <Icons.X className="icon-small" />
-                                </button>
-                            </div>
-                            {note.text && <p className="note-text">{note.text}</p>}
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
     );
 };
 // Tasting Tracker Side Panel Component
@@ -1259,10 +1051,14 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
     const price = wine.price || 0;
     const score = wine.score || 0;
 
+    const stopPropagation = (e) => {
+        e.stopPropagation();
+    };
+    
     return (
         <div className="modal-overlay">
             <div className="modal-backdrop" onClick={onClose} />
-            <div className="modal-content wine-detail-modal">
+            <div className="modal-content wine-detail-modal" onClick={stopPropagation}>
                 <button onClick={onClose} className="modal-close">
                     <Icons.X className="icon-close" />
                 </button>
@@ -1292,15 +1088,7 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                             <span className="wine-score-xl">{score} Points</span>
                             <span className="wine-price-xl">${price}</span>
                         </div>
-                        
-                        {/* Add Share Button */}
-                        <ShareButton wine={wine} />
                     </div>
-                </div>
-                
-                {/* Add Personal Notes Section */}
-                <div className="wine-detail-notes">
-                    <PersonalNotes wineId={wine.id} wineName={wine.wine_full} />
                 </div>
             </div>
         </div>
