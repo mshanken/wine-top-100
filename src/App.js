@@ -1271,8 +1271,8 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                             <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                         </div>
                         <div className="wine-detail-footer">
-                            <span className="wine-price-xl">${price}</span>
                             <span className="wine-score-xl">{score} Points</span>
+                            <span className="wine-price-xl">${price}</span>
                         </div>
                         
                         {/* Add Share Button */}

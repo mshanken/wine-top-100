@@ -1132,6 +1132,8 @@ body {
   background: rgba(0, 0, 0, 0.5);
 }
 
+/* Wine detail footer styling is now defined directly with the wine-detail-footer class */
+
 .modal-content {
   position: relative;
   width: 100%;
@@ -1247,19 +1249,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.wine-price-xl {
-  font-size: 1.875rem;
-  font-weight: bold;
-  color: #8c0004;
+  width: 100%;
 }
 
 .wine-score-xl {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8c0004;
+  margin-right: auto;
+  line-height: 1;
+}
+
+.wine-price-xl {
   font-size: 1.25rem;
   color: #718096;
-  font-weight: 500;
+  margin-left: 1rem;
 }
+
+/* These styles are now defined in the wine detail footer section above */
 
 /* Personal Notes Styles */
 .wine-detail-notes {
