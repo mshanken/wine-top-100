@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Fragment } from 'react';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
@@ -30,6 +30,24 @@ const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jp
             />
         </div>
     );
+};
+
+// Hook: lock body scroll while a modal/popup is open
+const useBodyScrollLock = (locked) => {
+    useEffect(() => {
+        if (!locked) return;
+        const originalOverflow = document.body.style.overflow;
+        const originalPaddingRight = document.body.style.paddingRight;
+        const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = 'hidden';
+        if (scrollBarWidth > 0) {
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
+        }
+        return () => {
+            document.body.style.overflow = originalOverflow;
+            document.body.style.paddingRight = originalPaddingRight;
+        };
+    }, [locked]);
 };
 
 // Analytics functions
@@ -298,6 +316,22 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
     const [shareLink, setShareLink] = useState('');
     const [copied, setCopied] = useState(false);
 
+    // Lock body scroll when share modal is open
+    useBodyScrollLock(showShareModal);
+
+    // Close share modal on Escape
+    useEffect(() => {
+        if (!showShareModal) return;
+        const onKey = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                setShowShareModal(false);
+            }
+        };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [showShareModal]);
+
     const generateShareLink = () => {
         const tastedWineIds = Object.entries(tastingRecord)
             .filter(([_, status]) => status === 'tasted')
@@ -549,6 +583,22 @@ const ComparisonBar = ({ compareWines, onRemove, onCompare }) => {
 
 // Wine Comparison Modal Component
 const ComparisonModal = ({ wines, isOpen, onClose }) => {
+    // Close on Escape (hook must be before any early return)
+    useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+            }
+        };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [isOpen, onClose]);
+
+    // Lock body scroll when comparison modal is open
+    useBodyScrollLock(isOpen);
+
     if (!isOpen || !wines || wines.length === 0) return null;
 
     return (
@@ -993,8 +1043,24 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
 
 // PWL Response Modal for displaying PWL response
 const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
+    // Close on Escape (hook must be before any early return)
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    // Lock body scroll when PWL modal is open
+    useBodyScrollLock(isOpen);
+
     if (!isOpen) return null;
-    
+
     return (
         <div className="modal-backdrop pwl-modal-backdrop">
             <div className="modal pwl-modal">
@@ -1060,8 +1126,24 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
         console.log('[WineDetailModal] Props changed', { isOpen, wineId: wine?.id });
     }, [isOpen, wine?.id]);
 
+    // Close on Escape (hook must be before any early return)
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                onClose();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    // Lock body scroll when detail modal is open
+    useBodyScrollLock(isOpen);
+
     if (!isOpen || !wine) return null;
-    
+
     // Extract price and score with fallbacks
     const price = wine.price || 0;
     const score = wine.score || 0;
@@ -1075,6 +1157,7 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
         console.log('[WineDetailModal] Close button clicked');
         onClose();
     };
+    
     
     return (
         <div className="modal-overlay">

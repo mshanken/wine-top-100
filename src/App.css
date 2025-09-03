@@ -1158,6 +1158,9 @@ body {
   border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* Allow modal content to scroll while body is locked */
+  max-height: 90vh;
+  overflow: auto;
 }
 
 /* Scoped stacking for overlay-based modals (WineDetailModal, ComparisonModal, Share Modal) */
