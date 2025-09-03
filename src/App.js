@@ -1092,8 +1092,8 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                         )}
                     </div>
                     <div className="wine-detail-info">
-                        <h2>{wine.wine_full}</h2>
-                        <p className="wine-subtitle">{wine.winery_full} • {wine.vintage}</p>
+                        <h2>{wine.winery_full}</h2>
+                        <p className="wine-subtitle">{wine.wine_full} {wine.vintage}</p>
                         <div className="wine-tags">
                             <span className="wine-tag">{wine.country}</span>
                             <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
