@@ -886,8 +886,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
     // Extract rank from the top100_rank property or use the id as fallback
     const wineRank = wine.top100_rank ? parseInt(wine.top100_rank, 10) : parseInt(wine.id, 10);
     
-    // Extract price and score with fallbacks
-    const price = wine.price || 0;
+    // Extract score with fallback
     const score = wine.score || 0;
 
     const getRankColor = () => {
@@ -1342,15 +1341,6 @@ const App = () => {
     const [pwlModalOpen, setPwlModalOpen] = useState(false);
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
-
-    // Helper function to create URL-safe wine name
-    const createUrlSafeName = (name) => {
-        return name
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
-            .replace(/\s+/g, '-')         // Replace spaces with hyphens
-            .replace(/-+/g, '-');         // Replace multiple hyphens with a single hyphen
-    };
     
     // Handle Add to PWL button click
     const handleAddToPWL = (wine) => {
@@ -1653,6 +1643,27 @@ const App = () => {
                 wines={wines}
                 onTasteChange={handleTasteChange}
             />
+
+            {/* Comparison bar & modal */}
+            <ComparisonBar 
+                compareWines={compareWines}
+                onRemove={handleRemoveFromComparison}
+                onCompare={handleCompare}
+            />
+            <ComparisonModal 
+                wines={compareWines}
+                isOpen={showComparisonModal}
+                onClose={() => setShowComparisonModal(false)}
+            />
+
+            {/* Welcome popup */}
+            <WelcomePopup 
+                isOpen={showWelcomePopup}
+                onClose={() => setShowWelcomePopup(false)}
+            />
+
+            {/* Footer */}
+            <Footer />
         </Fragment>
     );
 };
