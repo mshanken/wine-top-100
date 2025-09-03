@@ -292,9 +292,14 @@ const WelcomePopup = ({ isOpen, onClose }) => {
 const ExportButton = ({ tastingRecord, wines }) => {
     const [showMenu, setShowMenu] = useState(false);
     
+    // Only include entries that exist in the current year's wine list
+    const wineIdSet = new Set(wines.map(w => String(w.id)));
+    const filteredEntries = Object.entries(tastingRecord).filter(([wineId]) => wineIdSet.has(String(wineId)));
+    
     const exportTastingList = (format) => {
-        const data = Object.entries(tastingRecord).map(([wineId, status]) => {
+        const data = filteredEntries.map(([wineId, status]) => {
             const wine = wines.find(w => String(w.id) === String(wineId));
+            if (!wine) return null;
             return {
                 Rank: wine.top100_rank ? parseInt(wine.top100_rank, 10) : 0,
                 Wine: wine.wine_full,
@@ -307,7 +312,7 @@ const ExportButton = ({ tastingRecord, wines }) => {
                 Score: wine.score,
                 Price: `$${wine.price}`
             };
-        });
+        }).filter(Boolean);
 
         if (format === 'csv') {
             const csv = [
@@ -337,7 +342,7 @@ const ExportButton = ({ tastingRecord, wines }) => {
         setShowMenu(false);
     };
 
-    const itemCount = Object.keys(tastingRecord).length;
+    const itemCount = filteredEntries.length;
     if (itemCount === 0) return null;
 
     return (
@@ -409,16 +414,20 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
         return () => document.removeEventListener('keydown', onKey);
     }, [showShareModal]);
 
+    // Only include entries that exist in the current year's wine list
+    const wineIdSetShare = new Set(wines.map(w => String(w.id)));
+    const filteredShareEntries = Object.entries(tastingRecord).filter(([wineId]) => wineIdSetShare.has(String(wineId)));
+
     const generateShareLink = () => {
-        const tastedWineIds = Object.entries(tastingRecord)
+        const tastedIds = filteredShareEntries
             .filter(([_, status]) => status === 'tasted')
-            .map(([wineId, _]) => wineId)
-            .join(',');
-        
+            .map(([wineId]) => wineId);
+        const tastedWineIds = tastedIds.join(',');
+
         const link = `${window.location.origin}${window.location.pathname}?tasted=${tastedWineIds}`;
         setShareLink(link);
         setShowShareModal(true);
-        trackEvent('share_tasting_list', { wine_count: tastedWineIds.split(',').length });
+        trackEvent('share_tasting_list', { wine_count: tastedIds.length });
     };
 
     const copyToClipboard = async () => {
@@ -431,7 +440,7 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
         }
     };
 
-    const itemCount = Object.keys(tastingRecord).length;
+    const itemCount = filteredShareEntries.length;
     if (itemCount === 0) return null;
 
     return (
@@ -470,8 +479,8 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
                         <div className="share-stats">
                             <p>Your list includes:</p>
                             <ul>
-                                <li>{Object.entries(tastingRecord).filter(([_, status]) => status === 'tasted').length} wines tasted</li>
-                                <li>{Object.entries(tastingRecord).filter(([_, status]) => status === 'want').length} wines to try</li>
+                                <li>{filteredShareEntries.filter(([_, status]) => status === 'tasted').length} wines tasted</li>
+                                <li>{filteredShareEntries.filter(([_, status]) => status === 'want').length} wines to try</li>
                             </ul>
                         </div>
                     </div>
