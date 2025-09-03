@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment } from 'react';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
@@ -152,12 +152,7 @@ const trackTastingAction = (wine, action) => {
     });
 };
 
-const trackSearch = (searchTerm, resultsCount) => {
-    trackEvent('search', {
-        search_term: searchTerm,
-        results_count: resultsCount
-    });
-};
+// (trackSearch removed – not used)
 
 const trackFilterUse = (filterType, filterValue) => {
     trackEvent('filter_wines', {
@@ -173,21 +168,7 @@ const trackExport = (format, itemCount) => {
     });
 };
 
-const wines = winesData.map((wine, index) => ({
-    id: parseInt(wine.top100_rank, 10) || index + 1,
-    rank: parseInt(wine.top100_rank, 10) || 0,
-    name: wine.wine_full || 'Unnamed Wine',
-    winery: wine.winery_full || 'Unknown Winery',
-    image: wine.label_url || '',
-    varietal: wine.varietal || 'N/A',
-    vintage: parseInt(wine.vintage, 10) || 'N/A',
-    region: wine.region || 'Unknown Region',
-    country: wine.country || 'Unknown Country',
-    type: wine.color || 'N/A',
-    score: parseInt(wine.score, 10) || 0,
-    price: parseFloat(String(wine.price || "0").replace('$', '')),
-    description: wine.note || 'No description available.',
-}));
+// (top-level wines mapping removed – state `wines` is the source of truth per selectedYear)
 
 const Icons = {
     Wine: ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 2h8l1 7c0 2.5-2 4.5-4.5 4.5S8 11.5 8 9l1-7z" /><line x1="12" y1="13.5" x2="12" y2="20" /><line x1="9" y1="20" x2="15" y2="20" /><ellipse cx="12" cy="9" rx="3.5" ry="2" fill="currentColor" opacity="0.3"/></svg>),
@@ -289,7 +270,7 @@ const WelcomePopup = ({ isOpen, onClose }) => {
 };
 
 // Export Button Component
-const ExportButton = ({ tastingRecord, wines }) => {
+const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
     const [showMenu, setShowMenu] = useState(false);
     
     // Only include entries that exist in the current year's wine list
@@ -324,7 +305,7 @@ const ExportButton = ({ tastingRecord, wines }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `wine-tasting-list-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `wine-tasting-list-${selectedYear}-${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             URL.revokeObjectURL(url);
         } else if (format === 'json') {
@@ -333,7 +314,7 @@ const ExportButton = ({ tastingRecord, wines }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `wine-tasting-list-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `wine-tasting-list-${selectedYear}-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -393,7 +374,7 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
 
 
 // Share Tasting List Component
-const ShareTastingList = ({ tastingRecord, wines }) => {
+const ShareTastingList = ({ tastingRecord, wines, selectedYear }) => {
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareLink, setShareLink] = useState('');
     const [copied, setCopied] = useState(false);
@@ -424,7 +405,7 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
             .map(([wineId]) => wineId);
         const tastedWineIds = tastedIds.join(',');
 
-        const link = `${window.location.origin}${window.location.pathname}?tasted=${tastedWineIds}`;
+        const link = `${window.location.origin}${window.location.pathname}?year=${encodeURIComponent(selectedYear)}&tasted=${tastedWineIds}`;
         setShareLink(link);
         setShowShareModal(true);
         trackEvent('share_tasting_list', { wine_count: tastedIds.length });
@@ -490,7 +471,7 @@ const ShareTastingList = ({ tastingRecord, wines }) => {
     );
 };
 // Tasting Tracker Side Panel Component
-const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteChange }) => {
+const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteChange, selectedYear }) => {
     const tastedWines = [];
     const wantToTasteWines = [];
     
@@ -628,8 +609,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
 
                 {totalCount > 0 && (
                     <div className="panel-footer">
-                        <ExportButton tastingRecord={tastingRecord} wines={wines} />
-                        <ShareTastingList tastingRecord={tastingRecord} wines={wines} />
+                        <ExportButton tastingRecord={tastingRecord} wines={wines} selectedYear={selectedYear} />
+                        <ShareTastingList tastingRecord={tastingRecord} wines={wines} selectedYear={selectedYear} />
                     </div>
                 )}
             </div>
@@ -1364,6 +1345,16 @@ const App = () => {
     };
 
     useEffect(() => {
+        // Parse ?year=YYYY from URL on initial load
+        const params = new URLSearchParams(window.location.search);
+        const yearParam = params.get('year');
+        if (yearParam) {
+            const y = parseInt(yearParam, 10);
+            if (!Number.isNaN(y)) {
+                setSelectedYear(y);
+            }
+        }
+
         // Check if welcome popup should be shown
         const hidePopup = localStorage.getItem('hideWelcomePopup');
         if (!hidePopup) {
@@ -1510,9 +1501,15 @@ const App = () => {
                                 <select 
                                     value={selectedYear}
                                     onChange={(e) => {
-                                        setSelectedYear(parseInt(e.target.value));
+                                        const y = parseInt(e.target.value, 10);
+                                        setSelectedYear(y);
                                         // Reset all filters to prevent empty results when switching years
                                         setFilters({ search: '', type: 'All', country: 'All' });
+                                        // Sync ?year= in URL (preserve other params)
+                                        const params = new URLSearchParams(window.location.search);
+                                        params.set('year', String(y));
+                                        const newUrl = `${window.location.pathname}?${params.toString()}`;
+                                        window.history.replaceState(null, '', newUrl);
                                     }}
                                     className="year-selector"
                                 >
@@ -1616,6 +1613,7 @@ const App = () => {
                 tastingRecord={tastingRecord}
                 wines={wines}
                 onTasteChange={handleTasteChange}
+                selectedYear={selectedYear}
             />
 
             {/* Comparison bar & modal */}
