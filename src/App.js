@@ -25,8 +25,19 @@ const buildImgixUrl = (url, params = {}) => {
 };
 
 // Lazy Loading Image Component with responsive srcset/sizes
-const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jpg', widths = [], sizes, noPreload = false }) => {
-    const [imageSrc, setImageSrc] = useState(placeholderSrc);
+const LazyImage = ({ src, alt, className, placeholderSrc = 'placeholder-wine.jpg', widths = [], sizes, noPreload = false }) => {
+    // Ensure placeholder works when the app is hosted under a subpath
+    const resolvedPlaceholder = (() => {
+        if (placeholderSrc && /^https?:\/\//.test(placeholderSrc)) return placeholderSrc;
+        const file = String(placeholderSrc || 'placeholder-wine.jpg').replace(/^\//, '');
+        const base = process.env.PUBLIC_URL;
+        return base && base.trim() !== ''
+            ? `${base.replace(/\/$/, '')}/${file}`
+            : `/${file}`; // root-relative when no PUBLIC_URL
+    })();
+
+
+    const [imageSrc, setImageSrc] = useState(resolvedPlaceholder);
     const [imageLoading, setImageLoading] = useState(true);
 
     const primarySrc = widths && widths.length > 0
@@ -38,7 +49,17 @@ const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jp
         : undefined;
 
     useEffect(() => {
-        if (!primarySrc) return;
+        // If there's no source, show the placeholder immediately
+        if (!src) {
+            setImageSrc(resolvedPlaceholder);
+            setImageLoading(false);
+            return;
+        }
+        if (!primarySrc) {
+            setImageSrc(resolvedPlaceholder);
+            setImageLoading(false);
+            return;
+        }
         if (noPreload) {
             // Let the browser handle lazy loading natively without JS preloading
             setImageSrc(primarySrc);
@@ -51,6 +72,11 @@ const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jp
         img.src = primarySrc;
         img.onload = () => {
             setImageSrc(primarySrc);
+            setImageLoading(false);
+        };
+        img.onerror = () => {
+            // Fall back to placeholder file path
+            setImageSrc(resolvedPlaceholder);
             setImageLoading(false);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,6 +96,7 @@ const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jp
                 alt={alt}
                 loading="lazy"
                 decoding="async"
+                onError={() => { setImageSrc(resolvedPlaceholder); setImageLoading(false); }}
                 className={`w-full h-full object-cover ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
             />
         </div>
@@ -512,13 +539,19 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                             <div className="mini-wine-list">
                                 {tastedWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
-                                        <LazyImage
-                                            src={wine.label_url || ''}
-                                            alt={wine.wine_full}
-                                            className="mini-wine-image"
-                                            widths={[80, 120, 160]}
-                                            sizes="80px"
-                                        />
+                                        {wine.label_url ? (
+                                            <LazyImage
+                                                src={wine.label_url}
+                                                alt={wine.wine_full}
+                                                className="mini-wine-image"
+                                                widths={[80, 120, 160]}
+                                                sizes="80px"
+                                            />
+                                        ) : (
+                                            <div className="mini-wine-image">
+                                                <Icons.Wine className="wine-placeholder" />
+                                            </div>
+                                        )}
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
                                             <p>{wine.winery_full}</p>
@@ -544,13 +577,19 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                             <div className="mini-wine-list">
                                 {wantToTasteWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
-                                        <LazyImage
-                                            src={wine.label_url || ''}
-                                            alt={wine.wine_full}
-                                            className="mini-wine-image"
-                                            widths={[80, 120, 160]}
-                                            sizes="80px"
-                                        />
+                                        {wine.label_url ? (
+                                            <LazyImage
+                                                src={wine.label_url}
+                                                alt={wine.wine_full}
+                                                className="mini-wine-image"
+                                                widths={[80, 120, 160]}
+                                                sizes="80px"
+                                            />
+                                        ) : (
+                                            <div className="mini-wine-image">
+                                                <Icons.Wine className="wine-placeholder" />
+                                            </div>
+                                        )}
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
                                             <p>{wine.winery_full}</p>
@@ -610,13 +649,19 @@ const ComparisonBar = ({ compareWines, onRemove, onCompare }) => {
                 <div className="comparison-wines">
                     {compareWines.map(wine => (
                         <div key={wine.id} className="comparison-wine-item">
-                            <LazyImage 
-                                src={wine.label_url || ''}
-                                alt={wine.wine_full}
-                                className="comparison-thumb"
-                                widths={[80, 120, 160]}
-                                sizes="80px"
-                            />
+                            {wine.label_url ? (
+                                <LazyImage 
+                                    src={wine.label_url}
+                                    alt={wine.wine_full}
+                                    className="comparison-thumb"
+                                    widths={[80, 120]}
+                                    sizes="80px"
+                                />
+                            ) : (
+                                <div className="comparison-thumb">
+                                    <Icons.Wine className="wine-placeholder" />
+                                </div>
+                            )}
                             <div className="comparison-wine-info">
                                 <span className="wine-name">{wine.wine_full}</span>
                                 <span className="wine-vintage">{wine.vintage}</span>
@@ -686,13 +731,19 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
                         return (
                             <div key={wine.id} className="comparison-column">
                                 <div className="comparison-wine-header">
-                                    <LazyImage 
-                                        src={wine.label_url || ''}
-                                        alt={wine.wine_full}
-                                        className="comparison-wine-image"
-                                        widths={[320, 480, 640, 800]}
-                                        sizes="(min-width: 1024px) 26vw, 90vw"
-                                    />
+                                    {wine.label_url ? (
+                                        <LazyImage 
+                                            src={wine.label_url}
+                                            alt={wine.wine_full}
+                                            className="comparison-wine-image"
+                                            widths={[320, 480, 640, 800]}
+                                            sizes="(min-width: 1024px) 26vw, 90vw"
+                                        />
+                                    ) : (
+                                        <div className="comparison-wine-image">
+                                            <Icons.Wine className="wine-placeholder" />
+                                        </div>
+                                    )}
                                     <h3>{wine.wine_full}</h3>
                                     <p className="comparison-winery">{wine.winery_full}</p>
                                 </div>
@@ -776,13 +827,17 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
             <div className="wine-card-condensed">
                 <div className={`wine-rank-condensed ${getRankColor()}`}>{wineRank}</div>
                 <div className="wine-image-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
+                {wine.label_url ? (
                     <LazyImage 
-                        src={wine.label_url || ''} 
+                        src={wine.label_url} 
                         alt={wine.wine_full} 
                         className="wine-bottle-image"
                         widths={[160, 240, 320]}
                         sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
                     />
+                ) : (
+                    <Icons.Wine className="wine-placeholder" />
+                )}
                 </div>
                 <div className="wine-info-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed info) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                     <h3>{wine.wine_full}</h3>

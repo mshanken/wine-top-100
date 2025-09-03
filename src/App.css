@@ -2000,9 +2000,19 @@ body {
   width: 50px;
   height: 80px;
   object-fit: contain;
-  background: white;
-  padding: 0.25rem;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.mini-wine-image .wine-placeholder {
+  display: block;
+  width: 60%;
+  height: 60%;
+  color: #e2e8f0;
 }
 
 .mini-wine-info {
