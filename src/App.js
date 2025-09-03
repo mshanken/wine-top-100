@@ -913,10 +913,10 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
         return (
             <div className="wine-card-condensed">
                 <div className={`wine-rank-condensed ${getRankColor()}`}>{wineRank}</div>
-                <div className="wine-image-condensed" onClick={() => onSelect(wine)}>
+                <div className="wine-image-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                     <LazyImage src={wine.label_url || ''} alt={wine.wine_full} className="wine-bottle-image" />
                 </div>
-                <div className="wine-info-condensed" onClick={() => onSelect(wine)}>
+                <div className="wine-info-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed info) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                     <h3>{wine.wine_full}</h3>
                     <p>{wine.winery_full}</p>
                     <div className="tasting-options-condensed">
@@ -951,7 +951,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <Icons.Check className="icon-small" />
                 </div>
             )}
-            <div className="wine-image" onClick={() => onSelect(wine)}>
+            <div className="wine-image" onClick={() => { console.log('[WineCard] onSelect (image) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                 {wine.label_url ? (
                     <LazyImage 
                         src={wine.label_url} 
@@ -964,8 +964,8 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
             </div>
             <div className="wine-content">
                 <div className="wine-header">
-                    <h3 className="wine-winery-name" onClick={() => onSelect(wine)}>{wine.winery_full}</h3>
-                    <h2 className="wine-name" onClick={() => onSelect(wine)}>{wine.wine_full}</h2>
+                    <h3 className="wine-winery-name" onClick={() => { console.log('[WineCard] onSelect (winery) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>{wine.winery_full}</h3>
+                    <h2 className="wine-name" onClick={() => { console.log('[WineCard] onSelect (name) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>{wine.wine_full}</h2>
                 </div>
                 <div className="wine-metadata">
                     <div className="wine-tags">
@@ -978,7 +978,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                     </div>
                     <div className="wine-footer">
-                        <button className="btn-modern btn-small" onClick={() => {onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id });}}>View Details</button>
+                        <button className="btn-modern btn-small" onClick={() => { console.log('[WineCard] View Details clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id }); }}>View Details</button>
                         <button 
                             className="btn-pwl"
                             onClick={() => onAddToPWL(wine)}
@@ -1041,9 +1041,25 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
 const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, onAddNote }) => {
     useEffect(() => {
         if (isOpen && wine) {
+            console.group('[WineDetailModal] Open');
+            console.log('Timestamp:', new Date().toISOString());
+            console.log('Wine selected:', { id: wine.id, name: wine.wine_full, vintage: wine.vintage, score: wine.score, price: wine.price });
+            console.groupEnd();
             trackWineView(wine);
         }
+        return () => {
+            if (isOpen && wine) {
+                console.group('[WineDetailModal] Unmount/Close');
+                console.log('Timestamp:', new Date().toISOString());
+                console.log('Last wine:', { id: wine.id, name: wine.wine_full });
+                console.groupEnd();
+            }
+        };
     }, [isOpen, wine]);
+
+    useEffect(() => {
+        console.log('[WineDetailModal] Props changed', { isOpen, wineId: wine?.id });
+    }, [isOpen, wine?.id]);
 
     if (!isOpen || !wine) return null;
     
@@ -1052,14 +1068,20 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
     const score = wine.score || 0;
 
     const stopPropagation = (e) => {
+        console.log('[WineDetailModal] stopPropagation called');
         e.stopPropagation();
+    };
+
+    const handleCloseClick = () => {
+        console.log('[WineDetailModal] Close button clicked');
+        onClose();
     };
     
     return (
         <div className="modal-overlay">
-            <div className="modal-backdrop" onClick={onClose} />
+            <div className="modal-backdrop" />
             <div className="modal-content wine-detail-modal" onClick={stopPropagation}>
-                <button onClick={onClose} className="modal-close">
+                <button onClick={handleCloseClick} className="modal-close">
                     <Icons.X className="icon-close" />
                 </button>
                 <div className="wine-detail-grid">
@@ -1107,8 +1129,8 @@ const Navigation = () => {
     return (
         <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
-                <a href="/" className="logo-container">
-                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : 'rgba(0, 0, 0, 0.3)' }}>
+                <a href="https://www.winespectator.com" className="logo-container">
+                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : 'rgba(0, 0, 0, 0.6)' }}>
                         <img 
                             src={process.env.PUBLIC_URL + (scrolled ? '/logo-black.png' : '/logo.png')} 
                             alt="Wine Spectator Logo" 
@@ -1117,8 +1139,8 @@ const Navigation = () => {
                     </div>
                 </a>
                 <div className="navbar-menu">
-                    <a href="#wines" className={scrolled ? 'nav-link-dark' : 'nav-link-light'}>Top 100</a>
-                    <button className="btn-modern">Subscribe</button>
+                    <a href="https://top100.winespectator.com" className={scrolled ? 'nav-link-dark' : 'nav-link-light'}>Top 100</a>
+                    <a href="https://www.winespectator.com/subscribe"><button className="btn-modern">Subscribe</button></a>
                 </div>
             </div>
         </nav>
