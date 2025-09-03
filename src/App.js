@@ -2,19 +2,59 @@ import React, { useState, useEffect, useMemo, useRef, Fragment } from 'react';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
-// Lazy Loading Image Component - SIMPLIFIED VERSION
-const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jpg' }) => {
+// Helper to build Imgix URL with defaults
+const buildImgixUrl = (url, params = {}) => {
+    if (!url) return url;
+    try {
+        const u = new URL(url, window.location.origin);
+        // Only apply if URL likely goes through Imgix
+        if (!u.hostname.includes('imgix')) {
+            return url; // no-op for non-Imgix hosts
+        }
+        const defaults = {
+            auto: 'format,compress',
+            fit: 'max',
+            q: 50,
+        };
+        const finalParams = { ...defaults, ...params };
+        Object.entries(finalParams).forEach(([k, v]) => u.searchParams.set(k, v));
+        return u.toString();
+    } catch (e) {
+        return url;
+    }
+};
+
+// Lazy Loading Image Component with responsive srcset/sizes
+const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jpg', widths = [], sizes, noPreload = false }) => {
     const [imageSrc, setImageSrc] = useState(placeholderSrc);
     const [imageLoading, setImageLoading] = useState(true);
 
+    const primarySrc = widths && widths.length > 0
+        ? buildImgixUrl(src, { w: widths[Math.min(1, widths.length - 1)] })
+        : buildImgixUrl(src);
+
+    const srcSet = (widths && widths.length > 0)
+        ? widths.map(w => `${buildImgixUrl(src, { w })} ${w}w`).join(', ')
+        : undefined;
+
     useEffect(() => {
+        if (!primarySrc) return;
+        if (noPreload) {
+            // Let the browser handle lazy loading natively without JS preloading
+            setImageSrc(primarySrc);
+            setImageLoading(false);
+            return;
+        }
         const img = new Image();
-        img.src = src;
+        img.srcset = srcSet || '';
+        img.sizes = sizes || '';
+        img.src = primarySrc;
         img.onload = () => {
-            setImageSrc(src);
+            setImageSrc(primarySrc);
             setImageLoading(false);
         };
-    }, [src]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [src, primarySrc, srcSet, sizes, noPreload]);
 
     return (
         <div className={className} style={{ position: 'relative' }}>
@@ -23,9 +63,13 @@ const LazyImage = ({ src, alt, className, placeholderSrc = '/placeholder-wine.jp
                     <div className="spinner"></div>
                 </div>
             )}
-            <img 
-                src={imageSrc} 
-                alt={alt} 
+            <img
+                src={imageSrc}
+                srcSet={srcSet}
+                sizes={sizes}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
                 className={`w-full h-full object-cover ${imageLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
             />
         </div>
@@ -128,6 +172,11 @@ const Icons = {
     Download: ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>),
     Compare: ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" /><line x1="9" y1="3" x2="9" y2="21" /><line x1="15" y1="3" x2="15" y2="21" /></svg>),
     Check: ({ className }) => (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>),
+    ArrowUp: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="6 15 12 9 18 15" />
+        </svg>
+    ),
 };
 
 // FIXED Scroll Animation Hook
@@ -218,7 +267,7 @@ const ExportButton = ({ tastingRecord, wines }) => {
     
     const exportTastingList = (format) => {
         const data = Object.entries(tastingRecord).map(([wineId, status]) => {
-            const wine = wines.find(w => w.id === parseInt(wineId));
+            const wine = wines.find(w => String(w.id) === String(wineId));
             return {
                 Rank: wine.top100_rank ? parseInt(wine.top100_rank, 10) : 0,
                 Wine: wine.wine_full,
@@ -294,8 +343,9 @@ const ExportButton = ({ tastingRecord, wines }) => {
 };
 
 const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
-    const isChecked = tastingRecord[wineId] === status;
-    const handleChange = () => onTasteChange(wineId, isChecked ? null : status);
+    const key = String(wineId);
+    const isChecked = tastingRecord[key] === status;
+    const handleChange = () => onTasteChange(key, isChecked ? null : status);
     
     return (
         <label className="tasting-checkbox">
@@ -410,7 +460,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
     
     // Organize wines by status
     Object.entries(tastingRecord).forEach(([wineId, status]) => {
-        const wine = wines.find(w => w.id === parseInt(wineId));
+        const wine = wines.find(w => String(w.id) === String(wineId));
         if (wine) {
             if (status === 'tasted') {
                 tastedWines.push(wine);
@@ -462,10 +512,12 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                             <div className="mini-wine-list">
                                 {tastedWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
-                                        <img 
-                                            src={wine.label_url || '/placeholder-wine.jpg'} 
+                                        <LazyImage
+                                            src={wine.label_url || ''}
                                             alt={wine.wine_full}
                                             className="mini-wine-image"
+                                            widths={[80, 120, 160]}
+                                            sizes="80px"
                                         />
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
@@ -492,10 +544,12 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                             <div className="mini-wine-list">
                                 {wantToTasteWines.map(wine => (
                                     <div key={wine.id} className="mini-wine-card">
-                                        <img 
-                                            src={wine.label_url || '/placeholder-wine.jpg'} 
+                                        <LazyImage
+                                            src={wine.label_url || ''}
                                             alt={wine.wine_full}
                                             className="mini-wine-image"
+                                            widths={[80, 120, 160]}
+                                            sizes="80px"
                                         />
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
@@ -556,7 +610,13 @@ const ComparisonBar = ({ compareWines, onRemove, onCompare }) => {
                 <div className="comparison-wines">
                     {compareWines.map(wine => (
                         <div key={wine.id} className="comparison-wine-item">
-                            <img src={wine.label_url || '/placeholder-wine.jpg'} alt={wine.wine_full} />
+                            <LazyImage 
+                                src={wine.label_url || ''}
+                                alt={wine.wine_full}
+                                className="comparison-thumb"
+                                widths={[80, 120, 160]}
+                                sizes="80px"
+                            />
                             <div className="comparison-wine-info">
                                 <span className="wine-name">{wine.wine_full}</span>
                                 <span className="wine-vintage">{wine.vintage}</span>
@@ -626,10 +686,12 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
                         return (
                             <div key={wine.id} className="comparison-column">
                                 <div className="comparison-wine-header">
-                                    <img 
-                                        src={wine.label_url || '/placeholder-wine.jpg'} 
+                                    <LazyImage 
+                                        src={wine.label_url || ''}
                                         alt={wine.wine_full}
                                         className="comparison-wine-image"
+                                        widths={[320, 480, 640, 800]}
+                                        sizes="(min-width: 1024px) 26vw, 90vw"
                                     />
                                     <h3>{wine.wine_full}</h3>
                                     <p className="comparison-winery">{wine.winery_full}</p>
@@ -678,257 +740,8 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
     );
 };
 
-// Enhanced Search Component
-const EnhancedSearch = ({ wines, onSearch, filters }) => {
-    const [searchTerm, setSearchTerm] = useState(filters.search || '');
-    const [showSuggestions, setShowSuggestions] = useState(false);
-    const [suggestions, setSuggestions] = useState([]);
-    const [recentSearches, setRecentSearches] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const searchRef = useRef(null);
+// Enhanced Search Component removed per request
 
-    // Load recent searches from localStorage
-    useEffect(() => {
-        const saved = localStorage.getItem('recentWineSearches');
-        if (saved) {
-            setRecentSearches(JSON.parse(saved));
-        }
-    }, []);
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (searchRef.current && !searchRef.current.contains(event.target)) {
-                setShowSuggestions(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    // Save search to recent searches
-    const saveRecentSearch = (term) => {
-        if (!term.trim()) return;
-        const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5);
-        setRecentSearches(updated);
-        localStorage.setItem('recentWineSearches', JSON.stringify(updated));
-    };
-
-    // Search function
-    const searchWines = (term) => {
-        if (!term.trim()) return [];
-        
-        const searchLower = term.toLowerCase();
-        return wines.filter(wine => {
-            return (
-                (wine.wine_full && wine.wine_full.toLowerCase().includes(searchLower)) ||
-                (wine.winery_full && wine.winery_full.toLowerCase().includes(searchLower)) ||
-                (wine.region && wine.region.toLowerCase().includes(searchLower)) ||
-                (wine.country && wine.country.toLowerCase().includes(searchLower)) ||
-                (wine.vintage && wine.vintage.toString().includes(searchLower))
-            );
-        }).slice(0, 8); // Limit to 8 suggestions
-    };
-
-    // Handle input change
-    const handleInputChange = (value) => {
-        setSearchTerm(value);
-        setSelectedIndex(-1);
-        
-        if (value.trim()) {
-            const results = searchWines(value);
-            setSuggestions(results);
-            setShowSuggestions(true);
-        } else {
-            setSuggestions([]);
-            setShowSuggestions(false);
-        }
-        
-        onSearch({ ...filters, search: value });
-        
-        if (value) {
-            trackSearch(value, suggestions.length);
-        }
-    };
-
-    // Handle suggestion click
-    const handleSuggestionClick = (wine) => {
-        setSearchTerm(wine.wine_full);
-        setShowSuggestions(false);
-        saveRecentSearch(wine.wine_full);
-        onSearch({ ...filters, search: wine.wine_full });
-        trackEvent('search_suggestion_clicked', { wine_id: wine.id, wine_name: wine.wine_full });
-    };
-
-    // Handle recent search click
-    const handleRecentSearchClick = (term) => {
-        setSearchTerm(term);
-        handleInputChange(term);
-        trackEvent('recent_search_clicked', { search_term: term });
-    };
-
-    // Clear recent searches
-    const clearRecentSearches = () => {
-        setRecentSearches([]);
-        localStorage.removeItem('recentWineSearches');
-    };
-
-    // Keyboard navigation
-    const handleKeyDown = (e) => {
-        if (!showSuggestions) return;
-
-        switch (e.key) {
-            case 'ArrowDown':
-                e.preventDefault();
-                setSelectedIndex(prev => 
-                    prev < suggestions.length - 1 ? prev + 1 : prev
-                );
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                setSelectedIndex(prev => prev > 0 ? prev - 1 : -1);
-                break;
-            case 'Enter':
-                e.preventDefault();
-                if (selectedIndex >= 0 && suggestions[selectedIndex]) {
-                    handleSuggestionClick(suggestions[selectedIndex]);
-                } else if (searchTerm.trim()) {
-                    saveRecentSearch(searchTerm);
-                    setShowSuggestions(false);
-                }
-                break;
-            case 'Escape':
-                setShowSuggestions(false);
-                break;
-            default:
-                // Do nothing for other keys
-                break;
-        }
-    };
-
-    return (
-        <div className="enhanced-search" ref={searchRef}>
-            <div className="search-input-wrapper">
-                <Icons.Search className="search-icon" />
-                <input
-                    type="text"
-                    placeholder="Search wines, wineries, regions..."
-                    value={searchTerm}
-                    onChange={(e) => handleInputChange(e.target.value)}
-                    onFocus={() => setShowSuggestions(true)}
-                    onKeyDown={handleKeyDown}
-                    className="enhanced-search-input"
-                />
-                {searchTerm && (
-                    <button
-                        className="search-clear"
-                        onClick={() => handleInputChange('')}
-                    >
-                        <Icons.X className="icon-small" />
-                    </button>
-                )}
-            </div>
-
-            {showSuggestions && (
-                <div className="search-dropdown">
-                    {/* Recent Searches */}
-                    {!searchTerm && recentSearches.length > 0 && (
-                        <div className="search-section">
-                            <div className="search-section-header">
-                                <span>Recent Searches</span>
-                                <button 
-                                    className="clear-recent"
-                                    onClick={clearRecentSearches}
-                                >
-                                    Clear
-                                </button>
-                            </div>
-                            {recentSearches.map((search, index) => (
-                                <div
-                                    key={index}
-                                    className="recent-search-item"
-                                    onClick={() => handleRecentSearchClick(search)}
-                                >
-                                    <Icons.Search className="icon-small" />
-                                    <span>{search}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Search Suggestions */}
-                    {searchTerm && suggestions.length > 0 && (
-                        <div className="search-section">
-                            <div className="search-section-header">
-                                <span>Suggestions</span>
-                                <span className="result-count">{suggestions.length} results</span>
-                            </div>
-                            {suggestions.map((wine, index) => (
-                                <div
-                                    key={wine.id}
-                                    className={`suggestion-item ${selectedIndex === index ? 'selected' : ''}`}
-                                    onClick={() => handleSuggestionClick(wine)}
-                                    onMouseEnter={() => setSelectedIndex(index)}
-                                >
-                                    <img 
-                                        src={wine.label_url || '/placeholder-wine.jpg'} 
-                                        alt={wine.wine_full}
-                                        className="suggestion-image"
-                                    />
-                                    <div className="suggestion-info">
-                                        <div className="suggestion-name">{wine.wine_full}</div>
-                                        <div className="suggestion-details">
-                                            {wine.winery_full} • {wine.vintage} • {wine.region || 'Unknown Region'}
-                                        </div>
-                                        <div className="suggestion-meta">
-                                            <span className="suggestion-price">${wine.price}</span>
-                                            <span className="suggestion-score">{wine.score} pts</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* No Results */}
-                    {searchTerm && suggestions.length === 0 && (
-                        <div className="search-no-results">
-                            <Icons.Search className="no-results-icon" />
-                            <p>No wines found for "{searchTerm}"</p>
-                            <span>Try searching by winery, region, or vintage</span>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const Pagination = ({ winesPerPage, totalWines, paginate, currentPage }) => {
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(totalWines / winesPerPage); i++) {
-        pageNumbers.push(i);
-    }
-
-    if (pageNumbers.length <= 1) return null;
-
-    return (
-        <nav className="pagination">
-            <ul>
-                {pageNumbers.map(number => (
-                    <li key={number}>
-                        <button 
-                            onClick={() => paginate(number)} 
-                            className={currentPage === number ? 'active' : ''}
-                        >
-                            {number}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-        </nav>
-    );
-};
 
 const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord, onTasteChange, isCondensed, onAddToPWL }) => {
     const isInComparison = compareWines.some(w => w.id === wine.id);
@@ -963,7 +776,13 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
             <div className="wine-card-condensed">
                 <div className={`wine-rank-condensed ${getRankColor()}`}>{wineRank}</div>
                 <div className="wine-image-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
-                    <LazyImage src={wine.label_url || ''} alt={wine.wine_full} className="wine-bottle-image" />
+                    <LazyImage 
+                        src={wine.label_url || ''} 
+                        alt={wine.wine_full} 
+                        className="wine-bottle-image"
+                        widths={[160, 240, 320]}
+                        sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
+                    />
                 </div>
                 <div className="wine-info-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed info) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                     <h3>{wine.wine_full}</h3>
@@ -1005,7 +824,9 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <LazyImage 
                         src={wine.label_url} 
                         alt={`Bottle of ${wine.wine_full}`} 
-                        className="wine-bottle-image" 
+                        className="wine-bottle-image"
+                        widths={[240, 360, 480]}
+                        sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
                     />
                 ) : (
                     <Icons.Wine className="wine-placeholder" />
@@ -1169,7 +990,13 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                 <div className="wine-detail-grid">
                     <div className="wine-detail-image">
                         {wine.label_url ? (
-                            <img src={wine.label_url} alt={`Bottle of ${wine.wine_full}`} />
+                            <LazyImage 
+                                src={wine.label_url}
+                                alt={`Bottle of ${wine.wine_full}`}
+                                className="wine-detail-image"
+                                widths={[480, 640, 800]}
+                                sizes="(min-width: 1024px) 44vw, 90vw"
+                            />
                         ) : (
                             <Icons.Wine className="wine-placeholder-large" />
                         )}
@@ -1242,24 +1069,23 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
     return (
         <div className="filter-bar">
             <div className="filter-row">
-                <EnhancedSearch 
-                    wines={wines}
-                    onSearch={onFiltersChange}
-                    filters={filters}
-                />
-                <div className="view-toggle">
-                    <button 
-                        onClick={() => { onViewChange(false); trackEvent('view_mode_changed', { mode: 'grid' }); }} 
-                        className={!isCondensed ? 'view-btn active' : 'view-btn'}
-                    >
-                        <Icons.Grid className="view-icon" />
-                    </button>
-                    <button 
-                        onClick={() => { onViewChange(true); trackEvent('view_mode_changed', { mode: 'list' }); }} 
-                        className={isCondensed ? 'view-btn active' : 'view-btn'}
-                    >
-                        <Icons.List className="view-icon" />
-                    </button>
+                {/* Search removed per request; relying on clickable filters only */}
+                <div className="filter-section">
+                    <p className="filter-label">View</p>
+                    <div className="filter-buttons">
+                        <button 
+                            onClick={() => { onViewChange(false); trackEvent('view_mode_changed', { mode: 'grid' }); }} 
+                            className={!isCondensed ? 'filter-btn active' : 'filter-btn'}
+                        >
+                            As Grid
+                        </button>
+                        <button 
+                            onClick={() => { onViewChange(true); trackEvent('view_mode_changed', { mode: 'list' }); }} 
+                            className={isCondensed ? 'filter-btn active' : 'filter-btn'}
+                        >
+                            As List
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="filter-section">
@@ -1319,17 +1145,13 @@ const Footer = () => (
                 <div className="footer-section">
                     <h4>Resources</h4>
                     <ul>
-                        <li><a href="https://www.wine.com" target="_blank" rel="noopener noreferrer">Wine.com</a></li>
+                        <li><a href="https://www.winespectator.com/wine/search" target="_blank" rel="noopener noreferrer">Wine Ratings Search</a></li>
                         <li><a href="https://www.winespectator.com/vintage-charts" target="_blank" rel="noopener noreferrer">Vintage Charts</a></li>
                     </ul>
                 </div>
                 <div className="footer-section">
                     <h4>Stay Updated</h4>
-                    <p>Subscribe to our newsletter.</p>
-                    <div className="newsletter-form">
-                        <input type="email" placeholder="Your email" />
-                        <button className="btn-modern btn-newsletter">Subscribe</button>
-                    </div>
+                    <p><a href="https://www.winespectator.com/newsletter">Subscribe to our newsletter.</a></p>
                 </div>
             </div>
             <div className="footer-bottom">
@@ -1343,6 +1165,7 @@ const App = () => {
     const [selectedYear, setSelectedYear] = useState(2024);
     const [wines, setWines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [showBackToTop, setShowBackToTop] = useState(false);
     
     // Load wine data when selectedYear changes
     useEffect(() => {
@@ -1419,8 +1242,6 @@ const App = () => {
             return {};
         }
     });
-    const [currentPage, setCurrentPage] = useState(1);
-    const winesPerPage = 12;
     const [pwlModalOpen, setPwlModalOpen] = useState(false);
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
@@ -1524,22 +1345,21 @@ const App = () => {
         localStorage.setItem('tastingRecord', JSON.stringify(tastingRecord));
     }, [tastingRecord]);
     
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [filters]);
+    // Pagination removed: always show all filtered wines
 
     const handleTasteChange = (wineId, status) => {
-        const wine = wines.find(w => w.id === wineId);
+        const wine = wines.find(w => String(w.id) === String(wineId));
         if (wine && status) {
             trackTastingAction(wine, status);
         }
         
         setTastingRecord(prevRecord => {
             const newRecord = { ...prevRecord };
+            const key = String(wineId);
             if (status === null) {
-                delete newRecord[wineId];
+                delete newRecord[key];
             } else {
-                newRecord[wineId] = status;
+                newRecord[key] = status;
             }
             return newRecord;
         });
@@ -1586,6 +1406,20 @@ const App = () => {
 
     useScrollAnimation();
 
+    // Back-to-top visibility handler
+    useEffect(() => {
+        const onScroll = () => {
+            setShowBackToTop(window.scrollY > 600);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     const filteredWines = useMemo(() => {
         return wines.filter(wine => {
             const matchesSearch = !filters.search || 
@@ -1597,20 +1431,7 @@ const App = () => {
         });
     }, [filters, wines]);
 
-    const indexOfLastWine = currentPage * winesPerPage;
-    const indexOfFirstWine = indexOfLastWine - winesPerPage;
-    const currentWines = filteredWines.slice(indexOfFirstWine, indexOfLastWine);
-    const totalPages = Math.ceil(filteredWines.length / winesPerPage);
-    
-    const handlePageChange = pageNumber => {
-        setCurrentPage(pageNumber);
-        const wineListElement = document.getElementById('wine-list-container');
-        if (wineListElement) {
-            const elementTop = wineListElement.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({ top: elementTop - 100, behavior: 'smooth' });
-        }
-        trackEvent('pagination_used', { page: pageNumber });
-    };
+    const currentWines = filteredWines;
 
     return (
         <Fragment>
@@ -1688,12 +1509,7 @@ const App = () => {
                                 )
                             )}
                             
-                            {/* Pagination */}
-                            <Pagination 
-                                currentPage={currentPage} 
-                                totalPages={totalPages} 
-                                onPageChange={handlePageChange} 
-                            />
+                            {/* Pagination removed: showing all wines */}
                         </div>
                     </div>
                 </section>
@@ -1706,6 +1522,17 @@ const App = () => {
                 wineName={pwlWineName}
                 responseData={pwlResponseData}
             />
+
+            {/* Back to Top Button */}
+            {showBackToTop && (
+                <button
+                    className="back-to-top"
+                    onClick={scrollToTop}
+                    aria-label="Back to top"
+                >
+                    <Icons.ArrowUp className="back-to-top-icon" />
+                </button>
+            )}
             
             {/* Wine detail modal */}
             {selectedWine && (
