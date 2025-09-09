@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
@@ -206,67 +206,6 @@ const useScrollAnimation = () => {
             observer.disconnect();
         };
     }, []);
-};
-
-// Welcome Popup Component
-const WelcomePopup = ({ isOpen, onClose }) => {
-    const [dontShowAgain, setDontShowAgain] = useState(false);
-    
-    const handleClose = () => {
-        if (dontShowAgain) {
-            localStorage.setItem('hideWelcomePopup', 'true');
-        }
-        onClose();
-    };
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="welcome-popup-overlay">
-            <div className="welcome-popup-backdrop" onClick={handleClose} />
-            <div className="welcome-popup-content">
-                <button onClick={handleClose} className="welcome-popup-close">
-                    <Icons.X className="icon-close" />
-                </button>
-                
-                <div className="welcome-popup-header">
-                    <div className="welcome-popup-logo">
-                        <img src={process.env.PUBLIC_URL + '/logo.png'} alt="Wine Spectator Logo" />
-                    </div>
-                    <h2>About The Top 100</h2>
-                </div>
-                
-                <div className="welcome-popup-body">
-                    <p>
-                        Each year since 1988, <em>Wine Spectator</em> has released its Top 100 list, where our editors select the most exciting wines from the thousands we reviewed during the course of the year. These wines are a diverse group—ranging from emerging labels and regions to traditional estates exploring new directions—and all generate the excitement we call the "X-factor."
-                    </p>
-                    
-                    <p>
-                        In addition, our selection also prioritizes quality (based on score), value (based on price) and availability (based on the number of cases either made or imported into the United States). These criteria are applied to the wines that rated outstanding (90 points or higher on <em>Wine Spectator</em>'s 100-point scale) each year to determine our Top 100.
-                    </p>
-                    
-                    <p>
-                        As many wines are made in limited quantities and not available in every market, our Top 100 is not a "shopping list," but rather a guide to wineries to watch in the future—a reflection of the producers and wines our editors become particularly passionate about in each new year.
-                    </p>
-                </div>
-                
-                <div className="welcome-popup-footer">
-                    <label className="welcome-popup-checkbox">
-                        <input 
-                            type="checkbox" 
-                            checked={dontShowAgain}
-                            onChange={(e) => setDontShowAgain(e.target.checked)}
-                        />
-                        <span>Don't show me again</span>
-                    </label>
-                    
-                    <button onClick={handleClose} className="btn-modern">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
 };
 
 // Export Button Component
@@ -489,6 +428,30 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
 
     const totalCount = tastedWines.length + wantToTasteWines.length;
 
+    // Local dismissed state and logic to re-show when a new wine is added
+    const [dismissed, setDismissed] = useState(false);
+    const prevCountRef = useRef(totalCount);
+
+    useEffect(() => {
+        // Re-show the tab when the total count increases (a new wine is added)
+        if (totalCount > prevCountRef.current) {
+            setDismissed(false);
+        }
+        prevCountRef.current = totalCount;
+    }, [totalCount]);
+
+    // Also re-show the tab if the user edits an existing wine's status
+    // (e.g., switches from "want" to "tasted") while there is at least one selection
+    useEffect(() => {
+        if (totalCount > 0) {
+            setDismissed(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tastingRecord]);
+
+    // Hide the My Tastings tab and panel until there is at least one selection
+    if (totalCount === 0 || dismissed) return null;
+
     return (
         <>
             {/* Fixed Tab Button */}
@@ -498,6 +461,17 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
             >
                 <span className="tab-text">My Tastings</span>
                 <span className="tab-count">{totalCount}</span>
+                <span
+                    className="tab-hide"
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); } }}
+                    aria-label="Hide My Tastings"
+                    title="Hide My Tastings"
+                >
+                    (hide)
+                </span>
             </button>
 
             {/* Sliding Panel */}
@@ -1079,7 +1053,7 @@ const Navigation = () => {
                 <a href="https://www.winespectator.com" className="logo-container">
                     <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : '#8c0004' }}>
                         <img 
-                            src={process.env.PUBLIC_URL + (scrolled ? '/logo-black.png' : '/logo.png')} 
+                            src={process.env.PUBLIC_URL + (scrolled ? '/logo-red.png' : '/logo.png')} 
                             alt="Wine Spectator Logo" 
                             className="navbar-logo"
                         />
@@ -1268,7 +1242,6 @@ const App = () => {
     const [selectedWine, setSelectedWine] = useState(null);
     const [filters, setFilters] = useState({ search: '', type: 'All', country: 'All' });
     const [isCondensed, setIsCondensed] = useState(false);
-    const [showWelcomePopup, setShowWelcomePopup] = useState(false);
     const [showTastingPanel, setShowTastingPanel] = useState(false);
     const [compareWines, setCompareWines] = useState([]);
     const [showComparisonModal, setShowComparisonModal] = useState(false);
@@ -1364,12 +1337,6 @@ const App = () => {
             if (!Number.isNaN(y)) {
                 setSelectedYear(y);
             }
-        }
-
-        // Check if welcome popup should be shown
-        const hidePopup = localStorage.getItem('hideWelcomePopup');
-        if (!hidePopup) {
-            setShowWelcomePopup(true);
         }
 
         // Track page view
@@ -1637,12 +1604,6 @@ const App = () => {
                 wines={compareWines}
                 isOpen={showComparisonModal}
                 onClose={() => setShowComparisonModal(false)}
-            />
-
-            {/* Welcome popup */}
-            <WelcomePopup 
-                isOpen={showWelcomePopup}
-                onClose={() => setShowWelcomePopup(false)}
             />
 
             {/* Footer */}

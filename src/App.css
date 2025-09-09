@@ -1854,6 +1854,41 @@ body {
   font-size: 0.875rem;
 }
 
+.tab-hide {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tab-hide:hover {
+  color: #fff;
+}
+
+/* Dismiss button aligned with the tasting tab */
+.tasting-tracker-dismiss {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 96px; /* sits just to the left of the tab */
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1302; /* same layer as the tab */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.tasting-tracker-dismiss:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
 .tasting-tracker-panel {
   position: fixed;
   right: 0;
@@ -2459,6 +2494,14 @@ body {
     top: auto;
     bottom: 100px;
     transform: none;
+  }
+  
+  /* Position dismiss button next to the tab on mobile */
+  .tasting-tracker-dismiss {
+    top: auto;
+    bottom: 100px;
+    transform: none;
+    right: 96px;
   }
   
   .tasting-tracker-tab.tab-open {
