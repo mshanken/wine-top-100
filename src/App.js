@@ -844,7 +844,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             className="btn-pwl btn-pwl-small"
                             onClick={() => onAddToPWL(wine)}
                         >
-                            Add to PWL
+                            Save to PWL
                         </button>
                     </div>
                 </div>
@@ -898,7 +898,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             className="btn-pwl"
                             onClick={() => onAddToPWL(wine)}
                         >
-                            Add to PWL
+                            Save to PWL
                         </button>
                     </div>
                 </div>
@@ -945,13 +945,6 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
                     ) : responseData.success ? (
                         <div className="pwl-success">
                             <p>Successfully added to your Personal Wine List!</p>
-                            <div className="pwl-response">
-                                <p><strong>Wine ID:</strong> {responseData.wineId}</p>
-                                <div className="response-preview">
-                                    <p><strong>Response Preview:</strong></p>
-                                    <pre>{responseData.response}</pre>
-                                </div>
-                            </div>
                         </div>
                     ) : (
                         <div className="pwl-error">
@@ -1084,7 +1077,7 @@ const Navigation = () => {
         <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
                 <a href="https://www.winespectator.com" className="logo-container">
-                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : 'rgba(0, 0, 0, 0.6)' }}>
+                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : '#8c0004' }}>
                         <img 
                             src={process.env.PUBLIC_URL + (scrolled ? '/logo-black.png' : '/logo.png')} 
                             alt="Wine Spectator Logo" 
@@ -1290,59 +1283,77 @@ const App = () => {
     const [pwlModalOpen, setPwlModalOpen] = useState(false);
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
-    
-    // Handle Add to PWL button click
-    const handleAddToPWL = (wine) => {
-        // Set the wine name for display in the modal
-        setPwlWineName(wine.wine_full);
-        
-        // Reset response data and open modal
+
+    // Handle Save to PWL button click
+    const API_BASE = process.env.REACT_APP_API_BASE || 'https://www.winespectator.com';
+    const PWL_PATH = process.env.REACT_APP_PWL_PATH || '/pwl/apiAdditem';
+    const USE_API  = String(process.env.REACT_APP_PWL_API_ENABLED).toLowerCase() === 'true';
+
+    const handleAddToPWL = async (wine) => {
+        setPwlWineName(`${wine.winery_full} ${wine.wine_full} ${wine.vintage}`);
         setPwlResponseData(null);
         setPwlModalOpen(true);
-        
-        // Construct the URL
-        const url = 'https://www.winespectator.com/pwl/additem';
-        
-        // Create form data for the payload
-        const formData = new FormData();
-        formData.append('wineid[]', wine.id);
-        
-        // Make the POST request
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json',
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                // Set the response data
-                setPwlResponseData({ 
-                    success: true, 
-                    url, 
-                    wineId: wine.id,
-                    response: data.substring(0, 500) + (data.length > 500 ? '...' : '') 
-                });
-                
-                // Track the event
-                trackEvent('add_to_pwl', { wine_id: wine.id, wine_name: wine.wine_full });
-            })
-            .catch(error => {
-                console.error('Error adding to PWL:', error);
-                setPwlResponseData({ 
-                    success: false, 
-                    error: error.message, 
-                    url,
-                    wineId: wine.id 
-                });
+
+        // Fallback to legacy endpoint if you ever need to flip the flag off
+        const url = USE_API ? `${API_BASE}${PWL_PATH}` : `${API_BASE}/pwl/additem`;
+
+        try {
+            if (!USE_API) {
+                // legacy form flow (kept for easy rollback)
+                const fd = new FormData();
+                fd.append('wineid[]', wine.id);
+                const res = await fetch(url, { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+                const text = await res.text();
+                setPwlResponseData({ success: res.ok, url, wineId: wine.id, response: text.slice(0, 500) });
+                return;
+            }
+
+            // new JSON API flow
+            const res = await fetch(url, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',  // sends wso_session
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    listid: 'default',
+                    wineid: [wine.id],
+                    source: 'top100',
+                    name: `${wine.winery_full} ${wine.wine_full} ${wine.vintage}`
+                })
             });
-    };
+
+            if (res.status === 401) {
+                setPwlResponseData({ success: false, code: 'AUTH_REQUIRED', message: 'Please sign in to save to PWL.' });
+                return;
+            }
+            if (res.status === 403) {
+                setPwlResponseData({ success: false, code: 'PAYWALL_FORBIDDEN', message: 'Subscriber feature. Upgrade to continue.' });
+                return;
+            }
+            if (!res.ok && res.status !== 207) {
+                throw new Error(`Request failed: ${res.status}`);
+            }
+
+            const data = await res.json();
+            const { added = [], errors = [] } = data || {};
+            const partial = res.status === 207 || errors.length > 0;
+
+            setPwlResponseData({
+                success: !partial,
+      partial,
+      added,
+      errors,
+      message: partial
+        ? `Added ${added.length} item(s). ${errors.length} issue(s).`
+        : 'Added to your Personal Wine List.'
+    });
+
+    trackEvent('add_to_pwl', { wine_id: wine.id, wine_name: wine.wine_full, partial, status: res.status });
+    } catch (err) {
+    console.error('Error adding to PWL:', err);
+    setPwlResponseData({ success: false, code: 'NETWORK_ERROR', message: 'We had trouble saving that. Please try again.' });
+    }
+};
 
     useEffect(() => {
         // Parse ?year=YYYY from URL on initial load

@@ -15,19 +15,20 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "env-cmd": "^11.0.0",
     "gh-pages": "^6.1.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
     "deploy-github": "gh-pages -d build",
-    "deploy:staging": "aws s3 sync build/ s3://staging-top100list.winespectator.com --delete",
-    "deploy:production": "aws s3 sync build/ s3://top100list.winespectator.com --delete"
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:production": "env-cmd -f .env.production react-scripts build",
+    "deploy:staging": "npm run build:staging && aws s3 sync build/ s3://staging-top100list.winespectator.com --delete",
+    "deploy:production": "npm run build:production && aws s3 sync build/ s3://top100list.winespectator.com --delete"
   },
   "eslintConfig": {
     "extends": [
