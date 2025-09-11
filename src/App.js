@@ -818,7 +818,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             className="btn-pwl btn-pwl-small"
                             onClick={() => onAddToPWL(wine)}
                         >
-                            Save to PWL
+                            Save to Personal Wine List
                         </button>
                     </div>
                 </div>
@@ -872,7 +872,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             className="btn-pwl"
                             onClick={() => onAddToPWL(wine)}
                         >
-                            Save to PWL
+                            Save to Personal Wine List
                         </button>
                     </div>
                 </div>
@@ -1131,47 +1131,6 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
         </div>
     );
 };
-
-const Footer = () => (
-    <footer className="footer">
-        <div className="footer-container">
-            <div className="footer-grid">
-                <div className="footer-section">
-                    <img src={process.env.PUBLIC_URL + '/logo.png'} alt="Wine Spectator Logo" className="footer-logo" />
-                    <p>Curating the world's finest wines since 1976.</p>
-                </div>
-                <div className="footer-section">
-                    <h4>Follow Us</h4>
-                    <div className="social-links">
-                        <a href="https://twitter.com/WineSpectator" target="_blank" rel="noopener noreferrer" className="social-icon-container">
-                            <img src={process.env.PUBLIC_URL + '/X.png'} alt="X Social Icon" className="social-icon" />
-                        </a>
-                        <a href="https://facebook.com/WineSpectator" target="_blank" rel="noopener noreferrer" className="social-icon-container">
-                            <img src={process.env.PUBLIC_URL + '/FB.png'} alt="Facebook Social Icon" className="social-icon" />
-                        </a>
-                        <a href="https://instagram.com/winespectator" target="_blank" rel="noopener noreferrer" className="social-icon-container">
-                            <img src={process.env.PUBLIC_URL + '/IG.png'} alt="Instagram Social Icon" className="social-icon" />
-                        </a>
-                    </div>
-                </div>
-                <div className="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="https://www.winespectator.com/wine/search" target="_blank" rel="noopener noreferrer">Wine Ratings Search</a></li>
-                        <li><a href="https://www.winespectator.com/vintage-charts" target="_blank" rel="noopener noreferrer">Vintage Charts</a></li>
-                    </ul>
-                </div>
-                <div className="footer-section">
-                    <h4>Stay Updated</h4>
-                    <p><a href="https://www.winespectator.com/newsletter">Subscribe to our newsletter.</a></p>
-                </div>
-            </div>
-            <div className="footer-bottom">
-                <p> 2024 Wine Spectator. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-);
 
 const App = () => {
     const [selectedYear, setSelectedYear] = useState(2024);
@@ -1493,7 +1452,7 @@ const App = () => {
                                 >
                                     {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
                                         <option key={year} value={year}>
-                                            {year} Vintage
+                                            {year} Top 100
                                         </option>
                                     ))}
                                 </select>
@@ -1570,6 +1529,7 @@ const App = () => {
                     aria-label="Back to top"
                 >
                     <Icons.ArrowUp className="back-to-top-icon" />
+                    Back to Top
                 </button>
             )}
             
@@ -1606,8 +1566,7 @@ const App = () => {
                 onClose={() => setShowComparisonModal(false)}
             />
 
-            {/* Footer */}
-            <Footer />
+            {/* Footer moved to public/index.html as static HTML */}
         </Fragment>
     );
 };
