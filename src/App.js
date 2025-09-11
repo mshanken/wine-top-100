@@ -24,6 +24,27 @@ const buildImgixUrl = (url, params = {}) => {
     }
 };
 
+// Compute fallback label URL using logic equivalent to the provided Twig template
+// Twig logic:
+// colorPlusType = wine.color ~ '_' ~ wine.type
+// if colorPlusType == "rosé" => betterType = "rose"
+// elseif colorPlusType == "rosé_still" => betterType = "rose_still"
+// elseif colorPlusType == "rosé_sparkling" => betterType = "rose_sparkling"
+// else betterType = colorPlusType
+// fallback_label = "https://mshanken.imgix.net/wso/bolt/wine-detail/details/" ~ betterType ~ ".png"
+const computeFallbackLabel = (wine) => {
+    const rawColor = (wine?.color || '').toString().toLowerCase().trim();
+    const rawTypeInput = (wine?.type || '').toString().toLowerCase().trim();
+    // If type is missing, infer: sparkling if color indicates sparkling/champagne; otherwise still
+    const inferredType = rawTypeInput || ((/sparkling|champagne/.test(rawColor)) ? 'sparkling' : 'still');
+    const colorPlusType = inferredType ? `${rawColor}_${inferredType}` : rawColor;
+    // Normalize accented rosé to rose in both standalone and prefixed forms
+    let betterType = colorPlusType
+        .replace(/^ros[ée]$/, 'rose')
+        .replace(/^ros[ée]_/, 'rose_');
+    return `https://mshanken.imgix.net/wso/bolt/wine-detail/details/${betterType}.png`;
+};
+
 // Lazy Loading Image Component with responsive srcset/sizes
 const LazyImage = ({ src, alt, className, placeholderSrc = 'placeholder-wine.jpg', widths = [], sizes, noPreload = false }) => {
     // Ensure placeholder works when the app is hosted under a subpath
@@ -512,9 +533,13 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                                 sizes="80px"
                                             />
                                         ) : (
-                                            <div className="mini-wine-image">
-                                                <Icons.Wine className="wine-placeholder" />
-                                            </div>
+                                            <LazyImage
+                                                src={computeFallbackLabel(wine)}
+                                                alt={wine.wine_full}
+                                                className="mini-wine-image"
+                                                widths={[80, 120, 160]}
+                                                sizes="80px"
+                                            />
                                         )}
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
@@ -550,9 +575,13 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                                 sizes="80px"
                                             />
                                         ) : (
-                                            <div className="mini-wine-image">
-                                                <Icons.Wine className="wine-placeholder" />
-                                            </div>
+                                            <LazyImage
+                                                src={computeFallbackLabel(wine)}
+                                                alt={wine.wine_full}
+                                                className="mini-wine-image"
+                                                widths={[80, 120, 160]}
+                                                sizes="80px"
+                                            />
                                         )}
                                         <div className="mini-wine-info">
                                             <h5>{wine.wine_full}</h5>
@@ -622,9 +651,13 @@ const ComparisonBar = ({ compareWines, onRemove, onCompare }) => {
                                     sizes="80px"
                                 />
                             ) : (
-                                <div className="comparison-thumb">
-                                    <Icons.Wine className="wine-placeholder" />
-                                </div>
+                                <LazyImage 
+                                    src={computeFallbackLabel(wine)}
+                                    alt={wine.wine_full}
+                                    className="comparison-thumb"
+                                    widths={[80, 120]}
+                                    sizes="80px"
+                                />
                             )}
                             <div className="comparison-wine-info">
                                 <span className="wine-name">{wine.wine_full}</span>
@@ -704,9 +737,13 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
                                             sizes="(min-width: 1024px) 26vw, 90vw"
                                         />
                                     ) : (
-                                        <div className="comparison-wine-image">
-                                            <Icons.Wine className="wine-placeholder" />
-                                        </div>
+                                        <LazyImage 
+                                            src={computeFallbackLabel(wine)}
+                                            alt={wine.wine_full}
+                                            className="comparison-wine-image"
+                                            widths={[320, 480, 640, 800]}
+                                            sizes="(min-width: 1024px) 26vw, 90vw"
+                                        />
                                     )}
                                     <h3>{wine.wine_full}</h3>
                                     <p className="comparison-winery">{wine.winery_full}</p>
@@ -800,7 +837,13 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                         sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
                     />
                 ) : (
-                    <Icons.Wine className="wine-placeholder" />
+                    <LazyImage 
+                        src={computeFallbackLabel(wine)} 
+                        alt={wine.wine_full} 
+                        className="wine-bottle-image"
+                        widths={[160, 240, 320]}
+                        sizes="(min-width: 1024px) 20vw, (min-width: 768px) 33vw, 50vw"
+                    />
                 )}
                 </div>
                 <div className="wine-info-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed info) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
@@ -848,7 +891,13 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                         sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
                     />
                 ) : (
-                    <Icons.Wine className="wine-placeholder" />
+                    <LazyImage 
+                        src={computeFallbackLabel(wine)} 
+                        alt={`Bottle of ${wine.wine_full}`} 
+                        className="wine-bottle-image"
+                        widths={[240, 360, 480]}
+                        sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
+                    />
                 )}
             </div>
             <div className="wine-content">
@@ -1010,7 +1059,13 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                                 sizes="(min-width: 1024px) 44vw, 90vw"
                             />
                         ) : (
-                            <Icons.Wine className="wine-placeholder-large" />
+                            <LazyImage 
+                                src={computeFallbackLabel(wine)} 
+                                alt={`Bottle of ${wine.wine_full}`} 
+                                className="wine-detail-image"
+                                widths={[480, 640, 800]}
+                                sizes="(min-width: 1024px) 44vw, 90vw"
+                            />
                         )}
                     </div>
                     <div className="wine-detail-info">
