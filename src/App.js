@@ -42,6 +42,10 @@ const computeFallbackLabel = (wine) => {
     let betterType = colorPlusType
         .replace(/^ros[ée]$/, 'rose')
         .replace(/^ros[ée]_/, 'rose_');
+    // Guard against invalid sparkling_sparkling; default to white_sparkling
+    if (betterType === 'sparkling_sparkling') {
+        betterType = 'white_sparkling';
+    }
     return `https://mshanken.imgix.net/wso/bolt/wine-detail/details/${betterType}.png`;
 };
 
@@ -795,7 +799,7 @@ const ComparisonModal = ({ wines, isOpen, onClose }) => {
 // Enhanced Search Component removed per request
 
 
-const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord, onTasteChange, isCondensed, onAddToPWL }) => {
+const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord, onTasteChange, isCondensed, onAddToPWL, selectedYear }) => {
     const isInComparison = compareWines.some(w => w.id === wine.id);
     
     // Extract rank from the top100_rank property or use the id as fallback
@@ -824,6 +828,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
     };
 
     if (isCondensed) {
+        const showVideoCondensed = Number(selectedYear) >= 2013 && wineRank <= 10;
         return (
             <div className="wine-card-condensed">
                 <div className={`wine-rank-condensed ${getRankColor()}`}>{wineRank}</div>
@@ -857,6 +862,17 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 <div className="wine-details-condensed">
                     <div className="price-score-row">
                         <span className="wine-score-condensed">{score} pts</span>
+                        {showVideoCondensed && (
+                            <a
+                                className="btn-video btn-small"
+                                href={`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => { e.stopPropagation(); trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id }); }}
+                            >
+                                Watch the video
+                            </a>
+                        )}
                         <button
                             className="btn-pwl btn-pwl-small"
                             onClick={() => onAddToPWL(wine)}
@@ -868,6 +884,8 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
             </div>
         );
     }
+
+    const showVideo = Number(selectedYear) >= 2013 && wineRank <= 10;
 
     return (
         <div className="wine-card-modern">
@@ -917,6 +935,17 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     </div>
                     <div className="wine-footer">
                         <button className="btn-modern btn-small" onClick={() => { console.log('[WineCard] View Details clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id }); }}>View Details</button>
+                        {showVideo && (
+                            <a
+                                className="btn-video btn-small"
+                                href={`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id })}
+                            >
+                                Watch the video
+                            </a>
+                        )}
                         <button 
                             className="btn-pwl"
                             onClick={() => onAddToPWL(wine)}
@@ -1540,6 +1569,7 @@ const App = () => {
                                                 compareWines={compareWines}
                                                 onCompareToggle={handleCompareToggle}
                                                 onAddToPWL={handleAddToPWL}
+                                                selectedYear={selectedYear}
                                             />
                                         ))}
                                     </div>
@@ -1556,6 +1586,7 @@ const App = () => {
                                                 compareWines={compareWines}
                                                 onCompareToggle={handleCompareToggle}
                                                 onAddToPWL={handleAddToPWL}
+                                                selectedYear={selectedYear}
                                             />
                                         ))}
                                     </div>

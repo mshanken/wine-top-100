@@ -1664,6 +1664,39 @@ body {
   stroke: currentColor;
 }
 
+/* Video button (distinct color) */
+.btn-video {
+  background-color: #10B981; /* green */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px; /* match .btn-modern default */
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-left: 8px;
+}
+
+.btn-video:hover {
+  background-color: #059669; /* darker green on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+}
+
+.btn-video:active {
+  transform: translateY(0);
+}
+
+.btn-video.btn-small {
+  padding: 8px 20px; /* match .btn-modern.btn-small */
+  font-size: 14px;   /* match .btn-modern.btn-small */
+  border-radius: 8px;
+}
+
 /* Static Site Footer (public/index.html) */
 .site-footer {
   background-color: #8d0004; /* already inline but keep for safety */
