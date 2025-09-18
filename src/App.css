@@ -1666,7 +1666,7 @@ body {
 
 /* Video button (distinct color) */
 .btn-video {
-  background-color: #10B981; /* green */
+  background-color: #b09855; /* gold */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -1682,7 +1682,7 @@ body {
 }
 
 .btn-video:hover {
-  background-color: #059669; /* darker green on hover */
+  background-color: #a28b4e; /* darker gold on hover */
   transform: translateY(-1px);
   box-shadow: 0 10px 18px rgba(0,0,0,0.18);
 }

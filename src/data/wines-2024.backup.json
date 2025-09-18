@@ -225,7 +225,7 @@
     "top100_year": 2024,
     "top100_rank": 12,
     "label_url": "https://mshanken-wineapi.imgix.net/Penfolds/Cabernet-Shiraz%20South%20Australia%20Bin%20389/2022/4d4fe1b54bc68431ad48a1a985a7c122.jpeg",
-    "wine_type": "still"
+    "wine_type": "still"  
   },
   {
     "id": 1312933,
@@ -300,8 +300,7 @@
     "issue_date": "Apr 30, 2024",
     "top100_year": 2024,
     "top100_rank": 16,
-    "label_url": "https://mshanken-wineapi.imgix.net/Merry%20Edwards/Sauvignon%20Blanc%20Russian%20River%20Valley/2022/fd02625132cafa6bdff382adf106b3f6.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Merry%20Edwards/Sauvignon%20Blanc%20Russian%20River%20Valley/2022/fd02625132cafa6bdff382adf106b3f6.jpeg"
   },
   {
     "id": 1307696,
@@ -319,8 +318,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 17,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bledsoe%20Family/Cabernet%20Sauvignon%20Walla%20Walla%20Valley/2021/69b1bd2942a5a33479f3e61133b89830.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bledsoe%20Family/Cabernet%20Sauvignon%20Walla%20Walla%20Valley/2021/69b1bd2942a5a33479f3e61133b89830.jpeg"
   },
   {
     "id": 1312532,
@@ -338,8 +336,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 18,
-    "label_url": "https://mshanken-wineapi.imgix.net/Michele%20Satta/Bolgheri%20Superiore%20Piastraia/2021/a175f432a5e6bf2f6abc31e1fd2e2d73.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Michele%20Satta/Bolgheri%20Superiore%20Piastraia/2021/a175f432a5e6bf2f6abc31e1fd2e2d73.jpeg"
   },
   {
     "id": 1308434,
@@ -357,8 +354,7 @@
     "issue_date": "Jun 30, 2024",
     "top100_year": 2024,
     "top100_rank": 19,
-    "label_url": "https://mshanken-wineapi.imgix.net/La%20Fiorita/Brunello%20di%20Montalcino/2019/1b3de551dd4d1405fa34e27cc7a7ceef.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/La%20Fiorita/Brunello%20di%20Montalcino/2019/1b3de551dd4d1405fa34e27cc7a7ceef.png"
   },
   {
     "id": 1315013,
@@ -376,8 +372,7 @@
     "issue_date": "Dec 15, 2024",
     "top100_year": 2024,
     "top100_rank": 20,
-    "label_url": "https://mshanken-wineapi.imgix.net/Roederer%20Estate/Brut%20Anderson%20Valley/2024/ea21a6a1f7bbdec3031844ef3767352d.jpeg",
-    "wine_type": "sparkling"
+    "label_url": "https://mshanken-wineapi.imgix.net/Roederer%20Estate/Brut%20Anderson%20Valley/2024/ea21a6a1f7bbdec3031844ef3767352d.jpeg"
   },
   {
     "id": 1309613,
@@ -395,8 +390,7 @@
     "issue_date": "Aug 31, 2024",
     "top100_year": 2024,
     "top100_rank": 21,
-    "label_url": "https://mshanken-wineapi.imgix.net/Carlisle/Zinfandel%20Russian%20River%20Valley%20Papera%20Ranch/2021/5c096714385920610cdf90870b0ca181.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Carlisle/Zinfandel%20Russian%20River%20Valley%20Papera%20Ranch/2021/5c096714385920610cdf90870b0ca181.jpeg"
   },
   {
     "id": 1308415,
@@ -414,8 +408,7 @@
     "issue_date": "Jun 30, 2024",
     "top100_year": 2024,
     "top100_rank": 22,
-    "label_url": "https://mshanken-wineapi.imgix.net/Siro%20Pacenti/Brunello%20di%20Montalcino%20Pelagrilli/2019/9fd1dc9a5bc79a794a54cc67bb24c45f.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Siro%20Pacenti/Brunello%20di%20Montalcino%20Pelagrilli/2019/9fd1dc9a5bc79a794a54cc67bb24c45f.jpeg"
   },
   {
     "id": 1298070,
@@ -433,8 +426,7 @@
     "issue_date": "Feb 29, 2024",
     "top100_year": 2024,
     "top100_rank": 23,
-    "label_url": "https://mshanken-wineapi.imgix.net/Figgins/Walla%20Walla%20Valley/2020/161572a1e3f22e35f599d8ec29d2230a",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Figgins/Walla%20Walla%20Valley/2020/161572a1e3f22e35f599d8ec29d2230a"
   },
   {
     "id": 1312445,
@@ -452,8 +444,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 24,
-    "label_url": "https://mshanken-wineapi.imgix.net/San%20Felice/Chianti%20Classico%20Il%20Grigio%20Riserva/2021/6becba8924eed77f2e880ee1dbf3ab4a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/San%20Felice/Chianti%20Classico%20Il%20Grigio%20Riserva/2021/6becba8924eed77f2e880ee1dbf3ab4a.jpeg"
   },
   {
     "id": 1303465,
@@ -471,8 +462,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 25,
-    "label_url": "https://mshanken-wineapi.imgix.net/Rutherford%20Hill/Merlot%20Napa%20Valley/2021/a5c576a9ea299948483c72c9146c08a1.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Rutherford%20Hill/Merlot%20Napa%20Valley/2021/a5c576a9ea299948483c72c9146c08a1.jpeg"
   },
   {
     "id": 1310102,
@@ -490,8 +480,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 26,
-    "label_url": "https://mshanken-wineapi.imgix.net/Dow/Late%20Bottled%20Port/2018/d3a2f148608e2257074a27eb8e128afc.png",
-    "wine_type": "dessert"
+    "label_url": "https://mshanken-wineapi.imgix.net/Dow/Late%20Bottled%20Port/2018/d3a2f148608e2257074a27eb8e128afc.png"
   },
   {
     "id": 1302208,
@@ -509,8 +498,7 @@
     "issue_date": "Apr 30, 2024",
     "top100_year": 2024,
     "top100_rank": 27,
-    "label_url": "https://mshanken-wineapi.imgix.net/St.%20Sup%C3%A9ry/Sauvignon%20Blanc%20Napa%20Valley%20Dollarhide%20Cold%20Concrete%20Fermented/2022/2d096ee5ea18e5da118a0d604e1feb3d.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/St.%20Sup%C3%A9ry/Sauvignon%20Blanc%20Napa%20Valley%20Dollarhide%20Cold%20Concrete%20Fermented/2022/2d096ee5ea18e5da118a0d604e1feb3d.jpeg"
   },
   {
     "id": 1308376,
@@ -528,8 +516,7 @@
     "issue_date": "Jun 30, 2024",
     "top100_year": 2024,
     "top100_rank": 28,
-    "label_url": "https://mshanken-wineapi.imgix.net/Castello%20Romitorio/Brunello%20di%20Montalcino/2019/2b4e30cc5a7c4eea6dd316c1c87c299d.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Castello%20Romitorio/Brunello%20di%20Montalcino/2019/2b4e30cc5a7c4eea6dd316c1c87c299d.jpeg"
   },
   {
     "id": 1311734,
@@ -547,8 +534,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 29,
-    "label_url": "https://mshanken-wineapi.imgix.net/Calera/Pinot%20Noir%20Mount%20Harlan%20Ryan%20Vineyard/2021/51e3f8202f98e8df58f5d0dab28abb36.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Calera/Pinot%20Noir%20Mount%20Harlan%20Ryan%20Vineyard/2021/51e3f8202f98e8df58f5d0dab28abb36.jpeg"
   },
   {
     "id": 1312313,
@@ -566,8 +552,7 @@
     "issue_date": "Nov 30, 2024",
     "top100_year": 2024,
     "top100_rank": 30,
-    "label_url": "https://mshanken-wineapi.imgix.net/Kaiken/Malbec%20Mendoza%20Ultra/2021/3d8c5e4c26605c0a65d56328a2268a5f.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Kaiken/Malbec%20Mendoza%20Ultra/2021/3d8c5e4c26605c0a65d56328a2268a5f.png"
   },
   {
     "id": 1306036,
@@ -585,8 +570,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 31,
-    "label_url": "https://mshanken-wineapi.imgix.net/Patz%20%26%20Hall/Pinot%20Noir%20Sonoma%20Coast/2021/abc051c4a2126a93f064c298df2d6da1.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Patz%20%26%20Hall/Pinot%20Noir%20Sonoma%20Coast/2021/abc051c4a2126a93f064c298df2d6da1.jpeg"
   },
   {
     "id": 1305983,
@@ -604,8 +588,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 32,
-    "label_url": "https://mshanken-wineapi.imgix.net/Barnard%20Griffin/Cabernet%20Sauvignon%20Columbia%20Valley/2021/dd9dd2cda005bc1ce5c252f30a218367.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Barnard%20Griffin/Cabernet%20Sauvignon%20Columbia%20Valley/2021/dd9dd2cda005bc1ce5c252f30a218367.jpeg"
   },
   {
     "id": 1311958,
@@ -623,8 +606,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 33,
-    "label_url": "https://mshanken-wineapi.imgix.net/Elena%20Walch/Pinot%20Grigio%20Alto%20Adige/2023/cc05bde4ee984051640a1a3b7f924d35.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Elena%20Walch/Pinot%20Grigio%20Alto%20Adige/2023/cc05bde4ee984051640a1a3b7f924d35.jpeg"
   },
   {
     "id": 1310989,
@@ -642,8 +624,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 34,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bergstr%C3%B6m/Pinot%20Noir%20Ribbon%20Ridge%20La%20Spirale%20Vineyard/2022/c994449cead307b510b12ce5fcb1cfe5.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bergstr%C3%B6m/Pinot%20Noir%20Ribbon%20Ridge%20La%20Spirale%20Vineyard/2022/c994449cead307b510b12ce5fcb1cfe5.jpeg"
   },
   {
     "id": 1313178,
@@ -661,8 +642,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 35,
-    "label_url": "https://mshanken-wineapi.imgix.net/Castellare%20di%20Castellina/Toscana%20I%20Sodi%20di%20San%20Niccol%C3%B2/2020/c059fb0aad087a218143e56d1227a81a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Castellare%20di%20Castellina/Toscana%20I%20Sodi%20di%20San%20Niccol%C3%B2/2020/c059fb0aad087a218143e56d1227a81a.jpeg"
   },
   {
     "id": 1306868,
@@ -680,8 +660,7 @@
     "issue_date": "May 31, 2024",
     "top100_year": 2024,
     "top100_rank": 36,
-    "label_url": "https://mshanken-wineapi.imgix.net/VIK/Milla%20Cala%20Millahue/2021/cd2c7deff87f8e0a91ddf605e6d7dfd1.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/VIK/Milla%20Cala%20Millahue/2021/cd2c7deff87f8e0a91ddf605e6d7dfd1.jpeg"
   },
   {
     "id": 1310695,
@@ -699,8 +678,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 37,
-    "label_url": "https://mshanken-wineapi.imgix.net/Vallepicciola/Chianti%20Classico/2021/bfdd61e27716a7faed46670e75e59864.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Vallepicciola/Chianti%20Classico/2021/bfdd61e27716a7faed46670e75e59864.png"
   },
   {
     "id": 1311745,
@@ -718,8 +696,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 38,
-    "label_url": "https://mshanken-wineapi.imgix.net/Racines/Pinot%20Noir%20Sta.%20Rita%20Hills%20Cuv%C3%A9e/2021/33c769b97558bb4e7c3c592bd90673d6.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Racines/Pinot%20Noir%20Sta.%20Rita%20Hills%20Cuv%C3%A9e/2021/33c769b97558bb4e7c3c592bd90673d6.jpeg"
   },
   {
     "id": 1312026,
@@ -737,8 +714,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 39,
-    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Cobos/Cocodrilo%20Corte%20Mendoza/2022/85486ce508d922fd946c2c6c49cbc930.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Cobos/Cocodrilo%20Corte%20Mendoza/2022/85486ce508d922fd946c2c6c49cbc930.png"
   },
   {
     "id": 1305484,
@@ -756,8 +732,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 40,
-    "label_url": "https://mshanken-wineapi.imgix.net/Wente/Chardonnay%20Central%20Coast%20Morning%20Fog/2022/5cea48b8e7dffa54bc1203118457ca3c.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Wente/Chardonnay%20Central%20Coast%20Morning%20Fog/2022/5cea48b8e7dffa54bc1203118457ca3c.jpeg"
   },
   {
     "id": 1308492,
@@ -775,8 +750,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 41,
-    "label_url": "https://mshanken-wineapi.imgix.net/Whitehaven/Sauvignon%20Blanc%20Marlborough/2023/c99534c357e04875234573176662eaed.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Whitehaven/Sauvignon%20Blanc%20Marlborough/2023/c99534c357e04875234573176662eaed.png"
   },
   {
     "id": 1313872,
@@ -794,8 +768,7 @@
     "issue_date": "Dec 15, 2024",
     "top100_year": 2024,
     "top100_rank": 42,
-    "label_url": "https://mshanken-wineapi.imgix.net/Giovanni%20Viberti/Barbera%20d%27Alba%20La%20Gemella/2022/fb8aff872fec586b3578b60175d290fc.jpeg?auto=compress,format,&sharp=5&vib=20&q=70&w=200",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Giovanni%20Viberti/Barbera%20d%27Alba%20La%20Gemella/2022/fb8aff872fec586b3578b60175d290fc.jpeg?auto=compress,format,&sharp=5&vib=20&q=70&w=200"
   },
   {
     "id": 1315493,
@@ -813,8 +786,7 @@
     "issue_date": "",
     "top100_year": 2024,
     "top100_rank": 43,
-    "label_url": "https://mshanken-wineapi.imgix.net/Flowers/Chardonnay%20Sonoma%20Coast/2023/dfa6d68f4122a1f82842ebd427e9b828.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Flowers/Chardonnay%20Sonoma%20Coast/2023/dfa6d68f4122a1f82842ebd427e9b828.jpeg"
   },
   {
     "id": 1311941,
@@ -832,8 +804,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 44,
-    "label_url": "https://mshanken-wineapi.imgix.net/Feudo%20Montoni/Nero%20d%27Avola%20Sicilia%20Lagnusa/2022/a11316ff000f18ceb420cee7b2e2a380.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Feudo%20Montoni/Nero%20d%27Avola%20Sicilia%20Lagnusa/2022/a11316ff000f18ceb420cee7b2e2a380.png"
   },
   {
     "id": 1315102,
@@ -851,8 +822,7 @@
     "issue_date": "",
     "top100_year": 2024,
     "top100_rank": 45,
-    "label_url": "https://mshanken-wineapi.imgix.net/Ch%C3%A2teau%20du%20Retout/Haut-M%C3%A9doc/2022/cccaf5a83b6a7654dec7acd4231838c5.webp",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Ch%C3%A2teau%20du%20Retout/Haut-M%C3%A9doc/2022/cccaf5a83b6a7654dec7acd4231838c5.webp"
   },
   {
     "id": 1314051,
@@ -870,8 +840,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 46,
-    "label_url": "https://mshanken-wineapi.imgix.net/Fattoria%20Le%20Pupille/Toscana%20Saffredi/2021/d98746fe561a17c2f0f36bc79b34c26c.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Fattoria%20Le%20Pupille/Toscana%20Saffredi/2021/d98746fe561a17c2f0f36bc79b34c26c.jpeg"
   },
   {
     "id": 1308542,
@@ -889,8 +858,7 @@
     "issue_date": "Jun 30, 2024",
     "top100_year": 2024,
     "top100_rank": 47,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bethel%20Heights/Pinot%20Noir%20Eola-Amity%20Hills%20Estate/2022/d84c1b97ac9ba8aaf56e0c3aabbcae22.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bethel%20Heights/Pinot%20Noir%20Eola-Amity%20Hills%20Estate/2022/d84c1b97ac9ba8aaf56e0c3aabbcae22.jpeg"
   },
   {
     "id": 1310793,
@@ -908,8 +876,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 48,
-    "label_url": "https://mshanken-wineapi.imgix.net/Joseph%20Drouhin/St.-V%C3%A9ran/2022/5f3f6ad2b0d23cfd35ce416540b37ff0.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Joseph%20Drouhin/St.-V%C3%A9ran/2022/5f3f6ad2b0d23cfd35ce416540b37ff0.jpeg"
   },
   {
     "id": 1309179,
@@ -927,8 +894,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 49,
-    "label_url": "https://mshanken-wineapi.imgix.net/Santa%20Cristina/Cabernet%20Sauvignon%20Toscana/2022/003be0e2885a103a0f7e3b074205225d.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Santa%20Cristina/Cabernet%20Sauvignon%20Toscana/2022/003be0e2885a103a0f7e3b074205225d.png"
   },
   {
     "id": 1313028,
@@ -946,8 +912,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 50,
-    "label_url": "https://mshanken-wineapi.imgix.net/Barone%20Ricasoli/Chianti%20Classico%20Gaiole%20Colledil%C3%A0%20Gran%20Selezione/2021/51ee9ebb19f70754b3f46318f107dd72.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Barone%20Ricasoli/Chianti%20Classico%20Gaiole%20Colledil%C3%A0%20Gran%20Selezione/2021/51ee9ebb19f70754b3f46318f107dd72.jpeg"
   },
   {
     "id": 1308879,
@@ -965,8 +930,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 51,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bodegas%20Muga/Rioja%20Reserva/2020/318e3fa6e583d882f732fa792ab5b677.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bodegas%20Muga/Rioja%20Reserva/2020/318e3fa6e583d882f732fa792ab5b677.jpeg"
   },
   {
     "id": 1304767,
@@ -984,8 +948,7 @@
     "issue_date": "Jun 30, 2024",
     "top100_year": 2024,
     "top100_rank": 52,
-    "label_url": "https://mshanken-wineapi.imgix.net/Lavinea/Pinot%20Noir%20Eola-Amity%20Hills/2022/fd0bd2975a393c2976370c805cefb820.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Lavinea/Pinot%20Noir%20Eola-Amity%20Hills/2022/fd0bd2975a393c2976370c805cefb820.jpeg"
   },
   {
     "id": 1302657,
@@ -1003,8 +966,7 @@
     "issue_date": "Mar 31, 2024",
     "top100_year": 2024,
     "top100_rank": 53,
-    "label_url": "https://mshanken-wineapi.imgix.net/R.%20L%C3%B3pez%20de%20Heredia%20Vi%C3%B1a%20Tondonia/Rioja%20Vi%C3%B1a%20Tondonia%20Reserva/2011/148c4c45aaa4d506d76efb1fcbe73b11",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/R.%20L%C3%B3pez%20de%20Heredia%20Vi%C3%B1a%20Tondonia/Rioja%20Vi%C3%B1a%20Tondonia%20Reserva/2011/148c4c45aaa4d506d76efb1fcbe73b11"
   },
   {
     "id": 1309522,
@@ -1022,8 +984,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 54,
-    "label_url": "https://mshanken-wineapi.imgix.net/Kistler/Pinot%20Noir%20Russian%20River%20Valley%20Cuv%C3%A9e%20Natalie%20Silver%20Belt%20Vineyard/2021/040379e026c0c0eeaa8db610ab313804.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Kistler/Pinot%20Noir%20Russian%20River%20Valley%20Cuv%C3%A9e%20Natalie%20Silver%20Belt%20Vineyard/2021/040379e026c0c0eeaa8db610ab313804.jpeg"
   },
   {
     "id": 1312629,
@@ -1041,8 +1002,7 @@
     "issue_date": "",
     "top100_year": 2024,
     "top100_rank": 55,
-    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20Tempier/Bandol%20Ros%C3%A9/2023/08bfd9d1ec34065b2efdf49ef24b8c5a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20Tempier/Bandol%20Ros%C3%A9/2023/08bfd9d1ec34065b2efdf49ef24b8c5a.jpeg"
   },
   {
     "id": 1309406,
@@ -1060,8 +1020,7 @@
     "issue_date": "Aug 31, 2024",
     "top100_year": 2024,
     "top100_rank": 56,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bodegas%20El%20Nido/Jumilla%20Clio/2021/557632a23671fd57b2bab4fb9f825858.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bodegas%20El%20Nido/Jumilla%20Clio/2021/557632a23671fd57b2bab4fb9f825858.jpeg"
   },
   {
     "id": 1312678,
@@ -1079,8 +1038,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 57,
-    "label_url": "https://mshanken-wineapi.imgix.net/Stag%27s%20Leap%20Wine%20Cellars/Cabernet%20Sauvignon%20Stags%20Leap%20District%20Cask%2023/2021/8fd5cbeef66c166217651cf92d74e394.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Stag%27s%20Leap%20Wine%20Cellars/Cabernet%20Sauvignon%20Stags%20Leap%20District%20Cask%2023/2021/8fd5cbeef66c166217651cf92d74e394.jpeg"
   },
   {
     "id": 1306473,
@@ -1098,8 +1056,7 @@
     "issue_date": "May 31, 2024",
     "top100_year": 2024,
     "top100_rank": 58,
-    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Tabali/Sauvignon%20Blanc%20Limar%C3%AD%20Valley%20Vetas%20Blancas/2023/f141ac807596e1521ed56ed111551fa8.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Tabali/Sauvignon%20Blanc%20Limar%C3%AD%20Valley%20Vetas%20Blancas/2023/f141ac807596e1521ed56ed111551fa8.jpeg"
   },
   {
     "id": 1309118,
@@ -1117,8 +1074,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 59,
-    "label_url": "https://mshanken-wineapi.imgix.net/Isaac%20Fernandez%20Selecci%C3%B3n/Ribera%20del%20Duero%20Finca%20La%20Mata/2022/82209f4751173e414ef5cf64d764d3e4.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Isaac%20Fernandez%20Selecci%C3%B3n/Ribera%20del%20Duero%20Finca%20La%20Mata/2022/82209f4751173e414ef5cf64d764d3e4.jpeg"
   },
   {
     "id": 1309152,
@@ -1136,8 +1092,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 60,
-    "label_url": "https://mshanken-wineapi.imgix.net/Umani%20Ronchi/Verdicchio%20dei%20Castelli%20di%20Jesi%20Classico%20Superiore%20Casal%20di%20Serra/2022/0ec4e2f56b436e8a5cf5dcbcc6965bb1.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Umani%20Ronchi/Verdicchio%20dei%20Castelli%20di%20Jesi%20Classico%20Superiore%20Casal%20di%20Serra/2022/0ec4e2f56b436e8a5cf5dcbcc6965bb1.png"
   },
   {
     "id": 1302030,
@@ -1155,8 +1110,7 @@
     "issue_date": "Feb 29, 2024",
     "top100_year": 2024,
     "top100_rank": 61,
-    "label_url": "https://mshanken-wineapi.imgix.net/Nik%20Weis%20St.-Urbans-Hof/Riesling%20Mosel%20From%20Old%20Vines/2022/5e3b953f322932936818e01498d1ee89",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Nik%20Weis%20St.-Urbans-Hof/Riesling%20Mosel%20From%20Old%20Vines/2022/5e3b953f322932936818e01498d1ee89"
   },
   {
     "id": 1308223,
@@ -1174,8 +1128,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 62,
-    "label_url": "https://mshanken-wineapi.imgix.net/Etxaniz%20Txakolina/Getariako%20Txakolina%20Txomin%20Etxaniz/2023/8425a22b7a82cf519fa62047dc0c42ab.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Etxaniz%20Txakolina/Getariako%20Txakolina%20Txomin%20Etxaniz/2023/8425a22b7a82cf519fa62047dc0c42ab.jpeg"
   },
   {
     "id": 1314074,
@@ -1193,8 +1146,7 @@
     "issue_date": "Nov 30, 2024",
     "top100_year": 2024,
     "top100_rank": 63,
-    "label_url": "https://mshanken-wineapi.imgix.net/Pierre%20Gimonnet%20%26%20Fils/Brut%20Blanc%20de%20Blancs%20Champagne%20Cuis/2024/0e26259ab8ec5e0e7b3a7b738e82d9fe.jpeg",
-    "wine_type": "sparkling"
+    "label_url": "https://mshanken-wineapi.imgix.net/Pierre%20Gimonnet%20%26%20Fils/Brut%20Blanc%20de%20Blancs%20Champagne%20Cuis/2024/0e26259ab8ec5e0e7b3a7b738e82d9fe.jpeg"
   },
   {
     "id": 1303413,
@@ -1212,8 +1164,7 @@
     "issue_date": "Feb 29, 2024",
     "top100_year": 2024,
     "top100_rank": 64,
-    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Mayu/Syrah%20Elqu%C3%AD%20Valley%20Gran%20Reserva%20Don%20Mauro%20Vineyard/2021/476c6cf0707b967e98c2f0ccc56754f1",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Vi%C3%B1a%20Mayu/Syrah%20Elqu%C3%AD%20Valley%20Gran%20Reserva%20Don%20Mauro%20Vineyard/2021/476c6cf0707b967e98c2f0ccc56754f1"
   },
   {
     "id": 1311233,
@@ -1231,8 +1182,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 65,
-    "label_url": "https://mshanken-wineapi.imgix.net/William%20F%C3%A8vre/Chablis%20Domaine/2022/967972e321e58b027b852d007ba1259a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/William%20F%C3%A8vre/Chablis%20Domaine/2022/967972e321e58b027b852d007ba1259a.jpeg"
   },
   {
     "id": 1305530,
@@ -1250,8 +1200,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 66,
-    "label_url": "https://mshanken-wineapi.imgix.net/Jos%C3%A9%20Maria%20da%20Fonseca/Pen%C3%ADnsula%20de%20Set%C3%BAbal%20Anticiclone/2022/95497ce40d12bd04c5728e653c647085.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Jos%C3%A9%20Maria%20da%20Fonseca/Pen%C3%ADnsula%20de%20Set%C3%BAbal%20Anticiclone/2022/95497ce40d12bd04c5728e653c647085.jpeg"
   },
   {
     "id": 1311928,
@@ -1269,8 +1218,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 67,
-    "label_url": "https://mshanken-wineapi.imgix.net/Royal%20Tokaji/Tokaji%20Asz%C3%BA%205%20Puttonyos%20Red%20Label/2018/f44084b6b08e1767b3c01e3c510de159.jpeg",
-    "wine_type": "dessert"
+    "label_url": "https://mshanken-wineapi.imgix.net/Royal%20Tokaji/Tokaji%20Asz%C3%BA%205%20Puttonyos%20Red%20Label/2018/f44084b6b08e1767b3c01e3c510de159.jpeg"
   },
   {
     "id": 1309808,
@@ -1288,8 +1236,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 68,
-    "label_url": "https://mshanken-wineapi.imgix.net/Law/Beguiling%20Adelaida%20District/2021/e1b16bad3b27e925a057f55044b1a534.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Law/Beguiling%20Adelaida%20District/2021/e1b16bad3b27e925a057f55044b1a534.jpeg"
   },
   {
     "id": 1309157,
@@ -1307,8 +1254,7 @@
     "issue_date": "Aug 31, 2024",
     "top100_year": 2024,
     "top100_rank": 69,
-    "label_url": "https://mshanken-wineapi.imgix.net/J.J.%20Vincent%20%26%20Fils/Pouilly-Fuiss%C3%A9%20Famille%20Vincent%20Marie-Antoinette/2022/8738ed4773efc819ac33598862eed957.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/J.J.%20Vincent%20%26%20Fils/Pouilly-Fuiss%C3%A9%20Famille%20Vincent%20Marie-Antoinette/2022/8738ed4773efc819ac33598862eed957.jpeg"
   },
   {
     "id": 1304518,
@@ -1326,8 +1272,7 @@
     "issue_date": "May 31, 2024",
     "top100_year": 2024,
     "top100_rank": 70,
-    "label_url": "https://mshanken-wineapi.imgix.net/Pr%C3%A0/Soave%20Classico%20Otto/2022/cdd1750130c239a74f058ede880c936c.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Pr%C3%A0/Soave%20Classico%20Otto/2022/cdd1750130c239a74f058ede880c936c.jpeg"
   },
   {
     "id": 1314589,
@@ -1345,8 +1290,7 @@
     "issue_date": "",
     "top100_year": 2024,
     "top100_rank": 71,
-    "label_url": "https://mshanken-wineapi.imgix.net/Aperture/Chenin%20Blanc%20Clarksburg/2023/136f45ae2bec8c7d72eed9961eb1c2c0.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Aperture/Chenin%20Blanc%20Clarksburg/2023/136f45ae2bec8c7d72eed9961eb1c2c0.jpeg"
   },
   {
     "id": 1300570,
@@ -1364,8 +1308,7 @@
     "issue_date": "Feb 29, 2024",
     "top100_year": 2024,
     "top100_rank": 72,
-    "label_url": "https://mshanken-wineapi.imgix.net/Massican/Annia%20California/2022/5b60d8effd3f5a466579fa5382e9e7e0",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Massican/Annia%20California/2022/5b60d8effd3f5a466579fa5382e9e7e0"
   },
   {
     "id": 1307671,
@@ -1383,8 +1326,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 73,
-    "label_url": "https://mshanken-wineapi.imgix.net/Burgess/Cabernet%20Sauvignon%20Napa%20Valley%20Promiscua/2021/208e455d3f904126b1ffca7f7000029a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Burgess/Cabernet%20Sauvignon%20Napa%20Valley%20Promiscua/2021/208e455d3f904126b1ffca7f7000029a.jpeg"
   },
   {
     "id": 1310357,
@@ -1402,8 +1344,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 74,
-    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20Roy%20%26%20Fils/Pinot%20Noir%20Dundee%20Hills%20Incline/2022/15614dfcc544a2893a440cc3a9de09ee.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20Roy%20%26%20Fils/Pinot%20Noir%20Dundee%20Hills%20Incline/2022/15614dfcc544a2893a440cc3a9de09ee.jpeg"
   },
   {
     "id": 1308095,
@@ -1421,8 +1362,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 75,
-    "label_url": "https://mshanken-wineapi.imgix.net/Sullivan/Cabernet%20Sauvignon%20Rutherford%20Coeur%20de%20Vigne/2021/e389a7d9cc009d256dcb4b0c167b528c.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Sullivan/Cabernet%20Sauvignon%20Rutherford%20Coeur%20de%20Vigne/2021/e389a7d9cc009d256dcb4b0c167b528c.jpeg"
   },
   {
     "id": 1306314,
@@ -1440,8 +1380,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 76,
-    "label_url": "https://mshanken-wineapi.imgix.net/Adegas%20Gran%20Vinum/Albari%C3%B1o%20Rias%20Baixas%20Val%20do%20Saln%C3%A9s%20Astrid/2022/783897fb4d48e54a4336b291d5bfea29.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Adegas%20Gran%20Vinum/Albari%C3%B1o%20Rias%20Baixas%20Val%20do%20Saln%C3%A9s%20Astrid/2022/783897fb4d48e54a4336b291d5bfea29.jpeg"
   },
   {
     "id": 1309937,
@@ -1459,8 +1398,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 77,
-    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png"
   },
   {
     "id": 1305508,
@@ -1478,8 +1416,7 @@
     "issue_date": "Jul 31, 2024",
     "top100_year": 2024,
     "top100_rank": 78,
-    "label_url": "https://mshanken-wineapi.imgix.net/Aveleda/Douro%20Superior%20Vale%20D.%20Maria%20Vinhas%20do%20Sabor/2020/9cc99c7a25d58f54ea33467baa40e4c9.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Aveleda/Douro%20Superior%20Vale%20D.%20Maria%20Vinhas%20do%20Sabor/2020/9cc99c7a25d58f54ea33467baa40e4c9.png"
   },
   {
     "id": 1314969,
@@ -1497,8 +1434,7 @@
     "issue_date": "Dec 15, 2024",
     "top100_year": 2024,
     "top100_rank": 79,
-    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20de%20la%20Janasse/Ch%C3%A2teauneuf-du-Pape%20Vieilles%20Vignes/2022/8752763cce50a2cc91629c441fabbd67.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Domaine%20de%20la%20Janasse/Ch%C3%A2teauneuf-du-Pape%20Vieilles%20Vignes/2022/8752763cce50a2cc91629c441fabbd67.jpeg"
   },
   {
     "id": 1312661,
@@ -1516,8 +1452,7 @@
     "issue_date": "Nov 30, 2024",
     "top100_year": 2024,
     "top100_rank": 80,
-    "label_url": "https://mshanken-wineapi.imgix.net/Henri%20Bourgeois/Sancerre%20ES-56%20Domaine/2022/30f988c17193fb954f33132a5840af77.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Henri%20Bourgeois/Sancerre%20ES-56%20Domaine/2022/30f988c17193fb954f33132a5840af77.jpeg"
   },
   {
     "id": 1311121,
@@ -1535,8 +1470,7 @@
     "issue_date": "Aug 31, 2024",
     "top100_year": 2024,
     "top100_rank": 81,
-    "label_url": "https://mshanken-wineapi.imgix.net/Soalheiro/Alvarinho%20Vinho%20Verde%20Mon%C3%A7%C3%A3o%20e%20Melga%C3%A7o/2023/31600b2a487fc7fcde91afb98bfe8396.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Soalheiro/Alvarinho%20Vinho%20Verde%20Mon%C3%A7%C3%A3o%20e%20Melga%C3%A7o/2023/31600b2a487fc7fcde91afb98bfe8396.jpeg"
   },
   {
     "id": 1309257,
@@ -1554,8 +1488,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 82,
-    "label_url": "https://mshanken-wineapi.imgix.net/Invivo/Pinot%20Noir%20Marlborough%20X%2C%20Sarah%20Jessica%20Parker/2022/19254e58ae7ece8983fa5d70e8aecb6b.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Invivo/Pinot%20Noir%20Marlborough%20X%2C%20Sarah%20Jessica%20Parker/2022/19254e58ae7ece8983fa5d70e8aecb6b.jpeg"
   },
   {
     "id": 1305344,
@@ -1573,8 +1506,7 @@
     "issue_date": "Apr 30, 2024",
     "top100_year": 2024,
     "top100_rank": 83,
-    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png"
   },
   {
     "id": 1312576,
@@ -1592,8 +1524,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 84,
-    "label_url": "https://mshanken-wineapi.imgix.net/Burn%20Cottage/Pinot%20Noir%20Central%20Otago%20Moonlight%20Race/2022/2280e11c3f77ddd80dbff08ff559b0bd.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Burn%20Cottage/Pinot%20Noir%20Central%20Otago%20Moonlight%20Race/2022/2280e11c3f77ddd80dbff08ff559b0bd.jpeg"
   },
   {
     "id": 1313022,
@@ -1611,8 +1542,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 85,
-    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/white_still.png"
   },
   {
     "id": 1302444,
@@ -1630,8 +1560,7 @@
     "issue_date": "Mar 31, 2024",
     "top100_year": 2024,
     "top100_rank": 86,
-    "label_url": "https://mshanken-wineapi.imgix.net/Gorman/Syrah-Cabernet%20Sauvignon%20Red%20Mountain%20The%20Evil%20Twin/2021/f656992def9b59d5cb5abe5520bc867a.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Gorman/Syrah-Cabernet%20Sauvignon%20Red%20Mountain%20The%20Evil%20Twin/2021/f656992def9b59d5cb5abe5520bc867a.jpeg"
   },
   {
     "id": 1313544,
@@ -1649,8 +1578,7 @@
     "issue_date": "Nov 30, 2024",
     "top100_year": 2024,
     "top100_rank": 87,
-    "label_url": "https://mshanken-wineapi.imgix.net/Bodega%20Mil%20Suelos/Estancia%20Uspallata%20Igneo%20Mendoza/2020/d74ad4442d1ddc634cfe97d9e81f4088.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Bodega%20Mil%20Suelos/Estancia%20Uspallata%20Igneo%20Mendoza/2020/d74ad4442d1ddc634cfe97d9e81f4088.jpeg"
   },
   {
     "id": 1313786,
@@ -1668,8 +1596,7 @@
     "issue_date": "Dec 15, 2024",
     "top100_year": 2024,
     "top100_rank": 88,
-    "label_url": "https://mshanken-wineapi.imgix.net/Yering%20Station/Pinot%20Noir%20Yarra%20Valley%20Village/2022/6c9b624648ebb5dc928411ad641b63a1.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Yering%20Station/Pinot%20Noir%20Yarra%20Valley%20Village/2022/6c9b624648ebb5dc928411ad641b63a1.jpeg"
   },
   {
     "id": 1308296,
@@ -1687,8 +1614,7 @@
     "issue_date": "Oct 15, 2024",
     "top100_year": 2024,
     "top100_rank": 89,
-    "label_url": "https://mshanken-wineapi.imgix.net/Trimbach/Riesling%20Alsace%20Fr%C3%A9d%C3%A9ric%20%C3%89mile/2017/2398ba86dc31a250acf6ea9576e144b7.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Trimbach/Riesling%20Alsace%20Fr%C3%A9d%C3%A9ric%20%C3%89mile/2017/2398ba86dc31a250acf6ea9576e144b7.png"
   },
   {
     "id": 1310397,
@@ -1706,8 +1632,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 90,
-    "label_url": "https://mshanken-wineapi.imgix.net/Louis%20Latour/Corton%20Ch%C3%A2teau%20Corton%20Grancey/2022/c3b0eb790f31bae2f6e3553d46768a41.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Louis%20Latour/Corton%20Ch%C3%A2teau%20Corton%20Grancey/2022/c3b0eb790f31bae2f6e3553d46768a41.jpeg"
   },
   {
     "id": 1309040,
@@ -1725,8 +1650,7 @@
     "issue_date": "Oct 31, 2024",
     "top100_year": 2024,
     "top100_rank": 91,
-    "label_url": "https://mshanken-wineapi.imgix.net/Domaines%20Dominique%20Piron/Morgon%20C%C3%B4te%20du%20Py/2022/346b86e76f1f635a2549a3de287cc713.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Domaines%20Dominique%20Piron/Morgon%20C%C3%B4te%20du%20Py/2022/346b86e76f1f635a2549a3de287cc713.jpeg"
   },
   {
     "id": 1310415,
@@ -1744,8 +1668,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 92,
-    "label_url": "https://mshanken-wineapi.imgix.net/Graeme%20%26%20Julie%20Bott/St.-Joseph/2022/c0abd9baafc3ef6868c87f82892c2e0d.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Graeme%20%26%20Julie%20Bott/St.-Joseph/2022/c0abd9baafc3ef6868c87f82892c2e0d.jpeg"
   },
   {
     "id": 1309896,
@@ -1763,8 +1686,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 93,
-    "label_url": "https://mshanken-wineapi.imgix.net/Proidl/Gr%C3%BCner%20Veltliner%20Kremstal%20Senftenberg%20Ried%20Pellingen%20Reserve/2022/afdb2a4014af08ff5f7bb776700c636d.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Proidl/Gr%C3%BCner%20Veltliner%20Kremstal%20Senftenberg%20Ried%20Pellingen%20Reserve/2022/afdb2a4014af08ff5f7bb776700c636d.jpeg"
   },
   {
     "id": 1313534,
@@ -1782,8 +1704,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 94,
-    "label_url": "https://mshanken-wineapi.imgix.net/Almacerro/Cabernet%20Sauvignon%20Howell%20Mountain/2021/0e9231b94d11c4435f291133f4667b49.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Almacerro/Cabernet%20Sauvignon%20Howell%20Mountain/2021/0e9231b94d11c4435f291133f4667b49.jpeg"
   },
   {
     "id": 1300861,
@@ -1801,8 +1722,7 @@
     "issue_date": "Apr 30, 2024",
     "top100_year": 2024,
     "top100_rank": 95,
-    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/red_still.png",
-    "wine_type": "still"
+    "label_url": "https://mshanken.imgix.net/wso/bolt/wine-detail/details/red_still.png"
   },
   {
     "id": 1310473,
@@ -1820,8 +1740,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 96,
-    "label_url": "https://mshanken-wineapi.imgix.net/Ferren/Pinot%20Noir%20Sonoma%20Coast/2021/815dd12469654dc70c6e7b447758d9c8.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Ferren/Pinot%20Noir%20Sonoma%20Coast/2021/815dd12469654dc70c6e7b447758d9c8.jpeg"
   },
   {
     "id": 1306903,
@@ -1839,8 +1758,7 @@
     "issue_date": "Sep 30, 2024",
     "top100_year": 2024,
     "top100_rank": 97,
-    "label_url": "https://mshanken-wineapi.imgix.net/VHR/Cabernet%20Sauvignon%20Oakville/2021/fa3f0084e3d5f2b2308cc5c1ef6e39c4.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/VHR/Cabernet%20Sauvignon%20Oakville/2021/fa3f0084e3d5f2b2308cc5c1ef6e39c4.jpeg"
   },
   {
     "id": 1306504,
@@ -1858,8 +1776,7 @@
     "issue_date": "Mar 31, 2024",
     "top100_year": 2024,
     "top100_rank": 98,
-    "label_url": "https://mshanken-wineapi.imgix.net/M.%20Chapoutier/Hermitage%20Monier%20de%20la%20Sizeranne/2020/05039ffdf161abd506a90ad47e79ac4c.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/M.%20Chapoutier/Hermitage%20Monier%20de%20la%20Sizeranne/2020/05039ffdf161abd506a90ad47e79ac4c.jpeg"
   },
   {
     "id": 1311116,
@@ -1877,8 +1794,7 @@
     "issue_date": "Nov 15, 2024",
     "top100_year": 2024,
     "top100_rank": 99,
-    "label_url": "https://mshanken-wineapi.imgix.net/Annulus/Cabernet%20Sauvignon%20Napa%20Valley%20Vine%20Hill%20Ranch%20Vineyard/2021/1e14c30304cce36346b3a88f339426f5.jpeg",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Annulus/Cabernet%20Sauvignon%20Napa%20Valley%20Vine%20Hill%20Ranch%20Vineyard/2021/1e14c30304cce36346b3a88f339426f5.jpeg"
   },
   {
     "id": 1305162,
@@ -1896,7 +1812,6 @@
     "issue_date": "Mar 31, 2024",
     "top100_year": 2024,
     "top100_rank": 100,
-    "label_url": "https://mshanken-wineapi.imgix.net/Rotem%20%26%20Mounir%20Saouma/Ch%C3%A2teauneuf-du-Pape%20White%20Magis/2020/c5bdfaea5b458def1f2172ef05296ecf",
-    "wine_type": "still"
+    "label_url": "https://mshanken-wineapi.imgix.net/Rotem%20%26%20Mounir%20Saouma/Ch%C3%A2teauneuf-du-Pape%20White%20Magis/2020/c5bdfaea5b458def1f2172ef05296ecf"
   }
 ]

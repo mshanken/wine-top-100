@@ -250,7 +250,7 @@ const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
                 Wine: wine.wine_full,
                 Winery: wine.winery_full,
                 Vintage: wine.vintage,
-                Type: wine.color,
+                Color: wine.color,
                 Region: wine.region,
                 Country: wine.country,
                 Status: status === 'tasted' ? 'Tasted' : 'Want to Taste',
@@ -1154,10 +1154,55 @@ const Navigation = () => {
 
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
-    const allTypes = [...new Set(currentWines.map(wine => wine.color))].filter(Boolean);
-    const allCountries = [...new Set(currentWines.map(wine => wine.country))].filter(Boolean);
+    // Build option lists constrained by the other active selections
+    const colorSource = currentWines.filter(wine =>
+        (filters.country === 'All' || wine.country === filters.country) &&
+        (filters.wineType === 'All' || wine.wine_type === filters.wineType)
+    );
+    const allColors = [...new Set(colorSource.map(wine => wine.color))].filter(Boolean);
+    const preferredColorOrder = ['Red', 'White', 'Rosé'];
+    const colorOptions = [
+        'All',
+        ...preferredColorOrder.filter(c => allColors.includes(c)),
+        ...allColors.filter(c => !preferredColorOrder.includes(c)).sort((a, b) => String(a).localeCompare(String(b)))
+    ];
+
+    const countrySource = currentWines.filter(wine =>
+        (filters.color === 'All' || wine.color === filters.color) &&
+        (filters.wineType === 'All' || wine.wine_type === filters.wineType)
+    );
+    const allCountries = [...new Set(countrySource.map(wine => wine.country))].filter(Boolean);
+    const countryOptions = ['All', ...allCountries.sort((a, b) => String(a).localeCompare(String(b)))];
+
+    const typeSource = currentWines.filter(wine =>
+        (filters.color === 'All' || wine.color === filters.color) &&
+        (filters.country === 'All' || wine.country === filters.country)
+    );
+    const allWineTypes = [...new Set(typeSource.map(wine => wine.wine_type))].filter(Boolean);
+    const wineTypePriority = { still: 0, sparkling: 1 };
+    const sortedWineTypes = [...allWineTypes].sort((a, b) => {
+        const ap = wineTypePriority[String(a).toLowerCase()] ?? 2;
+        const bp = wineTypePriority[String(b).toLowerCase()] ?? 2;
+        if (ap !== bp) return ap - bp;
+        // Secondary sort by humanized label
+        const al = String(a).toLowerCase().replace(/_/g, ' ');
+        const bl = String(b).toLowerCase().replace(/_/g, ' ');
+        return al.localeCompare(bl);
+    });
+    const wineTypeOptions = ['All', ...sortedWineTypes];
     
+    const formatWineTypeLabel = (wt) => {
+        if (!wt) return '';
+        const s = String(wt).toLowerCase().replace(/_/g, ' ');
+        // Title case each word
+        const titled = s.replace(/\b\w/g, (c) => c.toUpperCase());
+        // Optional: enhance common terms
+        return titled
+            .replace(/\bRose\b/, 'Rosé');
+    };
+
     const handleFilterChange = (filterType, value) => {
+        // Preserve the other filter; the lists (allColors/allCountries) already reflect the intersection
         onFiltersChange({ ...filters, [filterType]: value });
         trackFilterUse(filterType, value);
     };
@@ -1185,15 +1230,29 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
                 </div>
             </div>
             <div className="filter-section">
+                <p className="filter-label">Wine Color</p>
+                <div className="filter-buttons">
+                    {colorOptions.map(color => (
+                        <button 
+                            key={color} 
+                            onClick={() => handleFilterChange('color', color)} 
+                            className={filters.color === color ? 'filter-btn active' : 'filter-btn'}
+                        >
+                            {color}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <div className="filter-section">
                 <p className="filter-label">Wine Type</p>
                 <div className="filter-buttons">
-                    {['All', ...allTypes].map(type => (
+                    {wineTypeOptions.map(wt => (
                         <button 
-                            key={type} 
-                            onClick={() => handleFilterChange('type', type)} 
-                            className={filters.type === type ? 'filter-btn active' : 'filter-btn'}
+                            key={wt} 
+                            onClick={() => handleFilterChange('wineType', wt)} 
+                            className={filters.wineType === wt ? 'filter-btn active' : 'filter-btn'}
                         >
-                            {type}
+                            {wt === 'All' ? 'All' : formatWineTypeLabel(wt)}
                         </button>
                     ))}
                 </div>
@@ -1201,7 +1260,7 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
             <div className="filter-section">
                 <p className="filter-label">Country</p>
                 <div className="filter-buttons">
-                    {['All', ...allCountries].map(country => (
+                    {countryOptions.map(country => (
                         <button 
                             key={country} 
                             onClick={() => handleFilterChange('country', country)} 
@@ -1283,7 +1342,7 @@ const App = () => {
     }, [selectedYear]);
 
     const [selectedWine, setSelectedWine] = useState(null);
-    const [filters, setFilters] = useState({ search: '', type: 'All', country: 'All' });
+    const [filters, setFilters] = useState({ search: '', color: 'All', country: 'All', wineType: 'All' });
     const [isCondensed, setIsCondensed] = useState(false);
     const [showTastingPanel, setShowTastingPanel] = useState(false);
     const [compareWines, setCompareWines] = useState([]);
@@ -1501,9 +1560,10 @@ const App = () => {
             const matchesSearch = !filters.search || 
                 wine.wine_full.toLowerCase().includes(filters.search.toLowerCase()) || 
                 (wine.winery_full && wine.winery_full.toLowerCase().includes(filters.search.toLowerCase()));
-            const matchesType = filters.type === 'All' || wine.color === filters.type;
+            const matchesColor = filters.color === 'All' || wine.color === filters.color;
             const matchesCountry = filters.country === 'All' || wine.country === filters.country;
-            return matchesSearch && matchesType && matchesCountry;
+            const matchesWineType = filters.wineType === 'All' || wine.wine_type === filters.wineType;
+            return matchesSearch && matchesColor && matchesCountry && matchesWineType;
         });
     }, [filters, wines]);
 
@@ -1525,7 +1585,7 @@ const App = () => {
                                         const y = parseInt(e.target.value, 10);
                                         setSelectedYear(y);
                                         // Reset all filters to prevent empty results when switching years
-                                        setFilters({ search: '', type: 'All', country: 'All' });
+                                        setFilters({ search: '', color: 'All', country: 'All', wineType: 'All' });
                                         // Sync ?year= in URL (preserve other params)
                                         const params = new URLSearchParams(window.location.search);
                                         params.set('year', String(y));
