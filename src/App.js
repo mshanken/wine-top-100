@@ -24,9 +24,72 @@ const buildImgixUrl = (url, params = {}) => {
     }
 };
 
+// Footer Component (replicates top100.winespectator.com structure)
+const Footer = () => {
+    return (
+        <footer className="footer">
+            <div className="footer-container">
+                <div className="footer-grid">
+                    <div className="footer-section">
+                        <h4>Top 10 Archive</h4>
+                        <ul className="footer-links">
+                            <li><a href="https://top100.winespectator.com/2024">Top 10 of 2024</a></li>
+                            <li><a href="https://top100.winespectator.com/2023">Top 10 of 2023</a></li>
+                            <li><a href="https://top100.winespectator.com/2022">Top 10 of 2022</a></li>
+                            <li><a href="https://top100.winespectator.com/2021">Top 10 of 2021</a></li>
+                            <li><a href="https://top100.winespectator.com/2020">Top 10 of 2020</a></li>
+                            <li><a href="https://top100.winespectator.com/2019">Top 10 of 2019</a></li>
+                            <li><a href="https://top100.winespectator.com/2018">Top 10 of 2018</a></li>
+                            <li><a href="https://top100.winespectator.com/2017">Top 10 of 2017</a></li>
+                            <li><a href="https://top100.winespectator.com/2016">Top 10 of 2016</a></li>
+                            <li><a href="https://top100.winespectator.com/2015">Top 10 of 2015</a></li>
+                            <li><a href="https://top100.winespectator.com/2014">Top 10 of 2014</a></li>
+                            <li><a href="https://top100.winespectator.com/2013">Top 10 of 2013</a></li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h4>More from Wine Spectator</h4>
+                        <ul className="footer-links">
+                            <li><a href="https://www.winespectator.com/articles/about-our-tastings">Our Tastings</a></li>
+                            <li><a href="http://www.mshanken.com/winespectator/">Advertising with Wine Spectator</a></li>
+                            <li><a href="http://www.winespectator.com/display/show/id/privacy-policy">Privacy Policy</a></li>
+                            <li><a href="http://www.winespectator.com/display/show/id/terms-of-service">Terms of Service</a></li>
+                            <li><a href="http://help.winespectator.com/support/home">Help</a></li>
+                            <li><a href="http://www.winespectator.com/subscribe">Wine Spectator Magazine</a></li>
+                            <li><a href="http://www.winespectator.com/join">WineSpectator.com</a></li>
+                            <li><a href="https://store.emags.com/mshanken">Wine Spectator Digital Edition</a></li>
+                            <li><a href="http://www.winespectator.com/gift">Give a Gift Subscription</a></li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h4>Apps & Newsletters</h4>
+                        <ul className="footer-links">
+                            <li><a href="http://apps.winespectator.com/wineratingsplus/">WineRatings+</a></li>
+                            <li><a href="https://apps.apple.com/us/app/restaurant-awards/id1114166113">Restaurant Awards</a></li>
+                            <li><a href="https://www.winespectator.com/insider">Insider</a></li>
+                            <li><a href="https://www.winespectator.com/advance">Advance</a></li>
+                            <li><a href="http://newsletters.winespectator.com">Ratings Flash</a></li>
+                            <li><a href="http://newsletters.winespectator.com/preferences.html">Manage Newsletter Preferences</a></li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h4>Partner</h4>
+                        <ul className="footer-links">
+                            <li><a href="https://top100.winespectator.com/cunard">Cunard</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="footer-bottom">
+                    <p>© {new Date().getFullYear()} Wine Spectator. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
 // Compute fallback label URL using logic equivalent to the provided Twig template
 // Twig logic:
-// colorPlusType = wine.color ~ '_' ~ wine.type
+// colorPlusType = wine.color ~ '_' ~ wine.wine_type
 // if colorPlusType == "rosé" => betterType = "rose"
 // elseif colorPlusType == "rosé_still" => betterType = "rose_still"
 // elseif colorPlusType == "rosé_sparkling" => betterType = "rose_sparkling"
@@ -34,10 +97,13 @@ const buildImgixUrl = (url, params = {}) => {
 // fallback_label = "https://mshanken.imgix.net/wso/bolt/wine-detail/details/" ~ betterType ~ ".png"
 const computeFallbackLabel = (wine) => {
     const rawColor = (wine?.color || '').toString().toLowerCase().trim();
-    const rawTypeInput = (wine?.type || '').toString().toLowerCase().trim();
-    // If type is missing, infer: sparkling if color indicates sparkling/champagne; otherwise still
+    const rawTypeInput = (wine?.wine_type || '').toString().toLowerCase().trim();
+    console.log('rawColor', rawColor);
+    console.log('rawTypeInput', rawTypeInput);
     const inferredType = rawTypeInput || ((/sparkling|champagne/.test(rawColor)) ? 'sparkling' : 'still');
+    console.log('inferredType', inferredType);
     const colorPlusType = inferredType ? `${rawColor}_${inferredType}` : rawColor;
+    console.log('colorPlusType', colorPlusType);
     // Normalize accented rosé to rose in both standalone and prefixed forms
     let betterType = colorPlusType
         .replace(/^ros[ée]$/, 'rose')
@@ -45,6 +111,9 @@ const computeFallbackLabel = (wine) => {
     // Guard against invalid sparkling_sparkling; default to white_sparkling
     if (betterType === 'sparkling_sparkling') {
         betterType = 'white_sparkling';
+    }
+    if (betterType === 'dessert_dessert') {
+        betterType = 'dessert_still';
     }
     return `https://mshanken.imgix.net/wso/bolt/wine-detail/details/${betterType}.png`;
 };
@@ -210,6 +279,16 @@ const Icons = {
             <polyline points="6 15 12 9 18 15" />
         </svg>
     ),
+    ChevronDown: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="6 9 12 15 18 9" />
+        </svg>
+    ),
+    ChevronUp: ({ className }) => (
+        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="6 15 12 9 18 15" />
+        </svg>
+    ),
 };
 
 // FIXED Scroll Animation Hook
@@ -323,13 +402,19 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
     const key = String(wineId);
     const isChecked = tastingRecord[key] === status;
     const handleChange = () => onTasteChange(key, isChecked ? null : status);
+    const stop = (e) => {
+        // Prevent clicks on the checkbox/label from bubbling up to card-level handlers
+        e.stopPropagation();
+    };
     
     return (
-        <label className="tasting-checkbox">
+        <label className="tasting-checkbox" onClick={stop} onMouseDown={stop} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') stop(e); }}>
             <input 
                 type="checkbox" 
                 checked={isChecked} 
                 onChange={handleChange} 
+                onClick={stop}
+                onMouseDown={stop}
             />
             <span>{status === 'tasted' ? 'I have tasted this' : 'I want to taste this'}</span>
         </label>
@@ -852,8 +937,11 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 )}
                 </div>
                 <div className="wine-info-condensed" onClick={() => { console.log('[WineCard] onSelect (condensed info) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
-                    <h3>{wine.wine_full}</h3>
-                    <p>{wine.winery_full}</p>
+                    <h3 className="condensed-winery">{wine.winery_full}</h3>
+                    <p className="condensed-wine-name">
+                        {wine.wine_full}
+                        {wine.vintage ? <span className="condensed-vintage"> {wine.vintage}</span> : null}
+                    </p>
                     <div className="tasting-options-condensed">
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
                         <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
@@ -861,7 +949,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 </div>
                 <div className="wine-details-condensed">
                     <div className="price-score-row">
-                        <span className="wine-score-condensed">{score} pts</span>
+                        <span className="wine-score-condensed">{score} pts{(wine.price !== undefined && wine.price !== null) ? ` / $${Math.round(wine.price)}` : ''}</span>
                         {showVideoCondensed && (
                             <a
                                 className="btn-video btn-small"
@@ -869,15 +957,21 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => { e.stopPropagation(); trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id }); }}
+                                aria-label="Watch the video"
+                                title="Watch the video"
                             >
-                                Watch the video
+                                <span className="label-full">Watch the video</span>
+                                <span className="label-short">Video</span>
                             </a>
                         )}
                         <button
                             className="btn-pwl btn-pwl-small"
                             onClick={() => onAddToPWL(wine)}
+                            aria-label="Save to Personal Wine List"
+                            title="Save to Personal Wine List"
                         >
-                            Save to Personal Wine List
+                            <span className="label-full">Save to Personal Wine List</span>
+                            <span className="label-short">Save to PWL</span>
                         </button>
                     </div>
                 </div>
@@ -921,11 +1015,16 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
             <div className="wine-content">
                 <div className="wine-header">
                     <h3 className="wine-winery-name" onClick={() => { console.log('[WineCard] onSelect (winery) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>{wine.winery_full}</h3>
-                    <h2 className="wine-name" onClick={() => { console.log('[WineCard] onSelect (name) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>{wine.wine_full}</h2>
+                    <h2 className="wine-name" onClick={() => { console.log('[WineCard] onSelect (name) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
+                        {wine.wine_full}
+                        {wine.vintage ? <span className="vintage-inline"> {wine.vintage}</span> : null}
+                    </h2>
+                    {(wine.price !== undefined && wine.price !== null) && (
+                        <p className="wine-price">${Math.round(wine.price)}</p>
+                    )}
                 </div>
                 <div className="wine-metadata">
                     <div className="wine-tags">
-                        <span className="wine-tag">{wine.vintage}</span>
                         <span className={`wine-tag ${getTypeColor(wine.color)}`}>{wine.color}</span>
                         <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
                     </div>
@@ -1124,30 +1223,69 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
 
 const Navigation = () => {
     const [scrolled, setScrolled] = useState(false);
-    
+    const [mobileOpen, setMobileOpen] = useState(false);
+
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    // Close mobile menu on route/hash changes or resize to desktop
+    useEffect(() => {
+        const onResize = () => {
+            if (window.innerWidth >= 768) setMobileOpen(false);
+        };
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
+    // Force light links to match a permanent dark header
+    const linkClass = 'nav-link-light';
+
     return (
         <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
-                <a href="https://www.winespectator.com" className="logo-container">
-                    <div className="logo-background" style={{ backgroundColor: scrolled ? 'white' : '#8c0004' }}>
-                        <img 
-                            src={process.env.PUBLIC_URL + (scrolled ? '/logo-red.png' : '/logo.png')} 
-                            alt="Wine Spectator Logo" 
+                <a href="https://top100.winespectator.com/" className="logo-container" aria-label="Top 100 Home">
+                    <div className="logo-background" style={{ backgroundColor: 'transparent' }}>
+                        <img
+                            src={process.env.PUBLIC_URL + '/logo.png'}
+                            alt="Wine Spectator Logo"
                             className="navbar-logo"
                         />
                     </div>
                 </a>
-                <div className="navbar-menu">
-                    <a href="https://top100.winespectator.com" className={scrolled ? 'nav-link-dark' : 'nav-link-light'}>Top 100</a>
-                    <a href="https://www.winespectator.com/subscribe"><button className="btn-modern">Subscribe</button></a>
+
+                {/* Desktop menu */}
+                <div className="navbar-menu" role="navigation" aria-label="Primary">
+                    <a href="https://top100.winespectator.com/2024" className={linkClass}>Top 10 of 2024</a>
+                    <a href="https://top100.winespectator.com/lists" className={linkClass}>All Top 100 Lists</a>
+                    <a href="https://top100.winespectator.com/2024/video" className={linkClass}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years’ Top 10s</a>
+                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className={linkClass}>Top Wine Values of 2024</a>
                 </div>
+
+                {/* Mobile toggle button */}
+                <button
+                    className={`navbar-toggle light`}
+                    aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={mobileOpen}
+                    onClick={() => setMobileOpen(v => !v)}
+                >
+                    {mobileOpen ? <Icons.X className="toggle-icon" /> : <Icons.Menu className="toggle-icon" />}
+                </button>
             </div>
+
+            {/* Mobile dropdown */}
+            {mobileOpen && (
+                <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
+                    <a href="https://top100.winespectator.com/2024" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2024</a>
+                    <a href="https://top100.winespectator.com/lists" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
+                    <a href="https://top100.winespectator.com/2024/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years’ Top 10s</a>
+                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of 2024</a>
+                </div>
+            )}
         </nav>
     );
 };
@@ -1209,66 +1347,52 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
 
     return (
         <div className="filter-bar">
-            <div className="filter-row">
-                {/* Search removed per request; relying on clickable filters only */}
-                <div className="filter-section">
-                    <p className="filter-label">View</p>
-                    <div className="filter-buttons">
-                        <button 
-                            onClick={() => { onViewChange(false); trackEvent('view_mode_changed', { mode: 'grid' }); }} 
-                            className={!isCondensed ? 'filter-btn active' : 'filter-btn'}
-                        >
-                            As Grid
-                        </button>
-                        <button 
-                            onClick={() => { onViewChange(true); trackEvent('view_mode_changed', { mode: 'list' }); }} 
-                            className={isCondensed ? 'filter-btn active' : 'filter-btn'}
-                        >
-                            As List
-                        </button>
+            <div className="filter-grid">
+                <div className="filter-col filter-col-left">
+                    <div className="filter-section">
+                        <p className="filter-label">Wine Color</p>
+                        <div className="filter-buttons">
+                            {colorOptions.map(color => (
+                                <button 
+                                    key={color} 
+                                    onClick={() => handleFilterChange('color', color)} 
+                                    className={filters.color === color ? 'filter-btn active' : 'filter-btn'}
+                                >
+                                    {color}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="filter-section">
+                        <p className="filter-label">Wine Type</p>
+                        <div className="filter-buttons">
+                            {wineTypeOptions.map(wt => (
+                                <button 
+                                    key={wt} 
+                                    onClick={() => handleFilterChange('wineType', wt)} 
+                                    className={filters.wineType === wt ? 'filter-btn active' : 'filter-btn'}
+                                >
+                                    {wt === 'All' ? 'All' : formatWineTypeLabel(wt)}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="filter-section">
-                <p className="filter-label">Wine Color</p>
-                <div className="filter-buttons">
-                    {colorOptions.map(color => (
-                        <button 
-                            key={color} 
-                            onClick={() => handleFilterChange('color', color)} 
-                            className={filters.color === color ? 'filter-btn active' : 'filter-btn'}
-                        >
-                            {color}
-                        </button>
-                    ))}
-                </div>
-            </div>
-            <div className="filter-section">
-                <p className="filter-label">Wine Type</p>
-                <div className="filter-buttons">
-                    {wineTypeOptions.map(wt => (
-                        <button 
-                            key={wt} 
-                            onClick={() => handleFilterChange('wineType', wt)} 
-                            className={filters.wineType === wt ? 'filter-btn active' : 'filter-btn'}
-                        >
-                            {wt === 'All' ? 'All' : formatWineTypeLabel(wt)}
-                        </button>
-                    ))}
-                </div>
-            </div>
-            <div className="filter-section">
-                <p className="filter-label">Country</p>
-                <div className="filter-buttons">
-                    {countryOptions.map(country => (
-                        <button 
-                            key={country} 
-                            onClick={() => handleFilterChange('country', country)} 
-                            className={filters.country === country ? 'filter-btn active' : 'filter-btn'}
-                        >
-                            {country}
-                        </button>
-                    ))}
+                <div className="filter-col filter-col-right">
+                    <div className="filter-section">
+                        <p className="filter-label">Country</p>
+                        <div className="filter-buttons">
+                            {countryOptions.map(country => (
+                                <button 
+                                    key={country} 
+                                    onClick={() => handleFilterChange('country', country)} 
+                                    className={filters.country === country ? 'filter-btn active' : 'filter-btn'}
+                                >
+                                    {country}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1344,6 +1468,14 @@ const App = () => {
     const [selectedWine, setSelectedWine] = useState(null);
     const [filters, setFilters] = useState({ search: '', color: 'All', country: 'All', wineType: 'All' });
     const [isCondensed, setIsCondensed] = useState(false);
+    const [showFilters, setShowFilters] = useState(() => {
+        try {
+            const saved = localStorage.getItem('showFilters');
+            return saved !== null ? saved === 'true' : true;
+        } catch (e) {
+            return true;
+        }
+    });
     const [showTastingPanel, setShowTastingPanel] = useState(false);
     const [compareWines, setCompareWines] = useState([]);
     const [showComparisonModal, setShowComparisonModal] = useState(false);
@@ -1358,6 +1490,15 @@ const App = () => {
     const [pwlModalOpen, setPwlModalOpen] = useState(false);
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
+
+    // Persist filters visibility preference
+    useEffect(() => {
+        try {
+            localStorage.setItem('showFilters', String(showFilters));
+        } catch (e) {
+            // ignore storage failures
+        }
+    }, [showFilters]);
 
     // Handle Save to PWL button click
     const API_BASE = process.env.REACT_APP_API_BASE || 'https://www.winespectator.com';
@@ -1567,105 +1708,136 @@ const App = () => {
         });
     }, [filters, wines]);
 
-    const currentWines = filteredWines;
+const currentWines = filteredWines;
 
-    return (
-        <Fragment>
-            <Navigation />
-            <main>
-                <section id="wines" className="wines-section">
-                    <div className="container">
-                        <div className="section-header">
-                            <h2>Wine Spectator's Top 100 Lists</h2>
-                            <p>Discover the finest wines from around the world</p>
-                            <div className="year-selector-container">
-                                <select 
-                                    value={selectedYear}
-                                    onChange={(e) => {
-                                        const y = parseInt(e.target.value, 10);
-                                        setSelectedYear(y);
-                                        // Reset all filters to prevent empty results when switching years
-                                        setFilters({ search: '', color: 'All', country: 'All', wineType: 'All' });
-                                        // Sync ?year= in URL (preserve other params)
-                                        const params = new URLSearchParams(window.location.search);
-                                        params.set('year', String(y));
-                                        const newUrl = `${window.location.pathname}?${params.toString()}`;
-                                        window.history.replaceState(null, '', newUrl);
-                                    }}
-                                    className="year-selector"
-                                >
-                                    {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
-                                        <option key={year} value={year}>
-                                            {year} Top 100
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        <FilterBar 
-                            filters={filters} 
-                            onFiltersChange={setFilters} 
-                            isCondensed={isCondensed}
-                            currentWines={wines} 
-                            onViewChange={setIsCondensed} 
-                        />
-                        <div id="wine-list-container" className="wine-list-container">
-                            {isLoading ? (
-                                <div className="loading-container">
-                                    <div className="spinner"></div>
-                                    <p>Loading {selectedYear} vintage...</p>
-                                </div>
-                            ) : (
-                                isCondensed ? (
-                                    <div className="wine-list-condensed">
-                                        {currentWines.map((wine) => (
-                                            <WineCard 
-                                                key={wine.id} 
-                                                wine={wine} 
-                                                onSelect={setSelectedWine} 
-                                                isCondensed={true} 
-                                                tastingRecord={tastingRecord} 
-                                                onTasteChange={handleTasteChange}
-                                                compareWines={compareWines}
-                                                onCompareToggle={handleCompareToggle}
-                                                onAddToPWL={handleAddToPWL}
-                                                selectedYear={selectedYear}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="wine-grid">
-                                        {currentWines.map((wine) => (
-                                            <WineCard 
-                                                key={wine.id} 
-                                                wine={wine} 
-                                                onSelect={setSelectedWine} 
-                                                isCondensed={false} 
-                                                tastingRecord={tastingRecord} 
-                                                onTasteChange={handleTasteChange}
-                                                compareWines={compareWines}
-                                                onCompareToggle={handleCompareToggle}
-                                                onAddToPWL={handleAddToPWL}
-                                                selectedYear={selectedYear}
-                                            />
-                                        ))}
-                                    </div>
-                                )
-                            )}
-                            
-                            {/* Pagination removed: showing all wines */}
+return (
+    <Fragment>
+        <Navigation />
+        <main>
+            <section id="wines" className="wines-section">
+                <div className="container">
+                    <div className="section-header">
+                        <h2>Wine Spectator's Top 100 Lists</h2>
+                        <div className="year-selector-container">
+                            <select 
+                                value={selectedYear}
+                                onChange={(e) => {
+                                    const y = parseInt(e.target.value, 10);
+                                    setSelectedYear(y);
+                                    // Reset all filters to prevent empty results when switching years
+                                    setFilters({ search: '', color: 'All', country: 'All', wineType: 'All' });
+                                    // Sync ?year= in URL (preserve other params)
+                                    const params = new URLSearchParams(window.location.search);
+                                    params.set('year', String(y));
+                                    const newUrl = `${window.location.pathname}?${params.toString()}`;
+                                    window.history.replaceState(null, '', newUrl);
+                                }}
+                                className="year-selector"
+                            >
+                                {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
+                                    <option key={year} value={year}>{year} Top 100</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
-                </section>
-            </main>
+                    <div className="filter-toggle-row">
+                        <div className={`view-segmented ${isCondensed ? 'list-active' : 'grid-active'}`} role="tablist" aria-label="View mode">
+                            <button
+                                className={`seg ${!isCondensed ? 'active' : ''}`}
+                                role="tab"
+                                aria-selected={!isCondensed}
+                                onClick={() => { if (isCondensed) { setIsCondensed(false); trackEvent('view_mode_changed', { mode: 'grid' }); } }}
+                                title="Grid View"
+                            >
+                                <Icons.Grid className="seg-icon" />
+                                <span>Grid</span>
+                            </button>
+                            <button
+                                className={`seg ${isCondensed ? 'active' : ''}`}
+                                role="tab"
+                                aria-selected={isCondensed}
+                                onClick={() => { if (!isCondensed) { setIsCondensed(true); trackEvent('view_mode_changed', { mode: 'list' }); } }}
+                                title="List View"
+                            >
+                                <Icons.List className="seg-icon" />
+                                <span>List</span>
+                            </button>
+                            <span className="seg-thumb" aria-hidden="true" />
+                        </div>
+                        <button
+                            className="btn-modern btn-small filter-toggle-btn"
+                            onClick={() => { setShowFilters(v => { const next = !v; trackEvent('filters_visibility_toggled', { visible: next }); return next; }); }}
+                            aria-expanded={showFilters}
+                            aria-controls="filters-panel"
+                        >
+                            <span className="toggle-text">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                        </button>
+                    </div>
+
+                    {showFilters && (
+                        <div id="filters-panel">
+                            <FilterBar 
+                                filters={filters} 
+                                onFiltersChange={setFilters} 
+                                currentWines={wines} 
+                            />
+                        </div>
+                    )}
+                    <div id="wine-list-container" className="wine-list-container">
+                        {isLoading ? (
+                            <div className="loading-container">
+                                <div className="spinner"></div>
+                                <p>Loading {selectedYear} vintage...</p>
+                            </div>
+                        ) : (
+                            isCondensed ? (
+                                <div className="wine-list-condensed">
+                                    {currentWines.map((wine) => (
+                                        <WineCard 
+                                            key={wine.id} 
+                                            wine={wine} 
+                                            onSelect={setSelectedWine} 
+                                            isCondensed={true} 
+                                            tastingRecord={tastingRecord} 
+                                            onTasteChange={handleTasteChange}
+                                            compareWines={compareWines}
+                                            onCompareToggle={handleCompareToggle}
+                                            onAddToPWL={handleAddToPWL}
+                                            selectedYear={selectedYear}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="wine-grid">
+                                    {currentWines.map((wine) => (
+                                        <WineCard 
+                                            key={wine.id} 
+                                            wine={wine} 
+                                            onSelect={setSelectedWine} 
+                                            isCondensed={false} 
+                                            tastingRecord={tastingRecord} 
+                                            onTasteChange={handleTasteChange}
+                                            compareWines={compareWines}
+                                            onCompareToggle={handleCompareToggle}
+                                            onAddToPWL={handleAddToPWL}
+                                            selectedYear={selectedYear}
+                                        />
+                                    ))}
+                                </div>
+                            )
+                        )}
+                    </div>
+                </div>
+            </section>
+        </main>
             
-            {/* PWL Response modal */}
-            <PWLResponseModal
-                isOpen={pwlModalOpen}
-                onClose={() => setPwlModalOpen(false)}
-                wineName={pwlWineName}
-                responseData={pwlResponseData}
-            />
+        {/* PWL Response modal */}
+        <PWLResponseModal
+            isOpen={pwlModalOpen}
+            onClose={() => setPwlModalOpen(false)}
+            wineName={pwlWineName}
+            responseData={pwlResponseData}
+        />
 
             {/* Back to Top Button */}
             {showBackToTop && (
@@ -1711,8 +1883,7 @@ const App = () => {
                 isOpen={showComparisonModal}
                 onClose={() => setShowComparisonModal(false)}
             />
-
-            {/* Footer moved to public/index.html as static HTML */}
+            <Footer />
         </Fragment>
     );
 };

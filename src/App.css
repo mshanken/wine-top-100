@@ -4,6 +4,237 @@
   box-sizing: border-box;
 }
 
+/* Filter toggle */
+.filter-toggle-row {
+  display: flex;
+  justify-content: space-between; /* left + right alignment */
+  align-items: center;
+  gap: 0.5rem; /* space between buttons */
+  margin: 0 0 0.5rem; /* sit directly above filter box */
+}
+
+/* Segmented view toggle */
+.view-segmented {
+  position: relative;
+  display: inline-flex;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.view-segmented .seg {
+  position: relative;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.view-segmented .seg-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.view-segmented .seg-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(50% - 2px);
+  background: #e11d2f; /* brand red */
+  border-radius: 999px;
+  transition: transform 160ms ease;
+}
+
+.view-segmented.grid-active .seg-thumb {
+  transform: translateX(0%);
+}
+
+.view-segmented.list-active .seg-thumb {
+  transform: translateX(100%);
+}
+
+.view-segmented .seg.active {
+  color: #fff;
+}
+
+.filter-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 6px 12px; /* tighter height */
+  line-height: 1.1; /* reduce extra vertical space */
+  font-size: 13px; /* slightly smaller to match tighter button */
+  white-space: nowrap; /* keep icon and text on one line */
+}
+
+/* Condensed list: normalize action buttons */
+.wine-details-condensed .price-score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* --- Condensed card text wrapping fixes (mobile) --- */
+.wine-card-condensed .wine-info-condensed {
+  min-width: 0; /* allow flex child to shrink so text can wrap */
+}
+
+.wine-card-condensed .condensed-winery,
+.wine-card-condensed .condensed-wine-name {
+  white-space: normal;      /* allow multi-line */
+  overflow: visible;        /* no clipping */
+  text-overflow: clip;      /* no ellipsis */
+}
+
+/* Optional hierarchy styling */
+.condensed-winery { font-weight: 700; }
+.condensed-wine-name { color: #4b5563; }
+.condensed-vintage { color: #6b7280; }
+
+/* Make condensed score stand out */
+.wine-score-condensed {
+  font-weight: 700;
+  color: #111827; /* near-black for emphasis */
+  font-size: 15px;
+}
+
+/* Responsive button label swapping */
+.label-short { display: none; }
+.label-full { display: inline; }
+
+@media (max-width: 480px) {
+  .label-short { display: inline; }
+  .label-full { display: none; }
+}
+
+/* Base styles shared by both buttons */
+.btn-video,
+.btn-pwl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  line-height: 1; /* ensure equal height */
+  padding: 10px 14px; /* equalize vertical rhythm */
+  font-size: 14px; /* equal text size */
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  cursor: pointer;
+  min-height: 36px; /* force equal heights */
+  box-sizing: border-box;
+  margin: 0; /* normalize */
+}
+
+/* Color variants */
+.btn-video { background: #b0892d; } /* gold */
+.btn-video:hover { background: #9a7525; }
+
+.btn-pwl { background: #0b74e5; } /* blue */
+.btn-pwl:hover { background: #0a66c9; }
+
+/* Small variants use the same sizing so heights match */
+.btn-small,
+.btn-pwl-small {
+  padding: 10px 14px; /* same as base */
+  font-size: 14px; /* same as base */
+  min-height: 36px; /* enforce equal height for small variants too */
+}
+
+/* Match View Details button height to others in WineCard footer */
+.wine-footer .btn-modern.btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1;
+  min-height: 36px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.filter-toggle-btn .icon-small {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.toggle-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Tasting options: side-by-side checkboxes */
+.tasting-options,
+.tasting-options-condensed,
+.tasting-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap; /* wrap on small screens */
+}
+
+.tasting-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* even tighter spacing between box and label */
+  white-space: nowrap;
+}
+
+.tasting-checkbox input[type="checkbox"] {
+  margin: 0 2px 0 0; /* minimal space to label */
+  line-height: 1;
+}
+
+.tasting-checkbox span {
+  margin: 0; /* remove any default spacing */
+  line-height: 1.1;
+}
+
+/* Tighten vertical spacing around tasting options in WineCard */
+.wine-metadata .tasting-options {
+  margin: 2px 0; /* tighter above and below */
+}
+
+.wine-metadata .wine-footer {
+  margin-top: 4px; /* tighter spacing to action buttons */
+}
+
+/* Further tighten spacing at the bottom of non-condensed WineCard */
+.wine-card-modern .wine-metadata {
+  margin-bottom: 0;
+  padding-bottom: 0; /* remove extra inner padding if any */
+}
+
+.wine-card-modern .wine-footer {
+  margin-bottom: 0;
+}
+
+.wine-card-modern {
+  padding-bottom: 4px; /* reduce space before the list separator line */
+}
+
+/* High-specificity tightening to override any inherited spacing */
+.wine-card-modern .tasting-options { margin-bottom: 0 !important; }
+.wine-card-modern .wine-metadata { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+.wine-card-modern .wine-footer { margin-top: 2px !important; margin-bottom: 0 !important; }
+.wine-card-modern .wine-content { margin-bottom: 0 !important; }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -136,16 +367,14 @@ body {
   left: 0;
   right: 0;
   z-index: 100;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
+  background: #000; /* solid black like target site */
+  transition: background-color 0.3s ease;
   padding: 0.5rem 0;
 }
 
 .navbar-modern.scrolled {
-  background: rgba(255,255,255,0.98);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-  backdrop-filter: blur(10px);
+  background: #000; /* remain black when scrolled */
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
   padding: 0;
 }
 
@@ -197,6 +426,72 @@ body {
   }
 }
 
+/* Mobile toggle button */
+.navbar-toggle {
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.navbar-toggle.light {
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3) inset;
+}
+
+.navbar-toggle.dark {
+  color: #4a5568;
+  box-shadow: 0 0 0 1px rgba(74,85,104,0.2) inset;
+}
+
+.toggle-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* Hide toggle on desktop */
+@media (min-width: 768px) {
+  .navbar-toggle {
+    display: none;
+  }
+}
+
+/* Mobile dropdown menu */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #000; /* dark mobile menu */
+  border-top: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+.mobile-menu .mobile-menu-link {
+  padding: 14px 24px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-menu .mobile-menu-link:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu .mobile-menu-link:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
 .nav-link-light,
 .nav-link-dark {
   text-decoration: none;
@@ -205,8 +500,7 @@ body {
 }
 
 .nav-link-light {
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  color: #fff;
 }
 
 .nav-link-light:hover {
@@ -542,24 +836,56 @@ body {
 .filter-bar {
   background: rgba(255,255,255,0.7);
   backdrop-filter: blur(12px);
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 0.5rem 0.75rem; /* tighter */
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem; /* tighter */
   position: relative;
   z-index: 10;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
+/* Two-column layout for filters */
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile stack */
+  gap: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .filter-grid {
+    grid-template-columns: 25% 75%; /* left: View/Color/Type (narrower), right: Country (wider) */
+    align-items: start;
+    column-gap: 1rem;
+  }
+}
+
+.filter-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-col-left .filter-row {
+  flex-wrap: wrap;
+}
+
+.filter-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .filter-row {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem; /* tighter */
 }
 
 @media (min-width: 768px) {
   .filter-row {
     flex-direction: row;
+    align-items: center;
   }
 }
 
@@ -568,25 +894,25 @@ body {
 
 
 .filter-section {
-  margin-top: 1rem;
+  margin-top: 0.5rem; /* tighter */
 }
 
 .filter-label {
   color: #3b424e;
-  font-size: 0.975rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem; /* slightly smaller */
+  margin-bottom: 0.35rem; /* tighter */
   font-weight: 500;
 }
 
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem; /* tighter */
 }
 
 .filter-btn {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem; /* keep touch target ~32px */
+  font-size: 0.82rem; /* slightly smaller */
   border-radius: 8px;
   background: #edf2f7;
   color: #4a5568;
@@ -1508,8 +1834,8 @@ body {
 /* Footer */
 .footer {
   padding: 3rem 0;
-  background: #8c0004;
-  color: #fff5f5;
+  background: #000; /* match target site's dark footer */
+  color: #fff;
 }
 
 .footer-container {
@@ -1538,13 +1864,41 @@ body {
 }
 
 .footer-section h4 {
-  color: white;
+  color: #fff;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .footer-section p {
   line-height: 1.75;
+}
+
+/* Footer links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin: 0.35rem 0;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 1rem;
+  text-align: center;
+  color: rgba(255,255,255,0.8);
 }
 
 .footer-logo {
