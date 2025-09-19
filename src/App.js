@@ -24,6 +24,17 @@ const buildImgixUrl = (url, params = {}) => {
     }
 };
 
+// Map color/type to CSS tag class (shared by cards and modal)
+const getTypeColor = (type) => {
+    const typeLower = (type || '').toLowerCase();
+    if (typeLower.includes('red')) return 'type-red';
+    if (typeLower.includes('white')) return 'type-white';
+    if (typeLower.includes('sparkling') || typeLower.includes('champagne')) return 'type-sparkling';
+    if (typeLower.includes('rosé') || typeLower.includes('rose') || typeLower.includes('blush')) return 'type-rose';
+    if (typeLower.includes('dessert')) return 'type-dessert';
+    return 'type-default';
+};
+
 // Footer Component (replicates top100.winespectator.com structure)
 const Footer = () => {
     return (
@@ -1026,6 +1037,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 <div className="wine-metadata">
                     <div className="wine-tags">
                         <span className={`wine-tag ${getTypeColor(wine.color)}`}>{wine.color}</span>
+                        <span className="wine-tag">{wine.country || 'Unknown Country'}</span>
                         <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
                     </div>
                     <div className="tasting-options">
@@ -1200,9 +1212,9 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                         <h2>{wine.winery_full}</h2>
                         <p className="wine-subtitle">{wine.wine_full} {wine.vintage}</p>
                         <div className="wine-tags">
-                            <span className="wine-tag">{wine.country}</span>
+                            <span className={`wine-tag ${getTypeColor(wine.color)}`}>{wine.color}</span>
+                            <span className="wine-tag">{wine.country || 'Unknown Country'}</span>
                             <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
-                            <span className="wine-tag type-tag">{wine.color}</span>
                         </div>
                         <h4>Tasting Note</h4>
                         <p className="wine-description">{wine.note || 'No tasting note available.'}</p>
@@ -1697,16 +1709,46 @@ const App = () => {
     };
 
     const filteredWines = useMemo(() => {
-        return wines.filter(wine => {
-            const matchesSearch = !filters.search || 
-                wine.wine_full.toLowerCase().includes(filters.search.toLowerCase()) || 
-                (wine.winery_full && wine.winery_full.toLowerCase().includes(filters.search.toLowerCase()));
-            const matchesColor = filters.color === 'All' || wine.color === filters.color;
-            const matchesCountry = filters.country === 'All' || wine.country === filters.country;
-            const matchesWineType = filters.wineType === 'All' || wine.wine_type === filters.wineType;
-            return matchesSearch && matchesColor && matchesCountry && matchesWineType;
-        });
-    }, [filters, wines]);
+      return wines.filter(wine => {
+          const matchesSearch = !filters.search || 
+              wine.wine_full.toLowerCase().includes(filters.search.toLowerCase()) || 
+              (wine.winery_full && wine.winery_full.toLowerCase().includes(filters.search.toLowerCase()));
+          const matchesColor = filters.color === 'All' || wine.color === filters.color;
+          const matchesCountry = filters.country === 'All' || wine.country === filters.country;
+          const matchesWineType = filters.wineType === 'All' || wine.wine_type === filters.wineType;
+          return matchesSearch && matchesColor && matchesCountry && matchesWineType;
+      });
+  }, [filters, wines]);
+
+  // Build list with interleaved ad placeholders
+  const renderWithAds = (items, condensed) => {
+      const out = [];
+      const interval = condensed ? 10 : 9; // grid: after every 3 rows (3 cols * 3 rows)
+      items.forEach((wine, idx) => {
+          out.push(
+              <WineCard 
+                  key={wine.id} 
+                  wine={wine} 
+                  onSelect={setSelectedWine} 
+                  isCondensed={condensed} 
+                  tastingRecord={tastingRecord} 
+                  onTasteChange={handleTasteChange}
+                  compareWines={compareWines}
+                  onCompareToggle={handleCompareToggle}
+                  onAddToPWL={handleAddToPWL}
+                  selectedYear={selectedYear}
+              />
+          );
+          if ((idx + 1) % interval === 0) {
+              out.push(
+                  <div className="ad-placeholder" key={`ad-${condensed ? 'list' : 'grid'}-${idx}`}>
+                      Advertising placeholder here
+                  </div>
+              );
+          }
+      });
+      return out;
+  };
 
 const currentWines = filteredWines;
 
@@ -1792,37 +1834,11 @@ return (
                         ) : (
                             isCondensed ? (
                                 <div className="wine-list-condensed">
-                                    {currentWines.map((wine) => (
-                                        <WineCard 
-                                            key={wine.id} 
-                                            wine={wine} 
-                                            onSelect={setSelectedWine} 
-                                            isCondensed={true} 
-                                            tastingRecord={tastingRecord} 
-                                            onTasteChange={handleTasteChange}
-                                            compareWines={compareWines}
-                                            onCompareToggle={handleCompareToggle}
-                                            onAddToPWL={handleAddToPWL}
-                                            selectedYear={selectedYear}
-                                        />
-                                    ))}
+                                    {renderWithAds(currentWines, true)}
                                 </div>
                             ) : (
                                 <div className="wine-grid">
-                                    {currentWines.map((wine) => (
-                                        <WineCard 
-                                            key={wine.id} 
-                                            wine={wine} 
-                                            onSelect={setSelectedWine} 
-                                            isCondensed={false} 
-                                            tastingRecord={tastingRecord} 
-                                            onTasteChange={handleTasteChange}
-                                            compareWines={compareWines}
-                                            onCompareToggle={handleCompareToggle}
-                                            onAddToPWL={handleAddToPWL}
-                                            selectedYear={selectedYear}
-                                        />
-                                    ))}
+                                    {renderWithAds(currentWines, false)}
                                 </div>
                             )
                         )}
