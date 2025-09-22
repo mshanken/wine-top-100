@@ -299,6 +299,9 @@ body {
   grid-column: 1 / -1;
 }
 
+/* When a label uses pad mode, show entire image (letterboxed) */
+.wine-image.label-pad img { object-fit: contain !important; }
+
 .year-selector {
   padding: 12px 24px;
   font-size: 16px;

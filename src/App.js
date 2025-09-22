@@ -24,6 +24,35 @@ const buildImgixUrl = (url, params = {}) => {
     }
 };
 
+// Build a label image URL honoring optional per-record overrides
+// Supported fields on wine:
+//  - label_fit_mode: 'crop' | 'pad' | 'fill' | 'max' (Imgix fit)
+//  - label_ar: e.g. '4:3', '3:4', '16:9' (aspect ratio)
+//  - label_crop: e.g. 'entropy', 'edges', 'faces', 'focalpoint'
+//  - label_fp_x, label_fp_y: 0..1 focal point when crop=focalpoint
+// These are only applied when at least one override is present; otherwise the original URL is returned unchanged.
+const computeLabelUrl = (src, wine) => {
+    if (!src || !wine) return src;
+    const hasOverride = Boolean(wine.label_fit_mode || wine.label_ar || wine.label_crop || (wine.label_fp_x != null && wine.label_fp_y != null));
+    if (!hasOverride) return src;
+    const params = {};
+    if (wine.label_fit_mode) params.fit = String(wine.label_fit_mode);
+    if (wine.label_ar) params.ar = String(wine.label_ar);
+    if (wine.label_crop) params.crop = String(wine.label_crop);
+    if (String(wine.label_crop).toLowerCase() === 'focalpoint') {
+        if (wine.label_fp_x != null) params['fp-x'] = Number(wine.label_fp_x);
+        if (wine.label_fp_y != null) params['fp-y'] = Number(wine.label_fp_y);
+        // ensure fit=crop when using focal point
+        if (!params.fit) params.fit = 'crop';
+    }
+    // Optional background (for fit=pad) or fill-color (for fit=fill)
+    if (wine.label_bg) params.bg = String(wine.label_bg);
+    if (wine.label_fill_color) params['fill-color'] = String(wine.label_fill_color);
+    // Light cache-bust to ensure new params take effect
+    params.v = `${wine.top100_year || ''}-${wine.id || ''}`;
+    return buildImgixUrl(src, params);
+};
+
 // Map color/type to CSS tag class (shared by cards and modal)
 const getTypeColor = (type) => {
     const typeLower = (type || '').toLowerCase();
@@ -433,7 +462,8 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
 };
 
 
-// Share Tasting List Component
+// Share Tasting List Component (temporarily disabled)
+/*
 const ShareTastingList = ({ tastingRecord, wines, selectedYear }) => {
     const [showShareModal, setShowShareModal] = useState(false);
     const [shareLink, setShareLink] = useState('');
@@ -530,6 +560,7 @@ const ShareTastingList = ({ tastingRecord, wines, selectedYear }) => {
         </>
     );
 };
+*/
 // Tasting Tracker Side Panel Component
 const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteChange, selectedYear }) => {
     const tastedWines = [];
@@ -713,7 +744,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                 {totalCount > 0 && (
                     <div className="panel-footer">
                         <ExportButton tastingRecord={tastingRecord} wines={wines} selectedYear={selectedYear} />
-                        <ShareTastingList tastingRecord={tastingRecord} wines={wines} selectedYear={selectedYear} />
+                        {/** Share My List temporarily disabled */}
+                        {/** <ShareTastingList tastingRecord={tastingRecord} wines={wines} selectedYear={selectedYear} /> */}
                     </div>
                 )}
             </div>
@@ -1004,12 +1036,12 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <Icons.Check className="icon-small" />
                 </div>
             )}
-            <div className="wine-image" onClick={() => { console.log('[WineCard] onSelect (image) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
+            <div className={`wine-image ${wine.label_fit_mode ? 'label-has-overrides' : ''} ${wine.label_fit_mode === 'pad' ? 'label-pad' : ''}`} onClick={() => { console.log('[WineCard] onSelect (image) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                 {wine.label_url ? (
                     <LazyImage 
-                        src={wine.label_url} 
+                        src={computeLabelUrl(wine.label_url, wine)} 
                         alt={`Bottle of ${wine.wine_full}`} 
-                        className="wine-bottle-image"
+                        className={`wine-bottle-image`}
                         widths={[240, 360, 480]}
                         sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
                     />
@@ -1017,7 +1049,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <LazyImage 
                         src={computeFallbackLabel(wine)} 
                         alt={`Bottle of ${wine.wine_full}`} 
-                        className="wine-bottle-image"
+                        className={`wine-bottle-image`}
                         widths={[240, 360, 480]}
                         sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 90vw"
                     />

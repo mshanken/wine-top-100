@@ -263,6 +263,9 @@
     "top100_year": 2024,
     "top100_rank": 14,
     "label_url": "https://mshanken-wineapi.imgix.net/Turley/Zinfandel%20California%20Juvenile/2022/0d8e88b3578500ef68fada61ae994ebb.jpeg",
+    "label_fit_mode": "pad",
+    "label_ar": "3:1",
+    "label_bg": "ffffff",
     "wine_type": "still"
   },
   {
