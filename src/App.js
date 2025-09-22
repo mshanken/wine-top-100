@@ -570,7 +570,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tastingRecord]);
 
-    // Hide the My Tastings tab and panel until there is at least one selection
+    // Hide the Saved Wines tab and panel until there is at least one selection
     if (totalCount === 0 || dismissed) return null;
 
     return (
@@ -580,7 +580,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                 className={`tasting-tracker-tab ${isOpen ? 'tab-open' : ''}`}
                 onClick={onToggle}
             >
-                <span className="tab-text">My Tastings</span>
+                <span className="tab-text">Saved Wines</span>
                 <span className="tab-count">{totalCount}</span>
                 <span
                     className="tab-hide"
@@ -588,8 +588,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                     tabIndex={0}
                     onClick={(e) => { e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); }}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); } }}
-                    aria-label="Hide My Tastings"
-                    title="Hide My Tastings"
+                    aria-label="Hide Saved Wines"
+                    title="Hide Saved Wines"
                 >
                     (hide)
                 </span>
@@ -598,7 +598,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
             {/* Sliding Panel */}
             <div className={`tasting-tracker-panel ${isOpen ? 'panel-open' : ''}`}>
                 <div className="panel-header">
-                    <h3>My Wine Journey</h3>
+                    <h3>Saved Wines</h3>
                     <button onClick={onToggle} className="panel-close">
                         <Icons.X className="icon-close" />
                     </button>
