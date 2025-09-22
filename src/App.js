@@ -1309,7 +1309,10 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
         (filters.country === 'All' || wine.country === filters.country) &&
         (filters.wineType === 'All' || wine.wine_type === filters.wineType)
     );
-    const allColors = [...new Set(colorSource.map(wine => wine.color))].filter(Boolean);
+    // Exclude Dessert and Sparkling from Wine Color filter
+    const allColors = [...new Set(colorSource.map(wine => wine.color))]
+        .filter(Boolean)
+        .filter(c => c !== 'Dessert' && c !== 'Sparkling');
     const preferredColorOrder = ['Red', 'White', 'Rosé'];
     const colorOptions = [
         'All',
