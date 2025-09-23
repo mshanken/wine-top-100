@@ -985,6 +985,15 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                 <div className="wine-details-condensed">
                     <div className="price-score-row">
                         <span className="wine-score-condensed">{score} pts{(wine.price !== undefined && wine.price !== null) ? ` / $${Math.round(wine.price)}` : ''}</span>
+                        <button
+                            className="btn-modern btn-small"
+                            onClick={() => { onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id }); }}
+                            aria-label="View details"
+                            title="View details"
+                        >
+                            <span className="label-full">View Details</span>
+                            <span className="label-short">Details</span>
+                        </button>
                         {showVideoCondensed && (
                             <a
                                 className="btn-video btn-small"
