@@ -24,6 +24,52 @@
   margin: 0 0 0.5rem; /* sit directly above filter box */
 }
 
+/* Make the segmented toggle and share links sit side-by-side */
+.left-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.share-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.share-links .sep { color: #9aa4b2; }
+.share-links a {
+  color: inherit;              /* remove default blue */
+  text-decoration: none;       /* no underline */
+  display: inline-flex;
+  align-items: center;
+}
+.share-links a:hover { text-decoration: none; }
+
+/* Visually hidden text for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Share icon sizing */
+.share-links .share-icon {
+  width: 18px;   /* slightly larger */
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
 /* Ensure spacing between the two top action buttons */
 .filters-toggle {
   display: inline-flex;
@@ -116,6 +162,28 @@
   }
 }
 
+/* On phones, stack and equalize widths so all three buttons match */
+@media (max-width: 650px) {
+  /* Stack actions and right-align without changing container widths */
+  .wine-details-condensed .price-score-row {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  /* Keep native button sizing; just ensure consistency */
+  .wine-details-condensed .price-score-row .btn-modern.btn-small,
+  .wine-details-condensed .price-score-row .btn-video.btn-small,
+  .wine-details-condensed .price-score-row .btn-pwl,
+  .wine-details-condensed .price-score-row .btn-pwl-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 118px;          /* identical width so none is a few px wider */
+    min-width: 118px;
+  }
+}
+
 /* --- Condensed card text wrapping fixes (mobile) --- */
 .wine-card-condensed .wine-info-condensed {
   min-width: 0; /* allow flex child to shrink so text can wrap */
@@ -144,7 +212,7 @@
 .label-short { display: none; }
 .label-full { display: inline; }
 
-@media (max-width: 480px) {
+@media (max-width: 650px) {
   .label-short { display: inline; }
   .label-full { display: none; }
 }
@@ -196,6 +264,40 @@
   min-height: 36px;
   border-radius: 12px;
   box-sizing: border-box;
+}
+
+/* --- Muted palette for wine action buttons (scoped to wine contexts) --- */
+/* View Details (btn-modern) */
+.wine-footer .btn-modern,
+.wine-details-condensed .btn-modern {
+  background: #8c3a3f; /* further muted wine red */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-modern:hover,
+.wine-details-condensed .btn-modern:hover {
+  background: #7a3237;
+}
+
+/* Watch Video (btn-video) */
+.wine-footer .btn-video,
+.wine-details-condensed .btn-video {
+  background: #b7a86b; /* further muted gold */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-video:hover,
+.wine-details-condensed .btn-video:hover {
+  background: #a5955e;
+}
+
+/* Save to PWL (btn-pwl) */
+.wine-footer .btn-pwl,
+.wine-details-condensed .btn-pwl {
+  background: #4f84c9; /* further muted blue */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-pwl:hover,
+.wine-details-condensed .btn-pwl:hover {
+  background: #4476b3;
 }
 
 /* Ensure PWL button text size matches Video in all list/footer rows */

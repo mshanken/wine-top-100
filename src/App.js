@@ -439,7 +439,17 @@ const TastingCheckbox = ({ wineId, tastingRecord, onTasteChange, status }) => {
                 onClick={stop}
                 onMouseDown={stop}
             />
-            <span>{status === 'tasted' ? 'I have tasted this' : 'I want to taste this'}</span>
+            {status === 'tasted' ? (
+                <>
+                    <span className="label-full">I have tasted this</span>
+                    <span className="label-short">Have tasted</span>
+                </>
+            ) : (
+                <>
+                    <span className="label-full">I want to taste this</span>
+                    <span className="label-short">Want to taste</span>
+                </>
+            )}
         </label>
     );
 };
@@ -574,7 +584,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
             onDismissChange && onDismissChange(false);
         }
         prevCountRef.current = totalCount;
-    }, [totalCount]);
+    }, [totalCount, onDismissChange]);
 
     // Also re-show the tab if the user edits an existing wine's status
     // (e.g., switches from "want" to "tasted") while there is at least one selection
@@ -583,15 +593,13 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
             setDismissed(false);
             onDismissChange && onDismissChange(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tastingRecord]);
+    }, [tastingRecord, totalCount, onDismissChange]);
 
     // Listen for external undismiss requests
     useEffect(() => {
         setDismissed(false);
         onDismissChange && onDismissChange(false);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [undismissSignal]);
+    }, [undismissSignal, onDismissChange]);
 
     // Hide the Saved Wines tab and panel until there is at least one selection
     if (totalCount === 0 || dismissed) return null;
@@ -1824,6 +1832,17 @@ const App = () => {
 
 const currentWines = filteredWines;
 
+// Build share URLs for header share links
+const currentUrl = (typeof window !== 'undefined') ? window.location.href : 'https://top100.winespectator.com/';
+const encodedUrl = encodeURIComponent(currentUrl);
+const shareText = `Wine Spectator Top 100 ${selectedYear}`;
+const encodedText = encodeURIComponent(shareText);
+const shareUrls = {
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+  threads: `https://threads.net/intent/post?text=${encodedText}%20${encodedUrl}`
+};
+
 return (
     <Fragment>
         <Navigation />
@@ -1858,7 +1877,8 @@ return (
                         </div>
                     </div>
                     <div className="filter-toggle-row">
-                        <div className={`view-segmented ${isCondensed ? 'list-active' : 'grid-active'}`} role="tablist" aria-label="View mode">
+                        <div className="left-tools">
+                          <div className={`view-segmented ${isCondensed ? 'list-active' : 'grid-active'}`} role="tablist" aria-label="View mode">
                             <button
                                 className={`seg ${!isCondensed ? 'active' : ''}`}
                                 role="tab"
@@ -1880,6 +1900,31 @@ return (
                                 <span>List</span>
                             </button>
                             <span className="seg-thumb" aria-hidden="true" />
+                          </div>
+                          <div className="share-links" aria-label="Share links">
+                              <span>Share:</span>
+                              <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook" onClick={() => trackEvent('share_click', { network: 'facebook' })}>
+                                <span className="sr-only">Facebook</span>
+                                <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                                  <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z"/>
+                                </svg>
+                              </a>
+                              <span className="sep">|</span>
+                              <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onClick={() => trackEvent('share_click', { network: 'linkedin' })}>
+                                <span className="sr-only">LinkedIn</span>
+                                <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                                  <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z"/>
+                                </svg>
+                              </a>
+                              <span className="sep">|</span>
+                              <a href={shareUrls.threads} target="_blank" rel="noopener noreferrer" title="Share on Threads" onClick={() => trackEvent('share_click', { network: 'threads' })}>
+                                <span className="sr-only">Threads</span>
+                                <svg className="share-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                  <path fill="currentColor" d="M48.7934,51.38299c-2.20473,0.29799-3.99773,1.23521-5.03513,2.64377   c-0.85042,1.14848-1.1457,2.54625-0.88026,4.139c0.24923,1.48438,0.70964,4.25273,7.99005,4.25273   c6.97164,0,8.89465-7.0103,9.42552-10.85673c-1.85255-0.36838-3.86773-0.55799-6.0182-0.55799   C52.52563,51.00376,50.69472,51.12833,48.7934,51.38299z"/>
+                                  <path fill="currentColor" d="M97.43239,20.54097c-1.66843-9.29382-8.73216-16.35288-17.9952-17.98354   C59.93605-0.87186,39.87434-0.83395,20.54925,2.56015C11.29171,4.22329,4.23333,11.28235,2.56761,20.55447   C0.86399,30.2573,0,40.19036,0,50.07738c0,9.77864,0.86399,19.66024,2.56761,29.35764   c1.63052,9.26398,8.68883,16.32846,17.99791,18.00245C30.27276,99.13859,40.20203,100,50.0826,100   c9.77221,0,19.64735-0.86141,29.35459-2.56253c9.4418-1.66314,16.33755-8.5597,18.00056-18.00245   C99.13873,69.72677,100,59.8506,100,50.07738C100,40.19579,99.13873,30.26543,97.43239,20.54097z M79.85426,40.40704   c-1.77131,0.59055-3.67812-0.43877-4.23062-2.22385c-3.98689-12.83149-11.4352-18.06478-25.70353-18.06478   c-17.32347,0-25.39205,10.01974-25.39205,31.53002c0,18.15958,8.91093,27.92203,25.77121,28.22537   c7.15041,0.24922,13.56954-2.04237,17.63224-6.01888c2.77351-2.71416,4.24147-6.04594,4.24147-9.62694   c0-3.77604-1.28378-6.81525-3.8189-9.03646c-0.49297-0.43342-1.02926-0.82886-1.60889-1.19724   c-1.77131,9.44275-7.69206,15.18534-15.87714,15.18534c-10.74999,0-13.90537-5.38506-14.65834-9.89787   c-0.57149-3.42387,0.15984-6.63106,2.1072-9.26941c2.13433-2.89293,5.53616-4.78909,9.58266-5.33088   c4.38232-0.58506,8.47758-0.5742,12.15569-0.03791c-0.60669-2.61122-1.81471-4.74576-3.5102-6.01617   c-3.79734-2.79276-10.69851-2.52726-14.485,2.35392c-1.14299,1.47902-3.26376,1.74988-4.74257,0.60133   c-1.4761-1.14305-1.74696-3.26674-0.60398-4.74304c6.25658-8.07211,17.37766-8.39986,23.86176-3.64326   c3.8244,2.8713,6.1537,7.6983,6.59784,13.41376c2.12891,0.91017,4.01943,2.07492,5.6391,3.49433   c4.00317,3.51061,6.12115,8.39179,6.12115,14.12354c0,5.36336-2.22636,10.4992-6.27286,14.45943   c-5.18941,5.07623-13.04403,7.95838-21.65704,7.95838c-0.28164,0-0.55793-0.00543-0.83422-0.01086   c-20.58716-0.36838-32.4016-13.12127-32.4016-34.9865c0-25.40826,10.81767-38.29115,32.15244-38.29115   c17.33432,0,27.25274,7.03742,32.16058,22.82138C82.63319,37.96102,81.63649,39.85446,79.85426,40.40704z"/>
+                                </svg>
+                              </a>
+                          </div>
                         </div>
                         <div className="filters-toggle">
                             <button 
