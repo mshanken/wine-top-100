@@ -257,8 +257,13 @@ const useBodyScrollLock = (locked) => {
 
 // Analytics functions
 const trackEvent = (eventName, parameters = {}) => {
+    // GA4 (gtag) if present
     if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('event', eventName, parameters);
+    }
+    // GTM dataLayer if present
+    if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({ event: eventName, ...parameters });
     }
 };
 
@@ -1562,6 +1567,34 @@ const App = () => {
     const [pwlModalOpen, setPwlModalOpen] = useState(false);
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
+
+    // Inject Google Tag Manager if configured
+    useEffect(() => {
+        const GTM_ID = process.env.REACT_APP_GTM_ID;
+        if (!GTM_ID || typeof document === 'undefined') return;
+        // Prevent duplicate injection
+        if (document.getElementById('gtm-script')) return;
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        const gtmScript = document.createElement('script');
+        gtmScript.id = 'gtm-script';
+        gtmScript.async = true;
+        gtmScript.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`;
+        document.head.appendChild(gtmScript);
+        // Optional: add a <noscript> iframe for GTM; limited utility in SPA but included for completeness
+        const noScript = document.createElement('noscript');
+        noScript.id = 'gtm-noscript';
+        noScript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(GTM_ID)}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
+        document.body.appendChild(noScript);
+        return () => {
+            try {
+                const s = document.getElementById('gtm-script');
+                if (s) s.remove();
+                const n = document.getElementById('gtm-noscript');
+                if (n) n.remove();
+            } catch {}
+        };
+    }, []);
 
     // Persist filters visibility preference
     useEffect(() => {
