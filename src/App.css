@@ -4,13 +4,31 @@
   box-sizing: border-box;
 }
 
+/* Local dev stub notice in PWL modal */
+.pwl-stub-note {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #92400e; /* amber-800 */
+  background: #fff7ed; /* amber-50 */
+  border: 1px dashed #f59e0b; /* amber-500 */
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
 /* Filter toggle */
 .filter-toggle-row {
   display: flex;
   justify-content: space-between; /* left + right alignment */
   align-items: center;
-  gap: 0.5rem; /* space between buttons */
+  gap: 0.75rem; /* space between buttons (slightly increased) */
   margin: 0 0 0.5rem; /* sit directly above filter box */
+}
+
+/* Ensure spacing between the two top action buttons */
+.filters-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* space between Hide Filters and Show Saved Wines */
 }
 
 /* Segmented view toggle */
@@ -71,7 +89,7 @@
 .filter-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.8rem;
   padding: 6px 12px; /* tighter height */
   line-height: 1.1; /* reduce extra vertical space */
   font-size: 13px; /* slightly smaller to match tighter button */

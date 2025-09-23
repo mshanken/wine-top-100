@@ -545,7 +545,7 @@ const ShareTastingList = ({ tastingRecord, wines, selectedYear }) => {
 };
 */
 // Tasting Tracker Side Panel Component
-const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteChange, selectedYear }) => {
+const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteChange, selectedYear, undismissSignal = 0, onDismissChange }) => {
     const tastedWines = [];
     const wantToTasteWines = [];
     
@@ -571,6 +571,7 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
         // Re-show the tab when the total count increases (a new wine is added)
         if (totalCount > prevCountRef.current) {
             setDismissed(false);
+            onDismissChange && onDismissChange(false);
         }
         prevCountRef.current = totalCount;
     }, [totalCount]);
@@ -580,9 +581,17 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
     useEffect(() => {
         if (totalCount > 0) {
             setDismissed(false);
+            onDismissChange && onDismissChange(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tastingRecord]);
+
+    // Listen for external undismiss requests
+    useEffect(() => {
+        setDismissed(false);
+        onDismissChange && onDismissChange(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [undismissSignal]);
 
     // Hide the Saved Wines tab and panel until there is at least one selection
     if (totalCount === 0 || dismissed) return null;
@@ -600,8 +609,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                     className="tab-hide"
                     role="button"
                     tabIndex={0}
-                    onClick={(e) => { e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); }}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setDismissed(true); if (isOpen) onToggle(); } }}
+                    onClick={(e) => { e.stopPropagation(); setDismissed(true); onDismissChange && onDismissChange(true); if (isOpen) onToggle(); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); setDismissed(true); onDismissChange && onDismissChange(true); if (isOpen) onToggle(); } }}
                     aria-label="Hide Saved Wines"
                     title="Hide Saved Wines"
                 >
@@ -1123,6 +1132,19 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
                     ) : responseData.success ? (
                         <div className="pwl-success">
                             <p>Successfully added to your Personal Wine List!</p>
+                            {responseData.stubbed && (
+                                <p className="pwl-stub-note">Local development: This request was stubbed; no network call was made.</p>
+                            )}
+                            <div style={{ marginTop: '1rem' }}>
+                                <a
+                                    className="btn-modern"
+                                    href="https://www.winespectator.com/pwl/show"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    View my Personal Wine List
+                                </a>
+                            </div>
                         </div>
                     ) : (
                         <div className="pwl-error">
@@ -1434,6 +1456,9 @@ const App = () => {
     const [wines, setWines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showBackToTop, setShowBackToTop] = useState(false);
+    // Saved Wines panel dismissed status + signal to re-open it
+    const [savedPanelDismissed, setSavedPanelDismissed] = useState(false);
+    const [undismissSignal, setUndismissSignal] = useState(0);
     
     // Load wine data when selectedYear changes
     useEffect(() => {
@@ -1540,6 +1565,25 @@ const App = () => {
         setPwlResponseData(null);
         setPwlModalOpen(true);
 
+        // In local development, stub the network call to avoid CORS issues
+        try {
+            const host = typeof window !== 'undefined' ? window.location.hostname : '';
+            const isLocal = host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local');
+            if (isLocal) {
+                // Simulate latency
+                await new Promise(r => setTimeout(r, 500));
+                setPwlResponseData({
+                    success: true,
+                    stubbed: true,
+                    message: 'Local development: request stubbed; no network call was made.'
+                });
+                trackEvent('add_to_pwl_stubbed', { wine_id: wine.id, wine_name: wine.wine_full });
+                return;
+            }
+        } catch (e) {
+            // if hostname check fails for any reason, continue with normal flow
+        }
+
         // Fallback to legacy endpoint if you ever need to flip the flag off
         const url = USE_API ? `${API_BASE}${PWL_PATH}` : `${API_BASE}/pwl/additem`;
 
@@ -1586,20 +1630,21 @@ const App = () => {
 
             setPwlResponseData({
                 success: !partial,
-      partial,
-      added,
-      errors,
-      message: partial
-        ? `Added ${added.length} item(s). ${errors.length} issue(s).`
-        : 'Added to your Personal Wine List.'
-    });
+                partial,
+                added,
+                errors,
+                message: partial
+                  ? `Added ${added.length} item(s). ${errors.length} issue(s).`
+                  : 'Added to your Personal Wine List.'
+            });
 
-    trackEvent('add_to_pwl', { wine_id: wine.id, wine_name: wine.wine_full, partial, status: res.status });
-    } catch (err) {
-    console.error('Error adding to PWL:', err);
-    setPwlResponseData({ success: false, code: 'NETWORK_ERROR', message: 'We had trouble saving that. Please try again.' });
-    }
-};
+            trackEvent('add_to_pwl', { wine_id: wine.id, wine_name: wine.wine_full, partial, status: res.status });
+        } catch (err) {
+            console.error('Error adding to PWL:', err);
+            setPwlResponseData({ success: false, code: 'NETWORK_ERROR', message: 'We had trouble saving that. Please try again.' });
+        }
+    };
+
 
     useEffect(() => {
         // Parse ?year=YYYY from URL on initial load
@@ -1827,16 +1872,27 @@ return (
                             </button>
                             <span className="seg-thumb" aria-hidden="true" />
                         </div>
-                        <button
-                            className="btn-modern btn-small filter-toggle-btn"
-                            onClick={() => { setShowFilters(v => { const next = !v; trackEvent('filters_visibility_toggled', { visible: next }); return next; }); }}
-                            aria-expanded={showFilters}
-                            aria-controls="filters-panel"
-                        >
-                            <span className="toggle-text">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
-                        </button>
+                        <div className="filters-toggle">
+                            <button 
+                                className={`btn-modern btn-small filter-toggle-btn`}
+                                aria-expanded={!showFilters}
+                                aria-controls="filters-panel"
+                                onClick={() => setShowFilters(!showFilters)}
+                            >
+                                <span className="toggle-text">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                            </button>
+                            {savedPanelDismissed && (
+                                <button
+                                    className="btn-modern btn-small filter-toggle-btn"
+                                    onClick={() => { setUndismissSignal(s => s + 1); setShowTastingPanel(true); }}
+                                    title="Show Saved Wines"
+                                    aria-label="Show Saved Wines"
+                                >
+                                    <span className="toggle-text">Show Saved Wines</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
-
                     {showFilters && (
                         <div id="filters-panel">
                             <FilterBar 
@@ -1877,7 +1933,7 @@ return (
         />
 
             {/* Back to Top Button */}
-            {showBackToTop && (
+            {showBackToTop && !pwlModalOpen && (
                 <button
                     className="back-to-top"
                     onClick={scrollToTop}
@@ -1907,6 +1963,8 @@ return (
                 wines={wines}
                 onTasteChange={handleTasteChange}
                 selectedYear={selectedYear}
+                undismissSignal={undismissSignal}
+                onDismissChange={setSavedPanelDismissed}
             />
 
             {/* Comparison bar & modal */}
