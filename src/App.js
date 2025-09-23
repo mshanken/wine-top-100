@@ -354,7 +354,6 @@ const useScrollAnimation = () => {
 
 // Export Button Component
 const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
-    const [showMenu, setShowMenu] = useState(false);
     
     // Only include entries that exist in the current year's wine list
     const wineIdSet = new Set(wines.map(w => String(w.id)));
@@ -388,7 +387,7 @@ const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `wine-tasting-list-${selectedYear}-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `ws-top100-saved-wines-${selectedYear}-${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             URL.revokeObjectURL(url);
         } else if (format === 'json') {
@@ -397,13 +396,12 @@ const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `wine-tasting-list-${selectedYear}-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `ws-top100-saved-wines-${selectedYear}-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
 
         trackExport(format, data.length);
-        setShowMenu(false);
     };
 
     const itemCount = filteredEntries.length;
@@ -413,27 +411,12 @@ const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
         <div className="export-button-container">
             <button 
                 className="btn-modern export-button"
-                onClick={() => setShowMenu(!showMenu)}
+                onClick={() => exportTastingList('csv')}
+                title="Export as CSV"
             >
                 <Icons.Download className="export-icon" />
-                Export List ({itemCount})
+                Export as CSV ({itemCount})
             </button>
-            {showMenu && (
-                <div className="export-menu">
-                    <button 
-                        onClick={() => exportTastingList('csv')}
-                        className="export-menu-item"
-                    >
-                        Export as CSV
-                    </button>
-                    <button 
-                        onClick={() => exportTastingList('json')}
-                        className="export-menu-item"
-                    >
-                        Export as JSON
-                    </button>
-                </div>
-            )}
         </div>
     );
 };
@@ -673,9 +656,9 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                             />
                                         )}
                                         <div className="mini-wine-info">
-                                            <h5>{wine.wine_full}</h5>
-                                            <p>{wine.winery_full}</p>
-                                            <span className="mini-wine-price">${wine.price}</span>
+                                            <h5>{wine.winery_full}</h5>
+                                            <p>{wine.wine_full} {wine.vintage}</p>
+                                            <span className="mini-wine-price">{(wine.score !== undefined && wine.score !== null) ? `${wine.score} pts · ` : ''}${`${wine.price}`}</span>
                                         </div>
                                         <button 
                                             onClick={() => onTasteChange(wine.id, null)}
@@ -715,8 +698,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                             />
                                         )}
                                         <div className="mini-wine-info">
-                                            <h5>{wine.wine_full}</h5>
-                                            <p>{wine.winery_full}</p>
+                                            <h5>{wine.winery_full}</h5>
+                                            <p>{wine.wine_full}</p>
                                             <span className="mini-wine-price">${wine.price}</span>
                                         </div>
                                         <button 
