@@ -69,6 +69,8 @@
   text-decoration: none;       /* no underline */
   display: inline-flex;
   align-items: center;
+  padding: 6px;                /* larger tap target */
+  border-radius: 6px;          /* subtle rounding */
 }
 .share-links a:hover { text-decoration: none; }
 
@@ -87,8 +89,8 @@
 
 /* Share icon sizing */
 .share-links .share-icon {
-  width: 18px;   /* slightly larger */
-  height: 18px;
+  width: 22px;   /* larger icon */
+  height: 22px;
   display: inline-block;
   vertical-align: middle;
   fill: currentColor;
