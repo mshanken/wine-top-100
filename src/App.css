@@ -312,11 +312,25 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
+}
+
+/* Section description typography */
+.section-description {
+  margin: 8px 0 20px;
+}
+.section-description p {
+  max-width: 72ch;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #5a6473; /* muted slate */
+}
+@media (min-width: 768px) {
+  .section-description p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    letter-spacing: 0.1px;
+  }
 }
 
 .year-selector:hover {
