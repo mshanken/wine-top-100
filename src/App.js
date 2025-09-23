@@ -1243,6 +1243,10 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                     <div className="wine-detail-info">
                         <h2>{wine.winery_full}</h2>
                         <p className="wine-subtitle">{wine.wine_full} {wine.vintage}</p>
+                        <div className="wine-detail-footer">
+                            <span className="wine-score-xl">{score} Points</span>
+                            <span className="wine-price-xl">${price}</span>
+                        </div>
                         <div className="wine-tags">
                             <span className={`wine-tag ${getTypeColor(wine.color)}`}>{wine.color}</span>
                             <span className="wine-tag">{wine.country || 'Unknown Country'}</span>
@@ -1253,10 +1257,6 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
                         <div className="tasting-section">
                             <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
                             <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
-                        </div>
-                        <div className="wine-detail-footer">
-                            <span className="wine-score-xl">{score} Points</span>
-                            <span className="wine-price-xl">${price}</span>
                         </div>
                     </div>
                 </div>
