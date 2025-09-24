@@ -1208,9 +1208,9 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
                         </div>
                     ) : (
                         <div className="pwl-error">
-                            <p>Error adding to Personal Wine List:</p>
-                            <p className="error-message">{responseData.error}</p>
-                            <p><strong>Wine ID:</strong> {responseData.wineId}</p>
+                            <p>Sorry, we couldn't add this wine to your Personal Wine List.  If you are a Wine Spectator subscriber, please <a href="https://www.winespectator.com/auth/login" target="_blank" rel="noopener noreferrer">log in</a> and then try again.  If aren't a subscriber, sign up today at <a href="https://www.winespectator.com/subscribe" target="_blank" rel="noopener noreferrer">www.winespectator.com/subscribe</a>.</p>
+                            {/* <p className="error-message">{responseData.error}</p> */}
+                            {/* <p><strong>Wine ID:</strong> {responseData.wineId}</p> */}
                         </div>
                     )}
                 </div>
@@ -1922,7 +1922,7 @@ return (
                     <div className="section-header">
                         <h2>Wine Spectator's Top 100 Lists</h2>
                         <div className="section-description">
-                            <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100, based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.</p>
+                            <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100 based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.</p>
                         </div>
                         <div className="year-selector-container">
                             <select 
