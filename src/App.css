@@ -74,6 +74,25 @@
 }
 .share-links a:hover { text-decoration: none; }
 
+/* Wrap the header above filters on small screens */
+@media (max-width: 700px) {
+  .filter-toggle-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem 0.75rem; /* tighter when wrapped */
+  }
+  .left-tools {
+    flex: 1 1 auto; /* allow share + view controls to occupy first row */
+    min-width: 0;
+  }
+  .filters-toggle {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-end; /* move to the right on the next line */
+    margin-top: 4px;
+  }
+}
+
 /* Visually hidden text for screen readers */
 .sr-only {
   position: absolute;

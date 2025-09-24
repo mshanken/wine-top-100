@@ -1589,6 +1589,25 @@ const App = () => {
     const [selectedWine, setSelectedWine] = useState(null);
     const [filters, setFilters] = useState({ search: '', color: 'All', country: 'All', wineType: 'All' });
     const [isCondensed, setIsCondensed] = useState(false);
+
+    // Force Grid view on small screens
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        const applyBreakpoint = () => {
+            const isSmall = window.matchMedia('(max-width: 650px)').matches;
+            // Grid view corresponds to isCondensed === false
+            if (isSmall && isCondensed) {
+                setIsCondensed(false);
+                try { trackEvent('view_mode_changed', { mode: 'grid', reason: 'breakpoint' }); } catch {}
+            }
+        };
+        // Initial check on mount
+        applyBreakpoint();
+        // Update on resize
+        window.addEventListener('resize', applyBreakpoint);
+        return () => window.removeEventListener('resize', applyBreakpoint);
+        // Only depend on isCondensed so we can flip back to grid if user switched on small screens
+    }, [isCondensed]);
     const [showFilters, setShowFilters] = useState(() => {
         try {
             const saved = localStorage.getItem('showFilters');
