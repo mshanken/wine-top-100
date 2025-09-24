@@ -138,12 +138,8 @@ const Footer = () => {
 const computeFallbackLabel = (wine) => {
     const rawColor = (wine?.color || '').toString().toLowerCase().trim();
     const rawTypeInput = (wine?.wine_type || '').toString().toLowerCase().trim();
-    console.log('rawColor', rawColor);
-    console.log('rawTypeInput', rawTypeInput);
     const inferredType = rawTypeInput || ((/sparkling|champagne/.test(rawColor)) ? 'sparkling' : 'still');
-    console.log('inferredType', inferredType);
     const colorPlusType = inferredType ? `${rawColor}_${inferredType}` : rawColor;
-    console.log('colorPlusType', colorPlusType);
     // Normalize accented rosé to rose in both standalone and prefixed forms
     let betterType = colorPlusType
         .replace(/^ros[ée]$/, 'rose')
@@ -156,6 +152,12 @@ const computeFallbackLabel = (wine) => {
         betterType = 'dessert_still';
     }
     return `https://mshanken.imgix.net/wso/bolt/wine-detail/details/${betterType}.png`;
+};
+
+// Format a wine's full name consistently for analytics and UI
+const formatWineName = (wine) => {
+    const parts = [wine?.winery_full, wine?.wine_full, wine?.vintage];
+    return parts.filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
 };
 
 // Lazy Loading Image Component with responsive srcset/sizes
@@ -257,13 +259,49 @@ const useBodyScrollLock = (locked) => {
 
 // Analytics functions
 const trackEvent = (eventName, parameters = {}) => {
+    // Add GA4 debug flag in development so events appear in GA DebugView
+    const isDev = process.env.NODE_ENV === 'development';
+    if (isDev) {
+        parameters = { debug_mode: true, ...parameters };
+    }
+
+    // Ensure a consistent event name prefix across the entire site
+    const PREFIX = 'top100list_';
+    const baseName = String(eventName || '').trim();
+    const name = (baseName.startsWith(PREFIX)) ? baseName : `${PREFIX}${baseName}`;
+
+    // Add a lightweight category and summary for simpler GTM setups
+    // category = unprefixed event base name
+    // summary = short human-friendly string describing key params
+    const category = baseName.replace(/^top100list_/,'');
+    const keys = ['wine_name','wine_id','rank','year','mode','network','page_title'];
+    const pieces = [];
+    keys.forEach(k => { if (parameters && parameters[k] !== undefined) pieces.push(`${k}=${parameters[k]}`); });
+    const summary = pieces.join(' | ');
+    parameters = { category, summary, ...parameters };
+    try {
+        // eslint-disable-next-line no-console
+        if (isDev) console.log('[analytics:event]', name, parameters, {
+            gtagPresent: typeof window !== 'undefined' && !!window.gtag,
+            dataLayerPresent: typeof window !== 'undefined' && Array.isArray(window.dataLayer),
+        });
+    } catch {}
     // GA4 (gtag) if present
     if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', eventName, parameters);
+        try {
+            // eslint-disable-next-line no-console
+            if (isDev) console.log('[analytics:gtag] event', name, parameters);
+        } catch {}
+        window.gtag('event', name, parameters);
     }
     // GTM dataLayer if present
     if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
-        window.dataLayer.push({ event: eventName, ...parameters });
+        const payload = { event: name, ...parameters };
+        window.dataLayer.push(payload);
+        try {
+            // eslint-disable-next-line no-console
+            if (isDev) console.log('[analytics:dataLayer.push]', payload);
+        } catch {}
     }
 };
 
@@ -273,7 +311,7 @@ const trackWineView = (wine) => {
         value: wine.price,
         items: [{
             item_id: wine.id,
-            item_name: wine.wine_full,
+            item_name: formatWineName(wine),
             item_category: wine.color,
             price: wine.price,
             quantity: 1
@@ -284,7 +322,7 @@ const trackWineView = (wine) => {
 const trackTastingAction = (wine, action) => {
     trackEvent('wine_tasting_action', {
         wine_id: wine.id,
-        wine_name: wine.wine_full,
+        wine_name: formatWineName(wine),
         action: action,
         wine_price: wine.price,
         wine_score: wine.score
@@ -1050,7 +1088,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <Icons.Check className="icon-small" />
                 </div>
             )}
-            <div className={`wine-image ${wine.label_fit_mode ? 'label-has-overrides' : ''} ${wine.label_fit_mode === 'pad' ? 'label-pad' : ''}`} onClick={() => { console.log('[WineCard] onSelect (image) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
+            <div className={`wine-image ${wine.label_fit_mode ? 'label-has-overrides' : ''} ${wine.label_fit_mode === 'pad' ? 'label-pad' : ''}`} onClick={() => { if (process.env.NODE_ENV === 'development') console.log('[WineCard] onSelect (image) clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); }}>
                 {wine.label_url ? (
                     <LazyImage 
                         src={computeLabelUrl(wine.label_url, wine)} 
@@ -1187,24 +1225,30 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
 const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, onAddNote }) => {
     useEffect(() => {
         if (isOpen && wine) {
-            console.group('[WineDetailModal] Open');
-            console.log('Timestamp:', new Date().toISOString());
-            console.log('Wine selected:', { id: wine.id, name: wine.wine_full, vintage: wine.vintage, score: wine.score, price: wine.price });
-            console.groupEnd();
+            if (process.env.NODE_ENV === 'development') {
+                console.group('[WineDetailModal] Open');
+                console.log('Timestamp:', new Date().toISOString());
+                console.log('Wine selected:', { id: wine.id, name: wine.wine_full, vintage: wine.vintage, score: wine.score, price: wine.price });
+                console.groupEnd();
+            }
             trackWineView(wine);
         }
         return () => {
             if (isOpen && wine) {
-                console.group('[WineDetailModal] Unmount/Close');
-                console.log('Timestamp:', new Date().toISOString());
-                console.log('Last wine:', { id: wine.id, name: wine.wine_full });
-                console.groupEnd();
+                if (process.env.NODE_ENV === 'development') {
+                    console.group('[WineDetailModal] Unmount/Close');
+                    console.log('Timestamp:', new Date().toISOString());
+                    console.log('Last wine:', { id: wine.id, name: wine.wine_full });
+                    console.groupEnd();
+                }
             }
-        };
+        }
     }, [isOpen, wine]);
 
     useEffect(() => {
-        console.log('[WineDetailModal] Props changed', { isOpen, wineId: wine?.id });
+        if (process.env.NODE_ENV === 'development') {
+            console.log('[WineDetailModal] Props changed', { isOpen, wineId: wine?.id });
+        }
     }, [isOpen, wine?.id]);
 
     // Close on Escape (hook must be before any early return)
@@ -1230,12 +1274,12 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
     const score = wine.score || 0;
 
     const stopPropagation = (e) => {
-        console.log('[WineDetailModal] stopPropagation called');
+        if (process.env.NODE_ENV === 'development') console.log('[WineDetailModal] stopPropagation called');
         e.stopPropagation();
     };
 
     const handleCloseClick = () => {
-        console.log('[WineDetailModal] Close button clicked');
+        if (process.env.NODE_ENV === 'development') console.log('[WineDetailModal] Close button clicked');
         onClose();
     };
     
@@ -1568,33 +1612,7 @@ const App = () => {
     const [pwlResponseData, setPwlResponseData] = useState(null);
     const [pwlWineName, setPwlWineName] = useState('');
 
-    // Inject Google Tag Manager if configured
-    useEffect(() => {
-        const GTM_ID = process.env.REACT_APP_GTM_ID;
-        if (!GTM_ID || typeof document === 'undefined') return;
-        // Prevent duplicate injection
-        if (document.getElementById('gtm-script')) return;
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        const gtmScript = document.createElement('script');
-        gtmScript.id = 'gtm-script';
-        gtmScript.async = true;
-        gtmScript.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`;
-        document.head.appendChild(gtmScript);
-        // Optional: add a <noscript> iframe for GTM; limited utility in SPA but included for completeness
-        const noScript = document.createElement('noscript');
-        noScript.id = 'gtm-noscript';
-        noScript.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(GTM_ID)}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
-        document.body.appendChild(noScript);
-        return () => {
-            try {
-                const s = document.getElementById('gtm-script');
-                if (s) s.remove();
-                const n = document.getElementById('gtm-noscript');
-                if (n) n.remove();
-            } catch {}
-        };
-    }, []);
+    // GTM now loads via public/index.html for earliest execution.
 
     // Persist filters visibility preference
     useEffect(() => {
@@ -1708,7 +1726,7 @@ const App = () => {
         }
 
         // Track page view
-        trackEvent('page_view', { page_title: 'Wine Top 100' });
+        trackEvent('page_view', { page_title: 'Wine Spectator Top 100 List' });
 
         // Check for shared wine or list in URL
         const urlParams = new URLSearchParams(window.location.search);
