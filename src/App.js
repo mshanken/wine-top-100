@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
+const SHOW_AD_PLACEHOLDERS = false;
+
 // Helper to build Imgix URL with defaults
 const buildImgixUrl = (url, params = {}) => {
     if (!url) return url;
@@ -1906,7 +1908,7 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
                   selectedYear={selectedYear}
               />
           );
-          if ((idx + 1) % interval === 0) {
+          if (SHOW_AD_PLACEHOLDERS && (idx + 1) % interval === 0) {
               out.push(
                   <div className="ad-placeholder" key={`ad-${condensed ? 'list' : 'grid'}-${idx}`}>
                       Advertising placeholder here
