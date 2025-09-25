@@ -393,6 +393,21 @@ const useScrollAnimation = () => {
             observer.disconnect();
         };
     }, []);
+
+    // Handle shared wine deep link once wines are loaded
+    const handledSharedWineRef = useRef(false);
+    useEffect(() => {
+        if (handledSharedWineRef.current || !wines || wines.length === 0) return;
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedWineId = urlParams.get('wine');
+        if (!sharedWineId) return;
+        const wine = wines.find(w => w.id === parseInt(sharedWineId, 10));
+        if (wine) {
+            setSelectedWine(wine);
+            trackEvent('view_shared_wine', { wine_id: sharedWineId });
+        }
+        handledSharedWineRef.current = true;
+    }, [wines]);
 };
 
 // Export Button Component
@@ -1208,7 +1223,7 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
                         </div>
                     ) : (
                         <div className="pwl-error">
-                            <p>Sorry, we couldn't add this wine to your Personal Wine List.  If you are a Wine Spectator subscriber, please <a href="https://www.winespectator.com/auth/login" target="_blank" rel="noopener noreferrer">log in</a> and then try again.  If aren't a subscriber, sign up today at <a href="https://www.winespectator.com/subscribe" target="_blank" rel="noopener noreferrer">www.winespectator.com/subscribe</a>.</p>
+                            <p>Sorry, we couldn't add this wine to your Personal Wine List.  If you are a Wine Spectator member, please <a href="https://www.winespectator.com/auth/login" target="_blank" rel="noopener noreferrer">log in</a> and try again.  If you aren't a subscriber, sign up today at <a href="https://www.winespectator.com/subscribe" target="_blank" rel="noopener noreferrer">www.winespectator.com/subscribe</a>.</p>
                             {/* <p className="error-message">{responseData.error}</p> */}
                             {/* <p><strong>Wine ID:</strong> {responseData.wineId}</p> */}
                         </div>
@@ -1746,21 +1761,10 @@ const App = () => {
 
         // Track page view
         trackEvent('page_view', { page_title: 'Wine Spectator Top 100 List' });
-
-        // Check for shared wine or list in URL
+        
+        // Check for shared list in URL
         const urlParams = new URLSearchParams(window.location.search);
-        const sharedWineId = urlParams.get('wine');
         const sharedTastedList = urlParams.get('tasted');
-
-        if (sharedWineId) {
-            // Open specific wine
-            const wine = wines.find(w => w.id === parseInt(sharedWineId));
-            if (wine) {
-                setSelectedWine(wine);
-                trackEvent('view_shared_wine', { wine_id: sharedWineId });
-            }
-        }
-
         if (sharedTastedList) {
             // Import shared tasting list
             const wineIds = sharedTastedList.split(',');
@@ -1768,17 +1772,30 @@ const App = () => {
             wineIds.forEach(id => {
                 newTastingRecord[id] = 'tasted';
             });
-            setTastingRecord(prevRecord => ({...prevRecord, ...newTastingRecord}));
-            trackEvent('view_shared_list', { wine_count: wineIds.length });
             
-            // Show a notification
-            alert(`Imported ${wineIds.length} wines to your tasting list!`);
+// Show a notification
+alert(`Imported ${wineIds.length} wines to your tasting list!`);
             
-            // Open the tasting panel to show the imported wines
-            setShowTastingPanel(true);
-        }
-    }, [wines]);
+// Open the tasting panel to show the imported wines
+setShowTastingPanel(true);
+}
+}, []);
 
+// Track a new page view when the year changes (skip the initial render)
+const firstYearViewRef = useRef(true);
+useEffect(() => {
+if (firstYearViewRef.current) {
+firstYearViewRef.current = false;
+return; // initial load handled by the one-time page_view above
+}
+// Update the querystring to reflect the selected year (optional but helpful for analytics)
+try {
+const url = new URL(window.location.href);
+url.searchParams.set('year', String(selectedYear));
+window.history.replaceState({}, '', url.toString());
+} catch {}
+trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedYear}`, year: selectedYear });
+}, [selectedYear]);
     useEffect(() => {
         localStorage.setItem('tastingRecord', JSON.stringify(tastingRecord));
     }, [tastingRecord]);
