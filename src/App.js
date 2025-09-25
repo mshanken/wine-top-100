@@ -776,8 +776,8 @@ const TastingTrackerPanel = ({ isOpen, onToggle, tastingRecord, wines, onTasteCh
                                         )}
                                         <div className="mini-wine-info">
                                             <h5>{wine.winery_full}</h5>
-                                            <p>{wine.wine_full}</p>
-                                            <span className="mini-wine-price">${wine.price}</span>
+                                            <p>{wine.wine_full} {wine.vintage}</p>
+                                            <span className="mini-wine-price">{(wine.score !== undefined && wine.score !== null) ? `${wine.score} pts · ` : ''}${`${wine.price}`}</span>
                                         </div>
                                         <button 
                                             onClick={() => onTasteChange(wine.id, null)}
