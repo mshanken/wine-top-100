@@ -375,7 +375,7 @@ const Icons = {
 };
 
 // FIXED Scroll Animation Hook
-const useScrollAnimation = () => {
+const useScrollAnimation = (wines, setSelectedWine) => {
     useEffect(() => {
         const elements = document.querySelectorAll('.reveal');
         
@@ -397,7 +397,7 @@ const useScrollAnimation = () => {
     // Handle shared wine deep link once wines are loaded
     const handledSharedWineRef = useRef(false);
     useEffect(() => {
-        if (handledSharedWineRef.current || !wines || wines.length === 0) return;
+        if (handledSharedWineRef.current || !wines || wines.length === 0 || typeof setSelectedWine !== 'function') return;
         const urlParams = new URLSearchParams(window.location.search);
         const sharedWineId = urlParams.get('wine');
         if (!sharedWineId) return;
@@ -407,7 +407,7 @@ const useScrollAnimation = () => {
             trackEvent('view_shared_wine', { wine_id: sharedWineId });
         }
         handledSharedWineRef.current = true;
-    }, [wines]);
+    }, [wines, setSelectedWine]);
 };
 
 // Export Button Component
@@ -1859,7 +1859,7 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
         }
     };
 
-    useScrollAnimation();
+    useScrollAnimation(wines, setSelectedWine);
 
     // Back-to-top visibility handler
     useEffect(() => {
