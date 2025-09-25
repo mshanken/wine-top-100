@@ -27,8 +27,8 @@
     "deploy-github": "gh-pages -d build",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
     "build:production": "env-cmd -f .env.production react-scripts build",
-    "deploy:staging": "npm run build:staging && aws s3 sync build/ s3://staging-top100list.winespectator.com --delete",
-    "deploy:production": "npm run build:production && aws s3 sync build/ s3://top100list.winespectator.com --delete"
+    "deploy:staging": "npm run build:staging && aws s3 sync build/ s3://staging-top100list.winespectator.com --delete && aws cloudfront create-invalidation --distribution-id E9QQNHK4YWV6N --paths '/*'",
+    "deploy:production": "npm run build:production && aws s3 sync build/ s3://top100list.winespectator.com --delete && aws cloudfront create-invalidation --distribution-id E1TACB18U7BIFW --paths '/*'"
   },
   "eslintConfig": {
     "extends": [
