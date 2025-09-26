@@ -115,6 +115,22 @@
   fill: currentColor;
 }
 
+@media (max-width: 420px) {
+  .share-links {
+    gap: 4px;
+  }
+  .share-links .share-label {
+    display: none;
+  }
+  .share-links a {
+    padding: 4px;
+  }
+  .share-links .share-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
 /* Ensure spacing between the two top action buttons */
 .filters-toggle {
   display: inline-flex;

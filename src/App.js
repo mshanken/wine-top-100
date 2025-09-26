@@ -1991,7 +1991,7 @@ return (
                             <span className="seg-thumb" aria-hidden="true" />
                           </div>
                           <div className="share-links" aria-label="Share links">
-                              <span>Share:</span>
+                              <span className="share-label">Share:</span>
                               <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook" onClick={() => trackEvent('share_click', { network: 'facebook' })}>
                                 <span className="sr-only">Facebook</span>
                                 <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
