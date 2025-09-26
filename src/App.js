@@ -435,7 +435,11 @@ const ExportButton = ({ tastingRecord, wines, selectedYear }) => {
                 Score: wine.score,
                 Price: `$${wine.price}`
             };
-        }).filter(Boolean);
+        }).filter(Boolean).sort((a, b) => {
+            const statusCompare = a.Status.localeCompare(b.Status);
+            if (statusCompare !== 0) return statusCompare;
+            return a.Rank - b.Rank;
+        });
 
         if (format === 'csv') {
             const csv = [
