@@ -1395,7 +1395,7 @@ const Navigation = () => {
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
                     <a href="https://top100.winespectator.com/2024" className={linkClass}>Top 10 of 2024</a>
-                    <a href="https://top100.winespectator.com/lists" className={linkClass}>All Top 100 Lists</a>
+                    <a href="https://top100-list.winespectator.com/" className={linkClass}>All Top 100 Lists</a>
                     <a href="https://top100.winespectator.com/2024/video" className={linkClass}>Videos</a>
                     <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years’ Top 10s</a>
                     <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className={linkClass}>Top Wine Values of 2024</a>
@@ -1416,7 +1416,7 @@ const Navigation = () => {
             {mobileOpen && (
                 <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
                     <a href="https://top100.winespectator.com/2024" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2024</a>
-                    <a href="https://top100.winespectator.com/lists" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
+                    <a href="https://top100-list.winespectator.com/" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
                     <a href="https://top100.winespectator.com/2024/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
                     <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years’ Top 10s</a>
                     <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of 2024</a>
