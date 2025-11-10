@@ -1946,7 +1946,7 @@ return (
                     <div className="section-header">
                         <h2>Wine Spectator's Top 100 Lists</h2>
                         <div className="section-description">
-                            <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100 based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.</p>
+                            <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100 based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.  The full Top 100 of 2025 will be revealed on Nov. 17.</p>
                         </div>
                         <div className="year-selector-container">
                             <select 
