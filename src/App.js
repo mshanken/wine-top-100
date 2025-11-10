@@ -75,6 +75,7 @@ const Footer = () => {
                     <div className="footer-section">
                         <h4>Top 10 Archive</h4>
                         <ul className="footer-links">
+                            <li><a href="https://top100.winespectator.com/2025">Top 10 of 2025</a></li>
                             <li><a href="https://top100.winespectator.com/2024">Top 10 of 2024</a></li>
                             <li><a href="https://top100.winespectator.com/2023">Top 10 of 2023</a></li>
                             <li><a href="https://top100.winespectator.com/2022">Top 10 of 2022</a></li>
@@ -1394,11 +1395,11 @@ const Navigation = () => {
 
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
-                    <a href="https://top100.winespectator.com/2024" className={linkClass}>Top 10 of 2024</a>
+                    <a href="https://top100.winespectator.com/2025" className={linkClass}>Top 10 of 2025</a>
                     <a href="https://top100-list.winespectator.com/" className={linkClass}>All Top 100 Lists</a>
-                    <a href="https://top100.winespectator.com/2024/video" className={linkClass}>Videos</a>
+                    <a href="https://top100.winespectator.com/2025/video" className={linkClass}>Videos</a>
                     <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years’ Top 10s</a>
-                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className={linkClass}>Top Wine Values of 2024</a>
+                    <a href="https://www.winespectator.com/sweepstakes" className={linkClass}>Top 100 Sweepstakes</a>
                 </div>
 
                 {/* Mobile toggle button */}
@@ -1415,11 +1416,11 @@ const Navigation = () => {
             {/* Mobile dropdown */}
             {mobileOpen && (
                 <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
-                    <a href="https://top100.winespectator.com/2024" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2024</a>
+                    <a href="https://top100.winespectator.com/2025" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2025</a>
                     <a href="https://top100-list.winespectator.com/" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
-                    <a href="https://top100.winespectator.com/2024/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
+                    <a href="https://top100.winespectator.com/2025/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
                     <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years’ Top 10s</a>
-                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of 2024</a>
+                    <a href="https://www.winespectator.com/sweepstakes" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 100 Sweepstakes</a>
                 </div>
             )}
         </nav>
