@@ -1,16 +1,18 @@
 #!/bin/bash
 
 # Wine Spectator Top 100 Lists Downloader (CURL Version)
-# Downloads all JSON files from 1988 to 2024
+# CONFIGURATION: Update CURRENT_YEAR to match CURRENT_TOP100_YEAR in src/config.js
+CURRENT_YEAR=2025
 
+# Downloads all JSON files from 1988 to current year
 # Create directory for the data
 mkdir -p wine_spectator_top100
 
 # Base URL pattern
 BASE_URL="https://top100.winespectator.com/wp-content/themes/top100-theme/src/data"
 
-# Download files from 1988 to 2024
-for year in {1988..2024}; do
+# Download files from 1988 to current year
+for year in $(seq 1988 $CURRENT_YEAR); do
     echo "Downloading Top 100 list for $year..."
     
     # Use curl with proper encoding and error handling

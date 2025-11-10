@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import './App.css';
+import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
 import winesData from './data/wines-2024.json';
 
 const SHOW_AD_PLACEHOLDERS = false;
@@ -75,7 +76,8 @@ const Footer = () => {
                     <div className="footer-section">
                         <h4>Top 10 Archive</h4>
                         <ul className="footer-links">
-                            <li><a href="https://top100.winespectator.com/2024">Top 10 of 2024</a></li>
+                            <li><a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`}>Top 10 of {CURRENT_TOP100_YEAR}</a></li>
+                            <li><a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`}>Top 10 of {CURRENT_TOP100_YEAR}</a></li>
                             <li><a href="https://top100.winespectator.com/2023">Top 10 of 2023</a></li>
                             <li><a href="https://top100.winespectator.com/2022">Top 10 of 2022</a></li>
                             <li><a href="https://top100.winespectator.com/2021">Top 10 of 2021</a></li>
@@ -1394,11 +1396,11 @@ const Navigation = () => {
 
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
-                    <a href="https://top100.winespectator.com/2024" className={linkClass}>Top 10 of 2024</a>
+                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
                     <a href="https://top100-list.winespectator.com/" className={linkClass}>All Top 100 Lists</a>
-                    <a href="https://top100.winespectator.com/2024/video" className={linkClass}>Videos</a>
-                    <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years’ Top 10s</a>
-                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className={linkClass}>Top Wine Values of 2024</a>
+                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}/video`} className={linkClass}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years' Top 10s</a>
+                    <a href={`https://www.winespectator.com/issues/wine-value-of-the-year-${CURRENT_TOP100_YEAR}-02-28`} className={linkClass}>Top Wine Values of {CURRENT_TOP100_YEAR}</a>
                 </div>
 
                 {/* Mobile toggle button */}
@@ -1415,11 +1417,11 @@ const Navigation = () => {
             {/* Mobile dropdown */}
             {mobileOpen && (
                 <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
-                    <a href="https://top100.winespectator.com/2024" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2024</a>
+                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of {CURRENT_TOP100_YEAR}</a>
                     <a href="https://top100-list.winespectator.com/" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
-                    <a href="https://top100.winespectator.com/2024/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
-                    <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years’ Top 10s</a>
-                    <a href="https://www.winespectator.com/issues/wine-value-of-the-year-2025-02-28" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of 2024</a>
+                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}/video`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years' Top 10s</a>
+                    <a href={`https://www.winespectator.com/issues/wine-value-of-the-year-${CURRENT_TOP100_YEAR}-02-28`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of {CURRENT_TOP100_YEAR}</a>
                 </div>
             )}
         </nav>
@@ -1539,7 +1541,7 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
 };
 
 const App = () => {
-    const [selectedYear, setSelectedYear] = useState(2024);
+    const [selectedYear, setSelectedYear] = useState(CURRENT_TOP100_YEAR);
     const [wines, setWines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showBackToTop, setShowBackToTop] = useState(false);
@@ -1554,8 +1556,8 @@ const App = () => {
                 setIsLoading(true);
                 // Use dynamic import for loading from src/data
                 let wineData;
-                if (selectedYear === 2024) {
-                    // For 2024, we already have the data imported at the top
+                if (selectedYear === CURRENT_TOP100_YEAR) {
+                    // For current year, we already have the data imported at the top
                     wineData = winesData;
                 } else {
                     try {
@@ -1564,7 +1566,7 @@ const App = () => {
                         wineData = module.default;
                     } catch (importError) {
                         console.error(`Failed to import data for ${selectedYear}:`, importError);
-                        // Fallback to 2024 data if the selected year's data doesn't exist
+                        // Fallback to current year data if the selected year's data doesn't exist
                         wineData = winesData;
                     }
                 }
@@ -1963,7 +1965,7 @@ return (
                                 }}
                                 className="year-selector"
                             >
-                                {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
+                                {YEAR_RANGE.map(year => (
                                     <option key={year} value={year}>{year} Top 100</option>
                                 ))}
                             </select>
