@@ -209,6 +209,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  flex-flow: column;
 }
 
 /* Make condensed action buttons more compact on small screens */
@@ -244,7 +245,11 @@
     min-width: 118px;
   }
 }
-
+@media (min-width:992px) {
+  .wine-details-condensed .price-score-row {
+    flex-flow: row;
+  }
+}
 /* --- Condensed card text wrapping fixes (mobile) --- */
 .wine-card-condensed .wine-info-condensed {
   min-width: 0; /* allow flex child to shrink so text can wrap */
@@ -470,19 +475,20 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 120px; /* make sure it's obvious */
-  background: #fffbe6; /* amber-50 */
-  border: 2px dashed #f59e0b; /* amber-500 */
-  color: #92400e; /* amber-800 */
-  border-radius: 10px;
-  padding: 16px;
+  padding: 0;
   text-align: center;
   font-weight: 700;
   letter-spacing: 0.02em;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   text-transform: uppercase;
 }
-
+.adIsRendered {
+  padding: 16px 0;
+}
+.top100-leaderboard-top .adIsRendered {
+  padding: 0 0 5px  ;
+}
 /* Spacing tuned for each layout */
 .wine-grid .ad-placeholder { margin: 12px 0; }
 .wine-list-condensed .ad-placeholder { margin: 8px 0; }
@@ -629,7 +635,7 @@ body {
 
 /* Navbar */
 .navbar-modern {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -2498,7 +2504,8 @@ body {
   }
   
   .btn-compare,
-  .btn-modern.btn-small {
+  .btn-modern.btn-small,
+  .btn-video.btn-small {
     width: 100%;
     justify-content: center;
   }

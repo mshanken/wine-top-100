@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { DFPSlotsProvider, AdSlot } from 'react-dfp';
 import './App.css';
-import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
-import winesData from './data/wines-2025.json';
+import winesData from './data/wines-2024.json';
 
 const SHOW_AD_PLACEHOLDERS = true;
 
@@ -76,8 +76,8 @@ const Footer = () => {
                     <div className="footer-section">
                         <h4>Top 10 Archive</h4>
                         <ul className="footer-links">
-                            <li><a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`}>Top 10 of {CURRENT_TOP100_YEAR}</a></li>
-                            <li><a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`}>Top 10 of {CURRENT_TOP100_YEAR}</a></li>
+                            <li><a href="https://top100.winespectator.com/2025">Top 10 of 2025</a></li>
+                            <li><a href="https://top100.winespectator.com/2024">Top 10 of 2024</a></li>
                             <li><a href="https://top100.winespectator.com/2023">Top 10 of 2023</a></li>
                             <li><a href="https://top100.winespectator.com/2022">Top 10 of 2022</a></li>
                             <li><a href="https://top100.winespectator.com/2021">Top 10 of 2021</a></li>
@@ -1396,11 +1396,11 @@ const Navigation = () => {
 
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
-                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
+                    <a href="https://top100.winespectator.com/2025" className={linkClass}>Top 10 of 2025</a>
                     <a href="https://top100-list.winespectator.com/" className={linkClass}>All Top 100 Lists</a>
-                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}/video`} className={linkClass}>Videos</a>
-                    <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years' Top 10s</a>
-                    <a href={`https://www.winespectator.com/issues/wine-value-of-the-year-${CURRENT_TOP100_YEAR}-02-28`} className={linkClass}>Top Wine Values of {CURRENT_TOP100_YEAR}</a>
+                    <a href="https://top100.winespectator.com/2025/video" className={linkClass}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className={linkClass}>Past Years’ Top 10s</a>
+                    <a href="https://www.winespectator.com/sweepstakes" className={linkClass}>Top 100 Sweepstakes</a>
                 </div>
 
                 {/* Mobile toggle button */}
@@ -1417,11 +1417,11 @@ const Navigation = () => {
             {/* Mobile dropdown */}
             {mobileOpen && (
                 <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
-                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of {CURRENT_TOP100_YEAR}</a>
+                    <a href="https://top100.winespectator.com/2025" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of 2025</a>
                     <a href="https://top100-list.winespectator.com/" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>All Top 100 Lists</a>
-                    <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}/video`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
-                    <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years' Top 10s</a>
-                    <a href={`https://www.winespectator.com/issues/wine-value-of-the-year-${CURRENT_TOP100_YEAR}-02-28`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top Wine Values of {CURRENT_TOP100_YEAR}</a>
+                    <a href="https://top100.winespectator.com/2025/video" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Videos</a>
+                    <a href="https://top100.winespectator.com/archives" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Past Years’ Top 10s</a>
+                    <a href="https://www.winespectator.com/sweepstakes" className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 100 Sweepstakes</a>
                 </div>
             )}
         </nav>
@@ -1541,7 +1541,7 @@ const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, curren
 };
 
 const App = () => {
-    const [selectedYear, setSelectedYear] = useState(CURRENT_TOP100_YEAR);
+    const [selectedYear, setSelectedYear] = useState(2024);
     const [wines, setWines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showBackToTop, setShowBackToTop] = useState(false);
@@ -1556,8 +1556,8 @@ const App = () => {
                 setIsLoading(true);
                 // Use dynamic import for loading from src/data
                 let wineData;
-                if (selectedYear === CURRENT_TOP100_YEAR) {
-                    // For current year, we already have the data imported at the top
+                if (selectedYear === 2024) {
+                    // For 2024, we already have the data imported at the top
                     wineData = winesData;
                 } else {
                     try {
@@ -1566,7 +1566,7 @@ const App = () => {
                         wineData = module.default;
                     } catch (importError) {
                         console.error(`Failed to import data for ${selectedYear}:`, importError);
-                        // Fallback to current year data if the selected year's data doesn't exist
+                        // Fallback to 2024 data if the selected year's data doesn't exist
                         wineData = winesData;
                     }
                 }
@@ -1898,7 +1898,7 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
   // Build list with interleaved ad placeholders
   const renderWithAds = (items, condensed) => {
       const out = [];
-      const interval = condensed ? 10 : 9; // grid: after every 3 rows (3 cols * 3 rows)
+      const interval = condensed ? 10 : 12; // grid: after every 3 rows (3 cols * 3 rows)
       items.forEach((wine, idx) => {
           out.push(
               <WineCard 
@@ -1917,7 +1917,18 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
           if (SHOW_AD_PLACEHOLDERS && (idx + 1) % interval === 0) {
               out.push(
                   <div className="ad-placeholder" key={`ad-${condensed ? 'list' : 'grid'}-${idx}`}>
-                      Advertising placeholder here
+                     <DFPSlotsProvider
+                        dfpNetworkId="4054"
+                        sizeMapping={[
+                            { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
+                            { viewport: [768, 0], sizes: [[728, 90], [450, 75]] },
+                            { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
+                            { viewport: [0, 0], sizes: [] }]}>
+                        <AdSlot
+                            sizes={[[728, 90], [450, 75], [300, 250], [320, 50]]}
+                            adUnit="msha.ws.top100/msha.ws.top100"
+                            onSlotRender={eventData => document.getElementById(eventData.slotId).classList.add("adIsRendered")}  />
+                    </DFPSlotsProvider>
                   </div>
               );
           }
@@ -1940,6 +1951,23 @@ const shareUrls = {
 
 return (
     <Fragment>
+        <div className="ad-placeholder">
+            <DFPSlotsProvider
+            dfpNetworkId="4054"
+            sizeMapping={[
+                { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
+                { viewport: [768, 0], sizes: [[728, 90], [728, 90]] },
+                { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
+                { viewport: [0, 0], sizes: [] }]}>
+                <AdSlot
+                    className="top100-leaderboard-top"
+                    slotId="top100-leaderboard-top"
+                    sizes={[[1320, 330], [728, 90], [450, 75], [300, 250], [320, 50]]}
+                    adUnit="msha.ws.top100/msha.ws.top100"
+                    onSlotRender={eventData => document.getElementById(eventData.slotId).classList.add("adIsRendered")}  />
+            </DFPSlotsProvider>
+        </div>
+        
         <Navigation />
         <main>
             <section id="wines" className="wines-section">
@@ -1965,7 +1993,7 @@ return (
                                 }}
                                 className="year-selector"
                             >
-                                {YEAR_RANGE.map(year => (
+                                {Array.from({length: 37}, (_, i) => 2024 - i).map(year => (
                                     <option key={year} value={year}>{year} Top 100</option>
                                 ))}
                             </select>
@@ -2051,6 +2079,7 @@ return (
                             />
                         </div>
                     )}
+                    
                     <div id="wine-list-container" className="wine-list-container">
                         {isLoading ? (
                             <div className="loading-container">
