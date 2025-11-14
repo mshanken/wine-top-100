@@ -476,9 +476,6 @@ body {
   justify-content: center;
   width: 100%;
   min-height: 120px; /* make sure it's obvious */
-  background: #fffbe6; /* amber-50 */
-  border: 2px dashed #f59e0b; /* amber-500 */
-  color: #92400e; /* amber-800 */
   border-radius: 10px;
   padding: 16px;
   text-align: center;
@@ -2503,7 +2500,8 @@ body {
   }
   
   .btn-compare,
-  .btn-modern.btn-small {
+  .btn-modern.btn-small,
+  .btn-video.btn-small {
     width: 100%;
     justify-content: center;
   }
@@ -3292,9 +3290,4 @@ body {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
-}
-.adBox > div {
-  margin: 0 auto;
-  display: block !important;
-  text-align: center;
 }

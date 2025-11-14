@@ -3,7 +3,7 @@ import { DFPSlotsProvider, AdSlot } from 'react-dfp';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
-const SHOW_AD_PLACEHOLDERS = false;
+const SHOW_AD_PLACEHOLDERS = true;
 
 // Helper to build Imgix URL with defaults
 const buildImgixUrl = (url, params = {}) => {
@@ -1917,7 +1917,15 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
           if (SHOW_AD_PLACEHOLDERS && (idx + 1) % interval === 0) {
               out.push(
                   <div className="ad-placeholder" key={`ad-${condensed ? 'list' : 'grid'}-${idx}`}>
-                      Advertising placeholder here
+                     <DFPSlotsProvider
+                        dfpNetworkId="4054"
+                        sizeMapping={[
+                            { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
+                            { viewport: [768, 0], sizes: [[728, 90], [450, 75]] },
+                            { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
+                            { viewport: [0, 0], sizes: [] }]}>
+                            <AdSlot sizes={[[728, 90], [450, 75], [300, 250], [320, 50]]} adUnit="msha.ws.top100/msha.ws.top100" />
+                    </DFPSlotsProvider>
                   </div>
               );
           }
@@ -2051,17 +2059,7 @@ return (
                             />
                         </div>
                     )}
-                    <DFPSlotsProvider
-                        dfpNetworkId="4054"
-                        sizeMapping={[
-                            { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
-                            { viewport: [768, 0], sizes: [[728, 90], [450, 75]] },
-                            { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
-                            { viewport: [0, 0], sizes: [] }]}>
-                            <div class="m-auto">
-                                <AdSlot slotId="top100-leaderboard-1" sizes={[[728, 90], [450, 75], [300, 250], [320, 50]]} adUnit="msha.ws.top100/msha.ws.top100" />
-                            </div>
-                    </DFPSlotsProvider>
+                    
                     <div id="wine-list-container" className="wine-list-container">
                         {isLoading ? (
                             <div className="loading-container">
