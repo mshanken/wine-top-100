@@ -209,6 +209,7 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  flex-flow: column;
 }
 
 /* Make condensed action buttons more compact on small screens */
@@ -244,7 +245,11 @@
     min-width: 118px;
   }
 }
-
+@media (min-width:992px) {
+  .wine-details-condensed .price-score-row {
+    flex-flow: row;
+  }
+}
 /* --- Condensed card text wrapping fixes (mobile) --- */
 .wine-card-condensed .wine-info-condensed {
   min-width: 0; /* allow flex child to shrink so text can wrap */
