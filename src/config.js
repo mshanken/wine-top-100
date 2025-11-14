@@ -1,7 +1,7 @@
 // Wine Spectator Top 100 Configuration
 // Update this value each year to reflect the current Top 100 year
 
-export const CURRENT_TOP100_YEAR = 2024;
+export const CURRENT_TOP100_YEAR = 2025;
 
 // Derived configuration
 export const EARLIEST_YEAR = 1988;

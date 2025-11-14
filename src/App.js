@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import './App.css';
 import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
-import winesData from './data/wines-2024.json';
+import winesData from './data/wines-2025.json';
 
 const SHOW_AD_PLACEHOLDERS = false;
 
