@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
+import { DFPSlotsProvider, AdSlot } from 'react-dfp';
 import './App.css';
 import winesData from './data/wines-2024.json';
 
@@ -2050,6 +2051,17 @@ return (
                             />
                         </div>
                     )}
+                    <DFPSlotsProvider
+                        dfpNetworkId="4054"
+                        sizeMapping={[
+                            { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
+                            { viewport: [768, 0], sizes: [[728, 90], [450, 75]] },
+                            { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
+                            { viewport: [0, 0], sizes: [] }]}>
+                            <div class="m-auto">
+                                <AdSlot slotId="top100-leaderboard-1" sizes={[[728, 90], [450, 75], [300, 250], [320, 50]]} adUnit="msha.ws.top100/msha.ws.top100" />
+                            </div>
+                    </DFPSlotsProvider>
                     <div id="wine-list-container" className="wine-list-container">
                         {isLoading ? (
                             <div className="loading-container">

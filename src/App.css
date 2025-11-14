@@ -3288,3 +3288,8 @@ body {
     transform: translateX(-50%) translateY(0);
   }
 }
+.adBox > div {
+  margin: 0 auto;
+  display: block !important;
+  text-align: center;
+}
