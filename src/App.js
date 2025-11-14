@@ -3,7 +3,7 @@ import './App.css';
 import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
 import winesData from './data/wines-2025.json';
 
-const SHOW_AD_PLACEHOLDERS = false;
+const SHOW_AD_PLACEHOLDERS = true;
 
 // Helper to build Imgix URL with defaults
 const buildImgixUrl = (url, params = {}) => {
