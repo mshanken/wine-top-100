@@ -1,84 +1,115 @@
 <!DOCTYPE html>
+<!-- 
+  CONFIGURATION: Update the year in src/config.js (CURRENT_TOP100_YEAR)
+  Then update references below to match.
+-->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/t100favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#8c0004" />
-    <meta name="description" content="Discover and track the world's finest wines from Wine Spectator's Top 100 list" />
-    
+    <meta
+      name="description"
+      content="For 2025, here are the best wines of the year based on quality, value, availability and story. Find all our past Top 100 lists and track which wines you've tasted and which you want to try."
+    />
+    <!-- NOTE: Update year above when CURRENT_TOP100_YEAR changes in src/config.js -->
+
     <!-- PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="WS Top 100">
-    
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="WS Top 100" />
+
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Wine Spectator Top 100 Wines">
-    <meta property="og:description" content="Discover and track the world's finest wines from Wine Spectator's Top 100 list">
-    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg">
-    <meta property="og:url" content="https://mcapace.github.io/wine-top-100/">
-    <meta property="og:type" content="website">
-    
+    <!-- NOTE: Update year below when CURRENT_TOP100_YEAR changes in src/config.js -->
+    <meta property="og:title" content="Wine Spectator's Top 100 Wines of 2025: Explore the List and Track Your Favorites!" />
+    <meta
+      property="og:description"
+      content="Annually, Wine Spectator picks the most exciting wines reviewed in the past year. Here are the full lists for 2025
+       back to 1988; track which you've tried and which you want to taste."
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+    <meta property="og:url" content="https://top100-list.winespectator.com" />
+    <meta property="og:type" content="website" />
+
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Wine Spectator Top 100 Wines">
-    <meta name="twitter:description" content="Discover and track the world's finest wines">
-    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.jpg">
-    
+    <!-- NOTE: Update year below when CURRENT_TOP100_YEAR changes in src/config.js -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Wine Spectator's Top 100 Wines of 2025: Explore the List and Track Your Favorites!" />
+    <meta
+      name="twitter:description"
+      content="Annually, Wine Spectator picks the most exciting wines reviewed in the past year. Here are the full lists for 2025
+       back to 1988; track which you've tried and which you want to taste."
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/og-image.jpg" />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
+
     <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://www.googletagmanager.com">
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-89X9372ZWR"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
+    <!-- Google Tag Manager -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-89X9372ZWR');
+      (function(w,d,s,l,i){
+        w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+        var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+        j.async=true; j.id='gtm-base'; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+        f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-T7T9M4');
     </script>
-    
-    <title>Wine Spectator Top 100 - Track & Discover World's Finest Wines</title>
+    <!-- End Google Tag Manager -->
+
+    <!-- NOTE: Update year below when CURRENT_TOP100_YEAR changes in src/config.js -->
+    <title>
+      Wine Spectator's Top 100 Wines from 2025
+       to 1988: Explore the World's Most Exciting Wines
+    </title>
   </head>
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T7T9M4" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    
+    <!-- Using React Footer component; static footer removed -->
+
     <!-- PWA Install Prompt -->
     <script>
       // Check if should display install prompt
       let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', (e) => {
+      window.addEventListener("beforeinstallprompt", (e) => {
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
         // Stash the event so it can be triggered later
         deferredPrompt = e;
         // Update UI to notify the user they can add to home screen
-        const installButton = document.getElementById('install-button');
+        const installButton = document.getElementById("install-button");
         if (installButton) {
-          installButton.style.display = 'block';
-          installButton.addEventListener('click', () => {
+          installButton.style.display = "block";
+          installButton.addEventListener("click", () => {
             // Show the prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
             deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-                gtag('event', 'pwa_installed');
+              if (choiceResult.outcome === "accepted") {
+                console.log("User accepted the install prompt");
+                gtag("event", "pwa_installed");
               }
               deferredPrompt = null;
             });
           });
         }
       });
-      
+
       // Track PWA install
-      window.addEventListener('appinstalled', () => {
-        console.log('PWA was installed');
-        gtag('event', 'pwa_installed_success');
+      window.addEventListener("appinstalled", () => {
+        console.log("PWA was installed");
+        gtag("event", "pwa_installed_success");
       });
     </script>
   </body>

@@ -4,6 +4,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+## VanHook Edits August 2025
+### npm install
+This will build the files you need to run the app
+
+### npm run start
+Fires it up and opens it up in a browser window
+
+## Old Commands below here - not sure these still work
+
 In the project directory, you can run:
 
 ### `npm start`
@@ -68,3 +77,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+# To lock down staging, all that was needed was to go into the Cloudfront Distribution, click Security, and add the already existing MSC-VPN-WAF rule.  Magic presto.  
+
+# I did want to do more customization, though - so I removed the 403 error page redirecting to index.html, and it started serving the standard Cloudfront error page.
+

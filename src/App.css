@@ -4,6 +4,442 @@
   box-sizing: border-box;
 }
 
+/* --- Grid view: make footer buttons equal on small screens --- */
+@media (max-width: 650px) {
+  .wine-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .wine-footer .btn-modern.btn-small,
+  .wine-footer .btn-video,
+  .wine-footer .btn-video.btn-small,
+  .wine-footer .btn-pwl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 12px !important;
+    box-sizing: border-box;
+    margin: 0; /* normalize spacing */
+    align-self: stretch; /* ensure full width */
+  }
+}
+
+/* Local dev stub notice in PWL modal */
+.pwl-stub-note {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #92400e; /* amber-800 */
+  background: #fff7ed; /* amber-50 */
+  border: 1px dashed #f59e0b; /* amber-500 */
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* Filter toggle */
+.filter-toggle-row {
+  display: flex;
+  justify-content: space-between; /* left + right alignment */
+  align-items: center;
+  gap: 0.75rem; /* space between buttons (slightly increased) */
+  margin: 0 0 0.5rem; /* sit directly above filter box */
+}
+
+/* Make the segmented toggle and share links sit side-by-side */
+.left-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.share-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.share-links .sep { color: #9aa4b2; }
+.share-links a {
+  color: inherit;              /* remove default blue */
+  text-decoration: none;       /* no underline */
+  display: inline-flex;
+  align-items: center;
+  padding: 6px;                /* larger tap target */
+  border-radius: 6px;          /* subtle rounding */
+}
+.share-links a:hover { text-decoration: none; }
+
+/* Wrap the header above filters on small screens */
+@media (max-width: 700px) {
+  .filter-toggle-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.5rem 0.75rem; /* tighter when wrapped */
+  }
+  .left-tools {
+    flex: 1 1 auto; /* allow share + view controls to occupy first row */
+    min-width: 0;
+  }
+  .filters-toggle {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-end; /* move to the right on the next line */
+    margin-top: 4px;
+  }
+}
+
+/* Visually hidden text for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Share icon sizing */
+.share-links .share-icon {
+  width: 22px;   /* larger icon */
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: currentColor;
+}
+
+@media (max-width: 420px) {
+  .share-links {
+    gap: 4px;
+  }
+  .share-links .share-label {
+    display: none;
+  }
+  .share-links a {
+    padding: 4px;
+  }
+  .share-links .share-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Ensure spacing between the two top action buttons */
+.filters-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* space between Hide Filters and Show Saved Wines */
+}
+
+/* Segmented view toggle */
+.view-segmented {
+  position: relative;
+  display: inline-flex;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.view-segmented .seg {
+  position: relative;
+  z-index: 1;
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.view-segmented .seg-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.view-segmented .seg-thumb {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc(50% - 2px);
+  background: #e11d2f; /* brand red */
+  border-radius: 999px;
+  transition: transform 160ms ease;
+}
+
+.view-segmented.grid-active .seg-thumb {
+  transform: translateX(0%);
+}
+
+.view-segmented.list-active .seg-thumb {
+  transform: translateX(100%);
+}
+
+.view-segmented .seg.active {
+  color: #fff;
+}
+
+.filter-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 6px 12px; /* tighter height */
+  line-height: 1.1; /* reduce extra vertical space */
+  font-size: 13px; /* slightly smaller to match tighter button */
+  white-space: nowrap; /* keep icon and text on one line */
+}
+
+/* Condensed list: normalize action buttons */
+.wine-details-condensed .price-score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-flow: column;
+}
+
+/* Make condensed action buttons more compact on small screens */
+@media (max-width: 480px) {
+  .wine-details-condensed .btn-modern.btn-small,
+  .wine-details-condensed .btn-video.btn-small,
+  .wine-details-condensed .btn-pwl,
+  .wine-details-condensed .btn-pwl-small {
+    padding: 8px 10px; /* reduce horizontal padding */
+    font-size: 13px;
+    min-height: 34px;
+  }
+}
+
+/* On phones, stack and equalize widths so all three buttons match */
+@media (max-width: 650px) {
+  /* Stack actions and right-align without changing container widths */
+  .wine-details-condensed .price-score-row {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  /* Keep native button sizing; just ensure consistency */
+  .wine-details-condensed .price-score-row .btn-modern.btn-small,
+  .wine-details-condensed .price-score-row .btn-video.btn-small,
+  .wine-details-condensed .price-score-row .btn-pwl,
+  .wine-details-condensed .price-score-row .btn-pwl-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 118px;          /* identical width so none is a few px wider */
+    min-width: 118px;
+  }
+}
+@media (min-width:992px) {
+  .wine-details-condensed .price-score-row {
+    flex-flow: row;
+  }
+}
+/* --- Condensed card text wrapping fixes (mobile) --- */
+.wine-card-condensed .wine-info-condensed {
+  min-width: 0; /* allow flex child to shrink so text can wrap */
+}
+
+.wine-card-condensed .condensed-winery,
+.wine-card-condensed .condensed-wine-name {
+  white-space: normal;      /* allow multi-line */
+  overflow: visible;        /* no clipping */
+  text-overflow: clip;      /* no ellipsis */
+}
+
+/* Optional hierarchy styling */
+.condensed-winery { font-weight: 700; }
+.condensed-wine-name { color: #4b5563; }
+.condensed-vintage { color: #6b7280; }
+
+/* Make condensed score stand out */
+.wine-score-condensed {
+  font-weight: 700;
+  color: #111827; /* near-black for emphasis */
+  font-size: 15px;
+}
+
+/* Responsive button label swapping */
+.label-short { display: none; }
+.label-full { display: inline; }
+
+@media (max-width: 650px) {
+  .label-short { display: inline; }
+  .label-full { display: none; }
+}
+
+/* Base styles shared by both buttons */
+.btn-video,
+.btn-pwl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  line-height: 1; /* ensure equal height */
+  padding: 10px 14px; /* equalize vertical rhythm */
+  font-size: 14px; /* equal text size */
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  cursor: pointer;
+  min-height: 36px; /* force equal heights */
+  box-sizing: border-box;
+  margin: 0; /* normalize */
+}
+
+/* Color variants */
+.btn-video { background: #b0892d; } /* gold */
+.btn-video:hover { background: #9a7525; }
+
+.btn-pwl { background: #0b74e5; } /* blue */
+.btn-pwl:hover { background: #0a66c9; }
+
+/* Small variants use the same sizing so heights match */
+.btn-small,
+.btn-pwl-small {
+  padding: 10px 14px; /* same as base */
+  font-size: 14px; /* same as base */
+  min-height: 36px; /* enforce equal height for small variants too */
+}
+
+/* Match View Details button height to others in WineCard footer */
+.wine-footer .btn-modern.btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1;
+  min-height: 36px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+/* --- Muted palette for wine action buttons (scoped to wine contexts) --- */
+/* View Details (btn-modern) */
+.wine-footer .btn-modern,
+.wine-details-condensed .btn-modern {
+  background: #8c3a3f; /* further muted wine red */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-modern:hover,
+.wine-details-condensed .btn-modern:hover {
+  background: #7a3237;
+}
+
+/* Watch Video (btn-video) */
+.wine-footer .btn-video,
+.wine-details-condensed .btn-video {
+  background: #b7a86b; /* further muted gold */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-video:hover,
+.wine-details-condensed .btn-video:hover {
+  background: #a5955e;
+}
+
+/* Save to PWL (btn-pwl) */
+.wine-footer .btn-pwl,
+.wine-details-condensed .btn-pwl {
+  background: #4f84c9; /* further muted blue */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+.wine-footer .btn-pwl:hover,
+.wine-details-condensed .btn-pwl:hover {
+  background: #4476b3;
+}
+
+/* Ensure PWL button text size matches Video in all list/footer rows */
+.wine-details-condensed .price-score-row .btn-pwl,
+.wine-footer .btn-pwl {
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.filter-toggle-btn .icon-small {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.toggle-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Tasting options: side-by-side checkboxes */
+.tasting-options,
+.tasting-options-condensed,
+.tasting-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap; /* wrap on small screens */
+}
+
+.tasting-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px; /* even tighter spacing between box and label */
+  white-space: nowrap;
+}
+
+.tasting-checkbox input[type="checkbox"] {
+  margin: 0 2px 0 0; /* minimal space to label */
+  line-height: 1;
+}
+
+.tasting-checkbox span {
+  margin: 0; /* remove any default spacing */
+  line-height: 1.1;
+}
+
+/* Tighten vertical spacing around tasting options in WineCard */
+.wine-metadata .tasting-options {
+  margin: 2px 0; /* tighter above and below */
+}
+
+.wine-metadata .wine-footer {
+  margin-top: 4px; /* tighter spacing to action buttons */
+}
+
+/* Further tighten spacing at the bottom of non-condensed WineCard */
+.wine-card-modern .wine-metadata {
+  margin-bottom: 0;
+  padding-bottom: 0; /* remove extra inner padding if any */
+}
+
+.wine-card-modern .wine-footer {
+  margin-bottom: 0;
+}
+
+.wine-card-modern {
+  padding-bottom: 4px; /* reduce space before the list separator line */
+}
+
+/* High-specificity tightening to override any inherited spacing */
+.wine-card-modern .tasting-options { margin-bottom: 0 !important; }
+.wine-card-modern .wine-metadata { margin-bottom: 0 !important; padding-bottom: 0 !important; }
+.wine-card-modern .wine-footer { margin-top: 2px !important; margin-bottom: 0 !important; }
+.wine-card-modern .wine-content { margin-bottom: 0 !important; }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -11,6 +447,131 @@ body {
   color: #333;
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+/* Year Selector */
+.year-selector-container {
+  text-align: center;
+  margin: 20px 0 40px;
+}
+
+/* --- FilterBar spacing adjustments --- */
+.filter-bar {
+  padding-right: 16px; /* ensure content doesn't hug right edge */
+}
+
+.filter-col-right .filter-buttons {
+  padding-right: 8px; /* extra breathing room for many country pills */
+}
+
+@media (max-width: 600px) {
+  .filter-bar { padding-right: 12px; }
+  .filter-col-right .filter-buttons { padding-right: 6px; }
+}
+
+/* --- Interstitial ad placeholders --- */
+.ad-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  text-transform: uppercase;
+}
+.adIsRendered {
+  padding: 16px 0;
+}
+.top100-leaderboard-top .adIsRendered {
+  padding: 0 0 5px  ;
+}
+/* Spacing tuned for each layout */
+.wine-grid .ad-placeholder { margin: 12px 0; }
+.wine-list-condensed .ad-placeholder { margin: 8px 0; }
+
+/* Make the grid ad occupy the entire row */
+.wine-grid .ad-placeholder {
+  grid-column: 1 / -1;
+}
+
+/* When a label uses pad mode, show entire image (letterboxed) */
+.wine-image.label-pad img { object-fit: contain !important; }
+
+.year-selector {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+/* Section description typography */
+.section-description {
+  margin: 8px 0 20px;
+}
+.section-description p {
+  max-width: 72ch;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #5a6473; /* muted slate */
+}
+@media (min-width: 768px) {
+  .section-description p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    letter-spacing: 0.1px;
+  }
+}
+
+.year-selector:hover {
+  border-color: #8c0004;
+}
+
+.year-selector:focus {
+  outline: none;
+  border-color: #8c0004;
+  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
+}
+
+/* Spacing for score/price in WineDetailModal */
+.wine-detail-modal .wine-detail-footer {
+  margin: 6px 0 18px; /* extra space below before tags */
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  grid-column: 1 / -1;
+}
+
+.loading-container .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(140, 0, 4, 0.1);
+  border-radius: 50%;
+  border-top-color: #8c0004;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Container */
@@ -74,21 +635,19 @@ body {
 
 /* Navbar */
 .navbar-modern {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
+  background: #000; /* solid black like target site */
+  transition: background-color 0.3s ease;
   padding: 0.5rem 0;
 }
 
 .navbar-modern.scrolled {
-  background: rgba(255,255,255,0.98);
-  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-  backdrop-filter: blur(10px);
+  background: #000; /* remain black when scrolled */
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
   padding: 0;
 }
 
@@ -100,6 +659,17 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 64px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-background {
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .navbar-logo {
@@ -129,6 +699,72 @@ body {
   }
 }
 
+/* Mobile toggle button */
+.navbar-toggle {
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.navbar-toggle.light {
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3) inset;
+}
+
+.navbar-toggle.dark {
+  color: #4a5568;
+  box-shadow: 0 0 0 1px rgba(74,85,104,0.2) inset;
+}
+
+.toggle-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* Hide toggle on desktop */
+@media (min-width: 768px) {
+  .navbar-toggle {
+    display: none;
+  }
+}
+
+/* Mobile dropdown menu */
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #000; /* dark mobile menu */
+  border-top: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+
+.mobile-menu .mobile-menu-link {
+  padding: 14px 24px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-menu .mobile-menu-link:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu .mobile-menu-link:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+
 .nav-link-light,
 .nav-link-dark {
   text-decoration: none;
@@ -137,8 +773,7 @@ body {
 }
 
 .nav-link-light {
-  color: white;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  color: #fff;
 }
 
 .nav-link-light:hover {
@@ -161,6 +796,18 @@ body {
   justify-content: center;
   position: relative;
   overflow: hidden;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Background image is now handled by inline styles in the React component */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-video {
@@ -350,7 +997,40 @@ body {
 
 .section-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.year-selector-container {
+  margin-top: 20px;
+}
+
+.year-selector {
+  background-color: #fff;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 40px 10px 15px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 1em;
+  transition: all 0.2s ease;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.year-selector:hover {
+  border-color: #cbd5e1;
+}
+
+.year-selector:focus {
+  outline: none;
+  border-color: #8c0004;
+  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
 }
 
 .section-header h2 {
@@ -429,113 +1109,83 @@ body {
 .filter-bar {
   background: rgba(255,255,255,0.7);
   backdrop-filter: blur(12px);
-  padding: 1rem;
-  border-radius: 12px;
+  padding: 0.5rem 0.75rem; /* tighter */
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
-  margin-bottom: 3rem;
-  position: sticky;
-  top: 80px;
-  z-index: 20;
+  margin-bottom: 1.5rem; /* tighter */
+  position: relative;
+  z-index: 10;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Two-column layout for filters */
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile stack */
+  gap: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .filter-grid {
+    grid-template-columns: 25% 75%; /* left: View/Color/Type (narrower), right: Country (wider) */
+    align-items: start;
+    column-gap: 1rem;
+  }
+}
+
+.filter-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-col-left .filter-row {
+  flex-wrap: wrap;
+}
+
+.filter-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .filter-row {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem; /* tighter */
 }
 
 @media (min-width: 768px) {
   .filter-row {
     flex-direction: row;
+    align-items: center;
   }
 }
 
-.search-container {
-  position: relative;
-  flex-grow: 1;
-}
+ 
 
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: #a0aec0;
-}
 
-.search-input {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 3rem;
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  color: #1a202c;
-  font-size: 16px;
-}
-
-.search-input::placeholder {
-  color: #a0aec0;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #8c0004;
-  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
-}
-
-.view-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.view-btn {
-  padding: 0.75rem;
-  border-radius: 8px;
-  background: #edf2f7;
-  color: #718096;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.view-btn:hover {
-  background: #e2e8f0;
-}
-
-.view-btn.active {
-  background: #8c0004;
-  color: white;
-}
-
-.view-icon {
-  width: 20px;
-  height: 20px;
-}
 
 .filter-section {
-  margin-top: 1rem;
+  margin-top: 0.5rem; /* tighter */
 }
 
 .filter-label {
-  color: #718096;
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+  color: #3b424e;
+  font-size: 0.9rem; /* slightly smaller */
+  margin-bottom: 0.35rem; /* tighter */
   font-weight: 500;
 }
 
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem; /* tighter */
 }
 
 .filter-btn {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.875rem;
+  padding: 0.35rem 0.6rem; /* keep touch target ~32px */
+  font-size: 0.82rem; /* slightly smaller */
   border-radius: 8px;
   background: #edf2f7;
   color: #4a5568;
@@ -642,23 +1292,34 @@ body {
   text-transform: uppercase;
 }
 
-.rank-gold {
+/* Wine color-based rank badges */
+.rank-red {
+  background: #8c0004;
+  color: white;
+}
+
+.rank-white {
   background: #f6e05e;
   color: black;
 }
 
-.rank-silver {
-  background: #e2e8f0;
+.rank-rose {
+  background: #ff9a9e;
   color: black;
 }
 
-.rank-bronze {
-  background: #ed8936;
+.rank-sparkling {
+  background: #ffeaa7;
+  color: black;
+}
+
+.rank-dessert {
+  background: #9b5de5;
   color: white;
 }
 
 .rank-default {
-  background: #8c0004;
+  background: #718096;
   color: white;
 }
 
@@ -699,18 +1360,33 @@ body {
   flex-grow: 1;
 }
 
-.wine-content h3 {
-  font-size: 1.125rem;
+.wine-header {
+  margin-bottom: 1rem;
+}
+
+.wine-winery-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 0.25rem 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1.3;
+}
+
+.wine-name {
+  font-size: 1rem;
   font-weight: 600;
   color: #1a202c;
-  margin-bottom: 0.25rem;
-  min-height: 60px;
+  margin: 0;
+  padding: 0;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
   line-height: 1.4;
 }
 
-.wine-content h3:hover {
+.wine-winery-name:hover,
+.wine-name:hover {
   color: #8c0004;
 }
 
@@ -740,7 +1416,7 @@ body {
 .wine-tag {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 500;
   background: #f7fafc;
   color: #4a5568;
@@ -776,7 +1452,7 @@ body {
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: #a0aec0;
+  color: #40464e;
   transition: color 0.3s ease;
   margin-bottom: 0.5rem;
 }
@@ -796,7 +1472,7 @@ body {
   font-size: 0.875rem;
 }
 
-/* Wine Footer - Simplified */
+/* Wine Footer - Improved Layout */
 .wine-footer {
   display: flex;
   align-items: center;
@@ -804,6 +1480,8 @@ body {
   padding-top: 1rem;
   margin-top: 0.75rem;
   border-top: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .wine-price-large {
@@ -835,6 +1513,8 @@ body {
   gap: 1rem;
   position: relative;
 }
+
+/* (reverted mobile-specific stacking for condensed rows) */
 
 .wine-card-condensed:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -897,6 +1577,9 @@ body {
   margin-top: 0.5rem;
 }
 
+/* Default: hide the mobile-only duplicate */
+.tasting-options-condensed-mobile { display: none; }
+
 .tasting-options-condensed .tasting-checkbox {
   margin: 0;
 }
@@ -916,8 +1599,10 @@ body {
 /* Price and score on same line */
 .price-score-row {
   display: flex;
-  align-items: baseline;
-  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .wine-details-condensed .wine-price {
@@ -980,7 +1665,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 1200; /* above general UI like filter bar */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -988,21 +1673,48 @@ body {
 }
 
 .modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+/* Gray background specifically for PWL modal */
+.pwl-modal-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Wine detail footer styling is now defined directly with the wine-detail-footer class */
 
 .modal-content {
   position: relative;
   width: 100%;
   max-width: 896px;
-  max-height: 90vh;
+  margin: 2rem auto;
   background: white;
-  border-radius: 16px;
+  border-radius: 0.5rem;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* Allow modal content to scroll while body is locked */
+  max-height: 90vh;
+  overflow: auto;
+}
+
+/* Scoped stacking for overlay-based modals (WineDetailModal, ComparisonModal, Share Modal) */
+.modal-overlay .modal-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.modal-overlay .modal-content {
+  z-index: 1;
 }
 
 .modal-close {
@@ -1076,7 +1788,7 @@ body {
 
 .wine-subtitle {
   font-size: 1.25rem;
-  color: #a0aec0;
+  color: #4b515a;
   margin-bottom: 1rem;
 }
 
@@ -1109,19 +1821,24 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.wine-price-xl {
-  font-size: 1.875rem;
-  font-weight: bold;
-  color: #8c0004;
+  width: 100%;
 }
 
 .wine-score-xl {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #8c0004;
+  margin-right: auto;
+  line-height: 1;
+}
+
+.wine-price-xl {
   font-size: 1.25rem;
   color: #718096;
-  font-weight: 500;
+  margin-left: 1rem;
 }
+
+/* These styles are now defined in the wine detail footer section above */
 
 /* Personal Notes Styles */
 .wine-detail-notes {
@@ -1153,186 +1870,9 @@ body {
 }
 
 .rating-section label {
-  font-weight: 500;
-  color: #4a5568;
-}
-
-.star-rating {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.star {
-  font-size: 1.5rem;
-  color: #e2e8f0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
-}
-
-.star:hover {
-  transform: scale(1.1);
-}
-
-.star.filled {
-  color: #f6e05e;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
-.star:disabled {
-  cursor: default;
-}
-
-.note-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  resize: vertical;
-  font-family: inherit;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
-}
-
-.note-textarea:focus {
-  outline: none;
-  border-color: #8c0004;
-  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
-}
-
-.notes-history h5 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 1rem;
-}
-
-.note-item {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  margin-bottom: 1rem;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.note-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.note-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.note-date {
-  font-size: 0.75rem;
-  color: #718096;
-}
-
-.note-rating {
-  display: flex;
-  gap: 0.125rem;
-}
-
-.note-rating .star {
-  font-size: 1rem;
-}
-
-.note-delete {
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #e53e3e;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.note-item:hover .note-delete {
-  opacity: 1;
-}
-
-.note-delete:hover {
-  background: #feb2b2;
-  border-radius: 4px;
-}
-
-.note-text {
-  color: #4a5568;
-  line-height: 1.5;
-  white-space: pre-wrap;
-}
-
-/* Share Button Styles */
-.share-button-container {
-  position: relative;
-  margin-top: 1rem;
-}
-
-.share-button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-}
-
-.share-icon {
-  font-size: 1.125rem;
-}
-
-.share-menu {
-  position: absolute;
-  bottom: calc(100% + 0.5rem);
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-  border: 1px solid #e2e8f0;
-  overflow: hidden;
-  animation: slideUp 0.2s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.share-option {
-  display: block;
-  width: 100%;
-  padding: 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #4a5568;
-  transition: all 0.3s ease;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.share-option:last-child {
-  border-bottom: none;
-}
-
-.share-option:hover {
-  background: #f7fafc;
-  color: #8c0004;
 }
 
 /* Share Modal Styles */
@@ -1393,75 +1933,10 @@ body {
 .share-list-button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.5rem;
   width: 100%;
   margin-top: 0.5rem;
-}
-
-/* AI Assistant */
-.ai-assistant-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 99;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  overflow: hidden;
-}
-
-.ai-assistant-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 6px 30px rgba(0,0,0,0.3);
-}
-
-.ai-assistant-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.ai-chat-window {
-  position: fixed;
-  bottom: 120px;
-  right: 24px;
-  width: 380px;
-  max-height: 600px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-  display: flex;
-  flex-direction: column;
-  z-index: 98;
-  animation: slideUp 0.3s ease;
-}
-
-.ai-chat-header {
-  padding: 20px;
-  border-bottom: 1px solid #e5e5e5;
-  border-radius: 16px 16px 0 0;
-  background: linear-gradient(135deg, #8c0004 0%, #a91b0d 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ai-chat-header h3 {
-  color: white;
-  font-weight: 600;
-}
-
-.ai-close-btn {
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: white;
 }
 
 .icon-small {
@@ -1470,102 +1945,132 @@ body {
   flex-shrink: 0;
 }
 
-.ai-chat-messages {
-  flex: 1;
+/* PWL Button */
+.btn-pwl {
+  background: #0066cc;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px 0 rgba(0, 102, 204, 0.3);
+}
+
+.btn-pwl:hover {
+  background: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px 0 rgba(0, 102, 204, 0.4);
+}
+
+.btn-pwl:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px 0 rgba(0, 102, 204, 0.3);
+}
+
+.btn-pwl-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* PWL Response Modal */
+.pwl-modal {
+  max-width: 500px;
+  width: 90%;
+  padding: 1.5rem;
+  position: relative; /* create stacking context above backdrop */
+  z-index: 1002; /* above .modal-backdrop (1000) */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  margin: 0;
+}
+
+.pwl-success {
+  color: #28a745;
+  margin-top: 1rem;
+}
+
+.pwl-error {
+  color: #3562dc;
+  margin-top: 1rem;
+}
+
+.response-preview {
+  margin-top: 1rem;
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 4px;
+  max-height: 200px;
   overflow-y: auto;
-  padding: 20px;
+}
+
+.loading-spinner {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-height: 400px;
-}
-
-.ai-message {
-  max-width: 80%;
-  word-wrap: break-word;
-}
-
-.ai-message.user {
-  align-self: flex-end;
-  background: #f0f0f0;
-  padding: 12px 16px;
-  border-radius: 18px 18px 4px 18px;
-}
-
-.ai-message.assistant {
-  align-self: flex-start;
-  background: #8c0004;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 18px 18px 18px 4px;
-}
-
-.ai-message p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.typing-indicator {
-  display: flex;
-  gap: 4px;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 2rem 0;
 }
 
-.typing-indicator span {
-  width: 8px;
-  height: 8px;
-  background: #cbd5e0;
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  animation: bounce 1s infinite;
+  border-left-color: #0066cc;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
 }
 
-.typing-indicator span:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.typing-indicator span:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.typing-indicator span:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(-25%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  50% {
-    transform: translateY(0);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-.ai-chat-input {
-  padding: 16px;
-  border-top: 1px solid #e5e5e5;
+.pwl-response-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #0066cc;
 }
 
-.ai-chat-input input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 24px;
-  outline: none;
-  font-size: 14px;
+.pwl-response-result {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-.ai-chat-input input:focus {
-  border-color: #8c0004;
-  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
+.pwl-response-result pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  font-size: 0.875rem;
 }
 
-.ai-chat-input input:disabled {
-  background: #f7fafc;
-  cursor: not-allowed;
+.pwl-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.pwl-loading .spinner {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
 }
 
 /* Pagination */
@@ -1607,8 +2112,8 @@ body {
 /* Footer */
 .footer {
   padding: 3rem 0;
-  background: #8c0004;
-  color: #fff5f5;
+  background: #000; /* match target site's dark footer */
+  color: #fff;
 }
 
 .footer-container {
@@ -1637,13 +2142,41 @@ body {
 }
 
 .footer-section h4 {
-  color: white;
+  color: #fff;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .footer-section p {
   line-height: 1.75;
+}
+
+/* Footer links */
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin: 0.35rem 0;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top: 1rem;
+  text-align: center;
+  color: rgba(255,255,255,0.8);
 }
 
 .footer-logo {
@@ -1727,6 +2260,158 @@ body {
   text-align: center;
 }
 
+/* Back to Top Button */
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.5rem;
+  padding: 12px 16px;
+  border-radius: 9999px;
+  border: none;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 1100;
+  transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.back-to-top:hover {
+  transform: translateY(-2px);
+  background: rgba(0,0,0,0.85);
+}
+
+.back-to-top:active {
+  transform: translateY(0);
+}
+
+.back-to-top-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+/* Video button (distinct color) */
+.btn-video {
+  background-color: #b09855; /* gold */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px; /* match .btn-modern default */
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  margin-left: 8px;
+}
+
+.btn-video:hover {
+  background-color: #a28b4e; /* darker gold on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.18);
+}
+
+.btn-video:active {
+  transform: translateY(0);
+}
+
+.btn-video.btn-small {
+  padding: 8px 20px; /* match .btn-modern.btn-small */
+  font-size: 14px;   /* match .btn-modern.btn-small */
+  border-radius: 8px;
+}
+
+/* Static Site Footer (public/index.html) */
+.site-footer {
+  background-color: #8d0004; /* already inline but keep for safety */
+  color: #fff;
+  font-family: inherit;
+}
+
+.site-footer { padding-top: 4.8rem; padding-bottom: 4.4rem; }
+
+.site-footer__layout {
+  max-width: 1155px;
+  margin: 0 auto;
+  padding: 8px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 768px) {
+  .site-footer__layout { padding: 20px; }
+}
+
+.site-footer__column h3,
+.site-footer h3 {
+  color: #fff;
+  font-weight: 700;
+  margin: 0 0 1.6rem;
+  font-size: 1.25rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .site-footer__column h3,
+  .site-footer h3 { font-size: 2rem; }
+}
+
+.site-footer__column ul,
+.site-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4.8rem;
+}
+
+.site-footer__column ul li,
+.site-footer li { margin-bottom: 0.8rem; }
+.site-footer li:last-of-type { margin-bottom: 0; }
+
+.site-footer__column a,
+.site-footer a {
+  color: hsla(0,0%,100%,.85);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media screen and (min-width: 1024px) {
+  .site-footer__column a,
+  .site-footer a { font-size: 16px; }
+}
+
+.site-footer a:hover { text-decoration: underline; }
+
+/* Sister publication logos */
+.sister-publications {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sister-publications img { max-width: 125px; margin-bottom: 24px; }
+@media screen and (min-width: 1024px) { .sister-publications img { max-width: 175px; } }
+
+/* Social links row */
+.site-footer .social-links li { display: inline-block; }
+.site-footer .social-links li + li { margin-left: 6px; }
+
+.site-footer__copyright {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px 40px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Animations */
 @keyframes staggerIn {
   from {
@@ -1781,12 +2466,6 @@ body {
     left: 24px;
   }
 
-  .ai-assistant-btn {
-    width: 60px;
-    height: 60px;
-    bottom: 20px;
-    right: 20px;
-  }
 
   .filter-bar {
     position: relative;
@@ -1825,20 +2504,13 @@ body {
   }
   
   .btn-compare,
-  .btn-modern.btn-small {
+  .btn-modern.btn-small,
+  .btn-video.btn-small {
     width: 100%;
     justify-content: center;
   }
 
-  .wine-detail-notes {
-    padding: 1rem;
-  }
 
-  .share-menu {
-    bottom: auto;
-    top: calc(100% + 0.5rem);
-    animation: slideDown 0.2s ease;
-  }
 }
 
 /* For medium screens */
@@ -1890,7 +2562,7 @@ body {
   padding: 1rem 0.75rem;
   border-radius: 8px 0 0 8px;
   cursor: pointer;
-  z-index: 97;
+  z-index: 1302; /* above panel and its backdrop */
   box-shadow: -4px 0 20px rgba(0,0,0,0.2);
   transition: all 0.3s ease;
   display: flex;
@@ -1932,6 +2604,41 @@ body {
   font-size: 0.875rem;
 }
 
+.tab-hide {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tab-hide:hover {
+  color: #fff;
+}
+
+/* Dismiss button aligned with the tasting tab */
+.tasting-tracker-dismiss {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 96px; /* sits just to the left of the tab */
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1302; /* same layer as the tab */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.tasting-tracker-dismiss:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
 .tasting-tracker-panel {
   position: fixed;
   right: 0;
@@ -1942,7 +2649,7 @@ body {
   box-shadow: -10px 0 30px rgba(0,0,0,0.1);
   transform: translateX(100%);
   transition: transform 0.3s ease;
-  z-index: 97;
+  z-index: 1301; /* above its backdrop and other UI */
   display: flex;
   flex-direction: column;
 }
@@ -1955,7 +2662,7 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.5);
-  z-index: 96;
+  z-index: 1300; /* below the panel */
   animation: fadeIn 0.3s ease;
 }
 
@@ -2078,9 +2785,19 @@ body {
   width: 50px;
   height: 80px;
   object-fit: contain;
-  background: white;
-  padding: 0.25rem;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.mini-wine-image .wine-placeholder {
+  display: block;
+  width: 60%;
+  height: 60%;
+  color: #e2e8f0;
 }
 
 .mini-wine-info {
@@ -2488,70 +3205,19 @@ body {
   color: white;
 }
 
-/* Enhanced Search */
-.enhanced-search {
-  position: relative;
-  flex-grow: 1;
-  max-width: 600px;
-}
+/* Modal styles retained */
 
-.search-input-wrapper {
-  position: relative;
-}
-
-.enhanced-search-input {
-  width: 100%;
-  padding: 0.75rem 3rem;
-  background: #f7fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  color: #1a202c;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.enhanced-search-input:focus {
-  outline: none;
-  border-color: #8c0004;
+.modal {
   background: white;
-  box-shadow: 0 0 0 3px rgba(140, 0, 4, 0.1);
-}
-
-.enhanced-search-input::placeholder {
-  color: #a0aec0;
-}
-
-.search-clear {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0.25rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #718096;
-  transition: color 0.3s ease;
-}
-
-.search-clear:hover {
-  color: #1a202c;
-}
-
-/* Search Dropdown */
-.search-dropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-  border: 1px solid #e2e8f0;
-  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 90%;
+  width: 600px;
+  max-height: 90vh;
   overflow-y: auto;
-  z-index: 30;
-  animation: slideDown 0.2s ease;
+  position: relative;
+  margin: auto;
+  z-index: 1001;
 }
 
 @keyframes slideDown {
@@ -2565,144 +3231,7 @@ body {
   }
 }
 
-.search-section {
-  padding: 0.5rem 0;
-}
-
-.search-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  color: #718096;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.clear-recent {
-  background: none;
-  border: none;
-  color: #8c0004;
-  cursor: pointer;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transition: opacity 0.3s ease;
-}
-
-.clear-recent:hover {
-  opacity: 0.7;
-}
-
-.result-count {
-  color: #8c0004;
-}
-
-/* Recent Search Items */
-.recent-search-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.recent-search-item:hover {
-  background: #f7fafc;
-}
-
-.recent-search-item .icon-small {
-  color: #a0aec0;
-}
-
-/* Suggestion Items */
-.suggestion-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.suggestion-item:hover,
-.suggestion-item.selected {
-  background: #f7fafc;
-}
-
-.suggestion-image {
-  width: 40px;
-  height: 60px;
-  object-fit: contain;
-  background: white;
-  padding: 0.25rem;
-  border-radius: 4px;
-  border: 1px solid #e2e8f0;
-}
-
-.suggestion-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.suggestion-name {
-  font-weight: 600;
-  color: #1a202c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0.25rem;
-}
-
-.suggestion-details {
-  font-size: 0.875rem;
-  color: #718096;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0.25rem;
-}
-
-.suggestion-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.875rem;
-}
-
-.suggestion-price {
-  color: #8c0004;
-  font-weight: 600;
-}
-
-.suggestion-score {
-  color: #718096;
-}
-
-/* No Results */
-.search-no-results {
-  padding: 2rem;
-  text-align: center;
-  color: #718096;
-}
-
-.no-results-icon {
-  width: 48px;
-  height: 48px;
-  color: #e2e8f0;
-  margin: 0 auto 1rem;
-}
-
-.search-no-results p {
-  font-weight: 500;
-  color: #4a5568;
-  margin-bottom: 0.5rem;
-}
-
-.search-no-results span {
-  font-size: 0.875rem;
-}
+ 
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
@@ -2715,6 +3244,14 @@ body {
     top: auto;
     bottom: 100px;
     transform: none;
+  }
+  
+  /* Position dismiss button next to the tab on mobile */
+  .tasting-tracker-dismiss {
+    top: auto;
+    bottom: 100px;
+    transform: none;
+    right: 96px;
   }
   
   .tasting-tracker-tab.tab-open {
@@ -2731,16 +3268,6 @@ body {
   
   .comparison-grid {
     grid-template-columns: 1fr;
-  }
-
-  .enhanced-search {
-    max-width: none;
-  }
-  
-  .search-dropdown {
-    left: -1rem;
-    right: -1rem;
-    border-radius: 0 0 12px 12px;
   }
 }
 /* Notification Toast */

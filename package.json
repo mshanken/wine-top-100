@@ -2,13 +2,13 @@
   "name": "wine-top-100",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mcapace.github.io/wine-top-100",
+  "homepage": "/",
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.3.1",
+    "react-dfp": "^0.21.0",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "three": "^0.166.1",
@@ -16,17 +16,20 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "env-cmd": "^11.0.0",
     "gh-pages": "^6.1.1",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy-github": "gh-pages -d build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:production": "env-cmd -f .env.production react-scripts build",
+    "deploy:staging": "npm run build:staging && aws s3 sync build/ s3://staging-top100list.winespectator.com --delete && aws cloudfront create-invalidation --distribution-id E9QQNHK4YWV6N --paths '/*'",
+    "deploy:production": "npm run build:production && aws s3 sync build/ s3://top100list.winespectator.com --delete && aws cloudfront create-invalidation --distribution-id E1TACB18U7BIFW --paths '/*'"
   },
   "eslintConfig": {
     "extends": [
