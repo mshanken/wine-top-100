@@ -1336,15 +1336,19 @@ body {
 
 .wine-bottle-image,
 .lazy-image {
-  height: 100%;
   width: auto;
-  object-fit: contain;
   transition: transform 0.3s ease;
 }
 
 .wine-card-modern:hover .wine-bottle-image,
 .wine-card-modern:hover .lazy-image {
   transform: scale(1.05);
+}
+
+.wine-bottle-image img,
+.lazy-image img {
+  height: 224px;
+  object-fit: contain;
 }
 
 .wine-placeholder {
