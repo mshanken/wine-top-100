@@ -320,15 +320,19 @@
 }
 
 /* Match View Details button height to others in WineCard footer */
+.wine-footer .btn-modern.btn-small
+.wine-footer .btn-video.btn-small
+.wine-footer .btn-pwl.btn-small {
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+}
 .wine-footer .btn-modern.btn-small {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 14px;
-  font-size: 14px;
   line-height: 1;
   min-height: 36px;
-  border-radius: 12px;
   box-sizing: border-box;
 }
 
@@ -336,7 +340,7 @@
 /* View Details (btn-modern) */
 .wine-footer .btn-modern,
 .wine-details-condensed .btn-modern {
-  background: #8c3a3f; /* further muted wine red */
+  background: #8c3a3f; /* further muted wine red #6B1F2E */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-modern:hover,
@@ -347,23 +351,27 @@
 /* Watch Video (btn-video) */
 .wine-footer .btn-video,
 .wine-details-condensed .btn-video {
-  background: #b7a86b; /* further muted gold */
+  background-color: #b7a86b; /* further muted gold */
+  /* color: #b7a86b 70; */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-video:hover,
 .wine-details-condensed .btn-video:hover {
-  background: #a5955e;
+  background-color: #a5955e;
+  /* color: #fff ; */
 }
 
 /* Save to PWL (btn-pwl) */
 .wine-footer .btn-pwl,
 .wine-details-condensed .btn-pwl {
-  background: #4f84c9; /* further muted blue */
+  background-color: #4f84c9; /* further muted blue */
+  /* color: #4f84c9 57; */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-pwl:hover,
 .wine-details-condensed .btn-pwl:hover {
-  background: #4476b3;
+  background-color: #4476b3;
+  /* color: #fff;*/
 }
 
 /* Ensure PWL button text size matches Video in all list/footer rows */
@@ -598,6 +606,10 @@ body {
   display: inline-block;
   text-decoration: none;
 }
+a.btn-modern {
+  color: white ! important;
+  text-decoration: none ! important;
+}
 
 .btn-modern:before {
   content: '';
@@ -664,6 +676,14 @@ body {
 .logo-container {
   display: flex;
   align-items: center;
+  border-right: 1px solid #fff;
+  padding-right: 2%;
+}
+
+@media (min-width: 768px) {
+  .logo-container {
+    padding-right: 4%;
+  }
 }
 
 .logo-background {
@@ -672,14 +692,199 @@ body {
   transition: all 0.3s ease;
 }
 
+.menu {
+  background: #333333;
+  color: #ffffff;
+  padding: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+
+.menu a {
+  color: #ffffff;
+}
+
+.menu__bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.menu__logo {
+  padding: 6px;
+  margin-top: 2px;
+  border-right: 2px solid #fff;
+}
+
+.menu__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  position: relative;
+}
+
+.menu__title {
+  padding: 4px 10px;
+  line-height: 1.125;
+  -ms-flex-item-align: center;
+      align-self: center;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+  font-weight: normal;
+}
+
+@media only screen and (min-width: 640px) {
+  .menu__title {
+    padding: 12px 12px;
+  }
+}
+
+@media only screen and (min-width: 640px) {
+  .menu__title div {
+    display: inline-block;
+    font-size: 32px;
+    font-weight: 300;
+  }
+}
+
+.menu__title div:last-child {
+  display: inline-block;
+  font-weight: 900;
+}
+
+.menu__list li {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+}
+
+.menu__list li a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 100%;
+  padding: 12px 10px;
+}
+
+.menu__dropdown li a {
+  display: block;
+  padding: 24px;
+}
+
+.menu__dropdown li:nth-child(odd) a {
+  border-top: 1px solid #262626;
+  border-bottom: 1px solid #262626;
+  background: #3b3b3b;
+}
+
+.menu__dropdown li a:hover {
+  background: #679e88;
+}
+
+.menu__dropdown.is-hidden {
+  display: none;
+}
+
+.menu__toggle {
+  padding: 0 6px;
+  -webkit-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  border: 0;
+  outline: 0;
+  background: #679e88;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.menu__toggle:focus {
+  border: 0;
+  outline: 0;
+}
+
+.menu__toggle.is-hidden {
+  width: 0;
+  padding: 0;
+  -webkit-transition: none;
+  -o-transition: none;
+  transition: none;
+  border-right: 4px solid #679e88;
+  overflow: hidden;
+}
+
+.menu__toggle.is-active {
+  background: #6da28d;
+}
+
+.menu__toggle::after {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  border: 1px solid #5c907b;
+  border-radius: 50%;
+  background: #77a894;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 14px;
+  content: attr(count);
+}
+
+.u-display-none {
+    display: none !important;
+}
+
+@media only screen and (min-width: 640px) {
+    .u-md-display-none {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 640px) {
+    .u-md-display-inline {
+        display: inline !important;
+    }
+}
+
 .navbar-logo {
-  height: 32px;
+  height: 50px;
   transition: all 0.3s ease;
 }
 
 @media (min-width: 768px) {
   .navbar-logo {
-    height: 40px;
+    height: 58px;
   }
 }
 
@@ -921,7 +1126,6 @@ body {
 .icon-close {
   width: 24px;
   height: 24px;
-  color: #2d3748;
 }
 
 .welcome-popup-header {
@@ -1209,14 +1413,16 @@ body {
 }
 
 .wine-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 @media (min-width: 768px) {
   .wine-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
 }
 
@@ -1488,6 +1694,38 @@ body {
   gap: 0.75rem;
 }
 
+.wine-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: normal;
+}
+
+.wine-footer .btn-modern.btn-small,
+.wine-footer .btn-video.btn-small,
+.wine-footer .btn-pwl.btn-small {
+  display: block;
+  font-size: 14px;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  order: 0;
+  white-space: normal;
+  text-align: center;
+  overflow: visible;
+}
+
+@media ((max-width: 1100px) and (min-width: 1024px)) {
+  .wine-footer .btn-modern.btn-small,
+  .wine-footer .btn-video.btn-small,
+  .wine-footer .btn-pwl.btn-small {
+    font-size: 12px;
+  }
+}
+
 .wine-price-large {
   font-size: 1.5rem;
   font-weight: bold;
@@ -1666,6 +1904,21 @@ body {
 }
 
 /* Modal */
+/* Modal styles retained */
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.45);
+  max-width: 90%;
+  width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  margin: auto;
+  z-index: 1001;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1695,7 +1948,10 @@ body {
 }
 
 /* Wine detail footer styling is now defined directly with the wine-detail-footer class */
-
+.modal-header {
+  background-color: #8d0004;
+  padding: 10px 5px;
+}
 .modal-content {
   position: relative;
   width: 100%;
@@ -1737,6 +1993,90 @@ body {
 .modal-close:hover {
   background: #edf2f7;
 }
+
+/* PWL Response Modal */
+.pwl-modal {
+  max-width: 500px;
+  width: 90%;
+  z-index: 1002; /* above .modal-backdrop (1000) */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  margin: 0;
+  text-align: center;
+}
+
+.modal.pwl-modal h1,
+.modal.pwl-modal h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+.modal.pwl-modal h2 {
+  color: #fff;
+  font-size: 1.25rem;
+}
+.modal.pwl-modal hr {
+  margin: 1rem 0;
+}
+
+
+.pwl-modal .modal-content {
+  position: relative;
+  width: 100%;
+  margin: 2rem auto 1rem;
+  padding: 0 16px;
+  overflow: hidden;
+  /* Allow modal content to scroll while body is locked */
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: none;
+}
+
+.pwl-modal .modal-close {
+  background: #8d0004;
+  border: 2px solid #f7fafc;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+  right: 0.5rem;
+  transition: background-color 0.3s ease;
+  top: 0.5rem;
+  z-index: 50;
+}
+
+.pwl-modal .modal-close:hover {
+  background-color: #fff;
+  color: #8d0004;
+  border-color: #8d000533;
+}
+.pwl-success p,
+.pwl-error p {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 1rem;
+}
+
+.pwl-success p a,
+.pwl-error p a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.pwl-success {
+  color: #28a745;
+}
+
+.pwl-error {
+  color: #8d0004;
+}
+
 
 .wine-detail-modal {
   display: flex;
@@ -1978,31 +2318,6 @@ body {
   padding: 6px 12px;
   font-size: 12px;
   white-space: nowrap;
-}
-
-/* PWL Response Modal */
-.pwl-modal {
-  max-width: 500px;
-  width: 90%;
-  padding: 1.5rem;
-  position: relative; /* create stacking context above backdrop */
-  z-index: 1002; /* above .modal-backdrop (1000) */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1050;
-  margin: 0;
-}
-
-.pwl-success {
-  color: #28a745;
-  margin-top: 1rem;
-}
-
-.pwl-error {
-  color: #3562dc;
-  margin-top: 1rem;
 }
 
 .response-preview {
@@ -2314,7 +2629,6 @@ body {
   gap: 6px;
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  margin-left: 8px;
 }
 
 .btn-video:hover {
@@ -2701,9 +3015,9 @@ body {
 }
 
 .panel-close:hover {
-  background: #8c0004;
-  color: white;
-  border-color: #8c0004;
+  background-color: #8c0004;
+  color: #fff;
+  border-color: #8c000470;
 }
 
 .panel-stats {
@@ -3207,21 +3521,6 @@ body {
 .compare-btn-small.active {
   background: #22c55e;
   color: white;
-}
-
-/* Modal styles retained */
-
-.modal {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 90%;
-  width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  margin: auto;
-  z-index: 1001;
 }
 
 @keyframes slideDown {
