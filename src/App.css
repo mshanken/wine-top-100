@@ -336,7 +336,7 @@
 /* View Details (btn-modern) */
 .wine-footer .btn-modern,
 .wine-details-condensed .btn-modern {
-  background: #8c3a3f; /* further muted wine red */
+  background: #6B1F2E; /* further muted wine red */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-modern:hover,
@@ -347,23 +347,27 @@
 /* Watch Video (btn-video) */
 .wine-footer .btn-video,
 .wine-details-condensed .btn-video {
-  background: #b7a86b; /* further muted gold */
+  background-color: #b7a86b; /* further muted gold */
+  /* color: #b7a86b 70; */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-video:hover,
 .wine-details-condensed .btn-video:hover {
-  background: #a5955e;
+  background-color: #a5955e;
+  /* color: #fff ; */
 }
 
 /* Save to PWL (btn-pwl) */
 .wine-footer .btn-pwl,
 .wine-details-condensed .btn-pwl {
-  background: #4f84c9; /* further muted blue */
+  background-color: #4f84c9; /* further muted blue */
+  /* color: #4f84c9 57; */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-pwl:hover,
 .wine-details-condensed .btn-pwl:hover {
-  background: #4476b3;
+  background-color: #4476b3;
+  /* color: #fff;*/
 }
 
 /* Ensure PWL button text size matches Video in all list/footer rows */
@@ -598,6 +602,10 @@ body {
   display: inline-block;
   text-decoration: none;
 }
+a.btn-modern {
+  color: white ! important;
+  text-decoration: none ! important;
+}
 
 .btn-modern:before {
   content: '';
@@ -664,6 +672,13 @@ body {
 .logo-container {
   display: flex;
   align-items: center;
+  padding-right: 2%;
+}
+
+@media (min-width: 768px) {
+  .logo-container {
+    padding-right: 4%;
+  }
 }
 
 .logo-background {
@@ -921,7 +936,6 @@ body {
 .icon-close {
   width: 24px;
   height: 24px;
-  color: #2d3748;
 }
 
 .welcome-popup-header {
@@ -1666,6 +1680,21 @@ body {
 }
 
 /* Modal */
+/* Modal styles retained */
+
+.modal {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.45);
+  max-width: 90%;
+  width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  margin: auto;
+  z-index: 1001;
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1695,7 +1724,10 @@ body {
 }
 
 /* Wine detail footer styling is now defined directly with the wine-detail-footer class */
-
+.modal-header {
+  background-color: #8d0004;
+  padding: 10px 5px;
+}
 .modal-content {
   position: relative;
   width: 100%;
@@ -1737,6 +1769,90 @@ body {
 .modal-close:hover {
   background: #edf2f7;
 }
+
+/* PWL Response Modal */
+.pwl-modal {
+  max-width: 500px;
+  width: 90%;
+  z-index: 1002; /* above .modal-backdrop (1000) */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  margin: 0;
+  text-align: center;
+}
+
+.modal.pwl-modal h1,
+.modal.pwl-modal h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+.modal.pwl-modal h2 {
+  color: #fff;
+  font-size: 1.25rem;
+}
+.modal.pwl-modal hr {
+  margin: 1rem 0;
+}
+
+
+.pwl-modal .modal-content {
+  position: relative;
+  width: 100%;
+  margin: 2rem auto 1rem;
+  padding: 0 16px;
+  overflow: hidden;
+  /* Allow modal content to scroll while body is locked */
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: none;
+}
+
+.pwl-modal .modal-close {
+  background: #8d0004;
+  border: 2px solid #f7fafc;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1rem;
+  padding: 0.5rem;
+  position: absolute;
+  right: 0.5rem;
+  transition: background-color 0.3s ease;
+  top: 0.5rem;
+  z-index: 50;
+}
+
+.pwl-modal .modal-close:hover {
+  background-color: #fff;
+  color: #8d0004;
+  border-color: #8d000533;
+}
+.pwl-success p,
+.pwl-error p {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 1rem;
+}
+
+.pwl-success p a,
+.pwl-error p a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.pwl-success {
+  color: #28a745;
+}
+
+.pwl-error {
+  color: #8d0004;
+}
+
 
 .wine-detail-modal {
   display: flex;
@@ -1978,31 +2094,6 @@ body {
   padding: 6px 12px;
   font-size: 12px;
   white-space: nowrap;
-}
-
-/* PWL Response Modal */
-.pwl-modal {
-  max-width: 500px;
-  width: 90%;
-  padding: 1.5rem;
-  position: relative; /* create stacking context above backdrop */
-  z-index: 1002; /* above .modal-backdrop (1000) */
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1050;
-  margin: 0;
-}
-
-.pwl-success {
-  color: #28a745;
-  margin-top: 1rem;
-}
-
-.pwl-error {
-  color: #3562dc;
-  margin-top: 1rem;
 }
 
 .response-preview {
@@ -2701,9 +2792,9 @@ body {
 }
 
 .panel-close:hover {
-  background: #8c0004;
-  color: white;
-  border-color: #8c0004;
+  background-color: #8c0004;
+  color: #fff;
+  border-color: #8c000470;
 }
 
 .panel-stats {
@@ -3207,21 +3298,6 @@ body {
 .compare-btn-small.active {
   background: #22c55e;
   color: white;
-}
-
-/* Modal styles retained */
-
-.modal {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 90%;
-  width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  margin: auto;
-  z-index: 1001;
 }
 
 @keyframes slideDown {

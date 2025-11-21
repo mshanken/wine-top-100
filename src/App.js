@@ -262,6 +262,11 @@ const useBodyScrollLock = (locked) => {
     }, [locked]);
 };
 
+// Handling navigation links
+const handleNavigation = (url) => {
+    /* window.location.href = url; */
+    window.open(url, '_blank');
+};
 // Analytics functions
 const trackEvent = (eventName, parameters = {}) => {
     // Add GA4 debug flag in development so events appear in GA DebugView
@@ -1077,18 +1082,16 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             <span className="label-short">Details</span>
                         </button>
                         {showVideoCondensed && (
-                            <a
+                            <button
                                 className="btn-video btn-small"
-                                href={`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`}
-                                target="_blank"
                                 rel="noopener noreferrer"
-                                onClick={(e) => { e.stopPropagation(); trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id }); }}
+                                onClick={(e) => { e.stopPropagation(); handleNavigation(`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`); trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id }); }}
                                 aria-label="Watch the video"
                                 title="Watch the video"
                             >
                                 <span className="label-full">Watch the video</span>
                                 <span className="label-short">Video</span>
-                            </a>
+                            </button>
                         )}
                         <button
                             className="btn-pwl btn-pwl-small"
@@ -1106,7 +1109,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
     }
 
     const showVideo = Number(selectedYear) >= 2013 && wineRank <= 10;
-
+    
     return (
         <div className="wine-card-modern">
             <div className={`wine-rank ${getRankColor()}`}>{wineRank}</div>
@@ -1162,15 +1165,13 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                     <div className="wine-footer">
                         <button className="btn-modern btn-small" onClick={() => { console.log('[WineCard] View Details clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id }); }}>View Details</button>
                         {showVideo && (
-                            <a
+                            <button
                                 className="btn-video btn-small"
-                                href={`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`}
-                                target="_blank"
                                 rel="noopener noreferrer"
-                                onClick={() => trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id })}
+                                onClick={(e) => { e.preventDefault(); handleNavigation(`https://top100.winespectator.com/${selectedYear}/video/?play=${wineRank}`); trackEvent('watch_video_clicked', { year: selectedYear, rank: wineRank, wineId: wine.id })}}
                             >
                                 Watch the video
-                            </a>
+                            </button>
                         )}
                         <button 
                             className="btn-pwl"
@@ -1209,44 +1210,47 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
         <div className="modal-backdrop pwl-modal-backdrop">
             <div className="modal pwl-modal">
                 <div className="modal-header">
-                    <h3>Add to Personal Wine List</h3>
+                    <h2>Add to Personal Wine List</h2>
                     <button className="modal-close" onClick={onClose}>&times;</button>
                 </div>
                 <div className="modal-content">
-                    <h4>{wineName}</h4>
+                    <h1>{wineName}</h1>
                     
                     {!responseData ? (
                         <div className="loading-spinner">
                             <div className="spinner"></div>
                             <p>Adding to your Personal Wine List...</p>
                         </div>
-                    ) : responseData.success ? (
+                    ) : false ? (
                         <div className="pwl-success">
                             <p>Successfully added to your Personal Wine List!</p>
-                            {responseData.stubbed && (
-                                <p className="pwl-stub-note">Local development: This request was stubbed; no network call was made.</p>
-                            )}
-                            <div style={{ marginTop: '1rem' }}>
-                                <a
-                                    className="btn-modern"
-                                    href="https://www.winespectator.com/pwl/show"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    View my Personal Wine List
-                                </a>
-                            </div>
+                            
+                            <hr />
+                            <a
+                                className="btn-modern"
+                                href="https://www.winespectator.com/pwl/show"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                View my Personal Wine List
+                            </a>
                         </div>
                     ) : (
                         <div className="pwl-error">
-                            <p>Sorry, we couldn't add this wine to your Personal Wine List.  If you are a Wine Spectator member, please <a href="https://www.winespectator.com/auth/login" target="_blank" rel="noopener noreferrer">log in</a> and try again.  If you aren't a subscriber, sign up today at <a href="https://www.winespectator.com/subscribe" target="_blank" rel="noopener noreferrer">www.winespectator.com/subscribe</a>.</p>
-                            {/* <p className="error-message">{responseData.error}</p> */}
+                            <p>To add a wine to your personal wine list and enjoy many other benefits, subscribe to WineSpectator.com</p>
+                            <p><button 
+                                className="btn-modern"
+                                onClick={(e) => { e.preventDefault(); handleNavigation(`https://www.winespectator.com/freetrial`); trackEvent('free_trial_listbtn')}}
+                                >Start 30-Day Free Trial</button></p>
+                            <p>Already a member of WineSpectator.com?  <a 
+                                href="/"
+                                onClick={(e) => { e.preventDefault(); handleNavigation(`https://www.winespectator.com/auth/login`); trackEvent('sign_in_listbtn')}}
+                                >Sign In.</a></p>
+                            {/* <p><span><strong>Sorry,</strong> we couldn't add this wine to your Personal Wine List.</span>  If you are a Wine Spectator member, please <a href="https://www.winespectator.com/auth/login" target="_blank" rel="noopener noreferrer">log in</a> and try again.  If you aren't a subscriber, sign up today at <a href="https://www.winespectator.com/subscribe" target="_blank" rel="noopener noreferrer">www.winespectator.com/subscribe</a>.</p>
+                            <p className="error-message">{responseData.error}</p> */}
                             {/* <p><strong>Wine ID:</strong> {responseData.wineId}</p> */}
                         </div>
                     )}
-                </div>
-                <div className="modal-footer">
-                    <button className="btn-modern" onClick={onClose}>Close</button>
                 </div>
             </div>
         </div>
@@ -1400,15 +1404,12 @@ const Navigation = () => {
         <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-container">
                 <a href="https://top100.winespectator.com/" className="logo-container" aria-label="Top 100 Home">
-                    <div className="logo-background" style={{ backgroundColor: 'transparent' }}>
                         <img
                             src={process.env.PUBLIC_URL + '/logo.png'}
                             alt="Wine Spectator Logo"
                             className="navbar-logo"
                         />
-                    </div>
                 </a>
-
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
                     <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
@@ -1442,7 +1443,6 @@ const Navigation = () => {
         </nav>
     );
 };
-
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
     // Build option lists constrained by the other active selections
