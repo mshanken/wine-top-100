@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { DFPSlotsProvider, AdSlot } from 'react-dfp';
+// import $ from 'jquery';
 import './App.css';
 import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
 import winesData from './data/wines-2025.json';
@@ -1410,6 +1411,10 @@ const Navigation = () => {
                             className="navbar-logo"
                         />
                 </a>
+                <a class="menu__title" href="https://top100.winespectator.com/">
+                    <div>Top</div>
+                    <div>100</div>
+                </a>
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
                     <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
@@ -1443,6 +1448,110 @@ const Navigation = () => {
         </nav>
     );
 };
+
+/*
+ * Top 100 main navbar, runs witha warning on page load
+const Navigation2 = () => {
+    let $btn = $('.js-menu-toggle'),
+        $vlinks = $('.js-menu-list'),
+        $hlinks = $('.js-menu-dropdown'),
+
+        numOfItems = 0,
+        totalSpace = 0,
+        breakWidths = [];
+
+    // Get initial state
+    $vlinks.children().outerWidth(function (i, w) {
+        totalSpace += w;
+        numOfItems += 1;
+        breakWidths.push(totalSpace);
+    });
+
+    let availableSpace, numOfVisibleItems, requiredSpace;
+
+    const check = ()  => {
+        // Get instant state
+        availableSpace = $vlinks.width() - 10;
+        numOfVisibleItems = $vlinks.children().length;
+        requiredSpace = breakWidths[numOfVisibleItems - 1];
+
+        // There is not enought space
+        if (requiredSpace > availableSpace) {
+            $vlinks.children().last().prependTo($hlinks);
+            numOfVisibleItems -= 1;
+            check();
+            // There is more than enough space
+        } else if (availableSpace > breakWidths[numOfVisibleItems]) {
+            $hlinks.children().first().appendTo($vlinks);
+            numOfVisibleItems += 1;
+        }
+        // Update the button accordingly
+        $btn.attr("count", numOfItems - numOfVisibleItems);
+        if (numOfVisibleItems === numOfItems) {
+            $btn.addClass('is-hidden');
+        } else $btn.removeClass('is-hidden');
+    }
+    
+    // Risize: list on window resize
+    useEffect(() => {
+        const handleResize = () => {
+            check();
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup function to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    check();
+
+    return (
+        <nav className={`menu navbar-modern`}>
+            <div className="menu__bar js-menu-bar">
+                <a href="https://www.winespectator.com" className="menu__logo" aria-label="Top 100 Home">
+                    <img 
+                        className="u-md-display-none" 
+                        src="https://top100.winespectator.com/wp-content/themes/top100-theme/dest/images/logo-initals.png"
+                        alt="Wine Spectator Logo" />
+                    <img 
+                        className="u-display-none u-md-display-inline" 
+                        src="https://top100.winespectator.com/wp-content/themes/top100-theme/dest/images/logo.png"
+                        alt="Wine Spectator Logo" />
+                </a>
+                <a className="menu__title" href="https://top100.winespectator.com/">
+                    <div>Top</div>
+                    <div>100</div>
+                </a>
+                <ul className="menu__list js-menu-list" role="navigation" aria-label="Primary">
+                    <li>
+                        <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`}>
+                            Top 10 of 2025</a>
+                    </li>
+                    <li>
+                        <a href="https://top100-list.winespectator.com/">
+                            All Top 100 Lists</a>
+                    </li>
+                    <li>
+                        <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}/video`}>
+                            Videos</a>
+                    </li>
+                    <li>
+                        <a href="https://top100.winespectator.com/archives">
+                            Past Years&rsquo; Top 10s</a>
+                    </li>
+                    <li>
+                        <a target="_blank" rel="noopener noreferrer" href="https://top100.winespectator.com/sweepstakes">
+                            Enter Our Sweepstakes</a>
+                    </li>
+                </ul>
+                <button className="menu__toggle js-menu-toggle" onClick={() => {$hlinks.toggleClass('is-hidden');$btn.toggleClass('is-active')}}>Menu</button>
+            </div>
+            <ul className="menu__dropdown js-menu-dropdown is-hidden"></ul>
+        </nav>
+    );
+}; */
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
     // Build option lists constrained by the other active selections
@@ -1796,29 +1905,29 @@ const App = () => {
                 newTastingRecord[id] = 'tasted';
             });
             
-// Show a notification
-alert(`Imported ${wineIds.length} wines to your tasting list!`);
-            
-// Open the tasting panel to show the imported wines
-setShowTastingPanel(true);
-}
-}, []);
+            // Show a notification
+            alert(`Imported ${wineIds.length} wines to your tasting list!`);
+                        
+            // Open the tasting panel to show the imported wines
+            setShowTastingPanel(true);
+        }
+    }, []);
 
-// Track a new page view when the year changes (skip the initial render)
-const firstYearViewRef = useRef(true);
-useEffect(() => {
-if (firstYearViewRef.current) {
-firstYearViewRef.current = false;
-return; // initial load handled by the one-time page_view above
-}
-// Update the querystring to reflect the selected year (optional but helpful for analytics)
-try {
-const url = new URL(window.location.href);
-url.searchParams.set('year', String(selectedYear));
-window.history.replaceState({}, '', url.toString());
-} catch {}
-trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedYear}`, year: selectedYear });
-}, [selectedYear]);
+    // Track a new page view when the year changes (skip the initial render)
+    const firstYearViewRef = useRef(true);
+    useEffect(() => {
+        if (firstYearViewRef.current) {
+            firstYearViewRef.current = false;
+            return; // initial load handled by the one-time page_view above
+        }
+        // Update the querystring to reflect the selected year (optional but helpful for analytics)
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('year', String(selectedYear));
+            window.history.replaceState({}, '', url.toString());
+        } catch {}
+            trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedYear}`, year: selectedYear });
+    }, [selectedYear]);
     useEffect(() => {
         localStorage.setItem('tastingRecord', JSON.stringify(tastingRecord));
     }, [tastingRecord]);
@@ -1944,186 +2053,186 @@ trackEvent('page_view', { page_title: `Wine Spectator Top 100 List - ${selectedY
                             adUnit="msha.ws.top100/msha.ws.top100"
                             onSlotRender={eventData => document.getElementById(eventData.slotId).classList.add("adIsRendered")}  />
                     </DFPSlotsProvider>
-                  </div>
-              );
-          }
+                </div>
+            );
+        }
       });
       return out;
   };
 
-const currentWines = filteredWines;
+    const currentWines = filteredWines;
 
-// Build share URLs for header share links
-const currentUrl = (typeof window !== 'undefined') ? window.location.href : 'https://top100.winespectator.com/';
-const encodedUrl = encodeURIComponent(currentUrl);
-const shareText = `Wine Spectator Top 100 ${selectedYear}`;
-const encodedText = encodeURIComponent(shareText);
-const shareUrls = {
-  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-  threads: `https://threads.net/intent/post?text=${encodedText}%20${encodedUrl}`
-};
+    // Build share URLs for header share links
+    const currentUrl = (typeof window !== 'undefined') ? window.location.href : 'https://top100.winespectator.com/';
+    const encodedUrl = encodeURIComponent(currentUrl);
+    const shareText = `Wine Spectator Top 100 ${selectedYear}`;
+    const encodedText = encodeURIComponent(shareText);
+    const shareUrls = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+    threads: `https://threads.net/intent/post?text=${encodedText}%20${encodedUrl}`
+    };
 
-return (
-    <Fragment>
-        <div className="ad-placeholder">
-            <DFPSlotsProvider
-            dfpNetworkId="4054"
-            sizeMapping={[
-                { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
-                { viewport: [768, 0], sizes: [[728, 90], [728, 90]] },
-                { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
-                { viewport: [0, 0], sizes: [] }]}>
-                <AdSlot
-                    className="top100-leaderboard-top"
-                    slotId="top100-leaderboard-top"
-                    sizes={[[1320, 330], [728, 90], [450, 75], [300, 250], [320, 50]]}
-                    adUnit="msha.ws.top100/msha.ws.top100"
-                    onSlotRender={eventData => document.getElementById(eventData.slotId).classList.add("adIsRendered")}  />
-            </DFPSlotsProvider>
-        </div>
-        
-        <Navigation />
-        <main>
-            <section id="wines" className="wines-section">
-                <div className="container">
-                    <div className="section-header">
-                        <h2>Wine Spectator's Top 100 Lists</h2>
-                        <div className="section-description">
-                            <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100 based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.  The full Top 100 of 2025 will be revealed on Nov. 17.</p>
-                        </div>
-                        <div className="year-selector-container">
-                            <select 
-                                value={selectedYear}
-                                onChange={(e) => {
-                                    const y = parseInt(e.target.value, 10);
-                                    setSelectedYear(y);
-                                    // Reset all filters to prevent empty results when switching years
-                                    setFilters({ search: '', color: 'All', country: 'All', wineType: 'All' });
-                                    // Sync ?year= in URL (preserve other params)
-                                    const params = new URLSearchParams(window.location.search);
-                                    params.set('year', String(y));
-                                    const newUrl = `${window.location.pathname}?${params.toString()}`;
-                                    window.history.replaceState(null, '', newUrl);
-                                }}
-                                className="year-selector"
-                            >
-                                {YEAR_RANGE.map(year => (
-                                    <option key={year} value={year}>{year} Top 100</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    <div className="filter-toggle-row">
-                        <div className="left-tools">
-                          <div className={`view-segmented ${isCondensed ? 'list-active' : 'grid-active'}`} role="tablist" aria-label="View mode">
-                            <button
-                                className={`seg ${!isCondensed ? 'active' : ''}`}
-                                role="tab"
-                                aria-selected={!isCondensed}
-                                onClick={() => { if (isCondensed) { setIsCondensed(false); trackEvent('view_mode_changed', { mode: 'grid' }); } }}
-                                title="Grid View"
-                            >
-                                <Icons.Grid className="seg-icon" />
-                                <span>Grid</span>
-                            </button>
-                            <button
-                                className={`seg ${isCondensed ? 'active' : ''}`}
-                                role="tab"
-                                aria-selected={isCondensed}
-                                onClick={() => { if (!isCondensed) { setIsCondensed(true); trackEvent('view_mode_changed', { mode: 'list' }); } }}
-                                title="List View"
-                            >
-                                <Icons.List className="seg-icon" />
-                                <span>List</span>
-                            </button>
-                            <span className="seg-thumb" aria-hidden="true" />
-                          </div>
-                          <div className="share-links" aria-label="Share links">
-                              <span className="share-label">Share:</span>
-                              <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook" onClick={() => trackEvent('share_click', { network: 'facebook' })}>
-                                <span className="sr-only">Facebook</span>
-                                <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
-                                  <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z"/>
-                                </svg>
-                              </a>
-                              <span className="sep">|</span>
-                              <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onClick={() => trackEvent('share_click', { network: 'linkedin' })}>
-                                <span className="sr-only">LinkedIn</span>
-                                <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
-                                  <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z"/>
-                                </svg>
-                              </a>
-                              <span className="sep">|</span>
-                              <a href={shareUrls.threads} target="_blank" rel="noopener noreferrer" title="Share on Threads" onClick={() => trackEvent('share_click', { network: 'threads' })}>
-                                <span className="sr-only">Threads</span>
-                                <svg className="share-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-                                  <path fill="currentColor" d="M48.7934,51.38299c-2.20473,0.29799-3.99773,1.23521-5.03513,2.64377   c-0.85042,1.14848-1.1457,2.54625-0.88026,4.139c0.24923,1.48438,0.70964,4.25273,7.99005,4.25273   c6.97164,0,8.89465-7.0103,9.42552-10.85673c-1.85255-0.36838-3.86773-0.55799-6.0182-0.55799   C52.52563,51.00376,50.69472,51.12833,48.7934,51.38299z"/>
-                                  <path fill="currentColor" d="M97.43239,20.54097c-1.66843-9.29382-8.73216-16.35288-17.9952-17.98354   C59.93605-0.87186,39.87434-0.83395,20.54925,2.56015C11.29171,4.22329,4.23333,11.28235,2.56761,20.55447   C0.86399,30.2573,0,40.19036,0,50.07738c0,9.77864,0.86399,19.66024,2.56761,29.35764   c1.63052,9.26398,8.68883,16.32846,17.99791,18.00245C30.27276,99.13859,40.20203,100,50.0826,100   c9.77221,0,19.64735-0.86141,29.35459-2.56253c9.4418-1.66314,16.33755-8.5597,18.00056-18.00245   C99.13873,69.72677,100,59.8506,100,50.07738C100,40.19579,99.13873,30.26543,97.43239,20.54097z M79.85426,40.40704   c-1.77131,0.59055-3.67812-0.43877-4.23062-2.22385c-3.98689-12.83149-11.4352-18.06478-25.70353-18.06478   c-17.32347,0-25.39205,10.01974-25.39205,31.53002c0,18.15958,8.91093,27.92203,25.77121,28.22537   c7.15041,0.24922,13.56954-2.04237,17.63224-6.01888c2.77351-2.71416,4.24147-6.04594,4.24147-9.62694   c0-3.77604-1.28378-6.81525-3.8189-9.03646c-0.49297-0.43342-1.02926-0.82886-1.60889-1.19724   c-1.77131,9.44275-7.69206,15.18534-15.87714,15.18534c-10.74999,0-13.90537-5.38506-14.65834-9.89787   c-0.57149-3.42387,0.15984-6.63106,2.1072-9.26941c2.13433-2.89293,5.53616-4.78909,9.58266-5.33088   c4.38232-0.58506,8.47758-0.5742,12.15569-0.03791c-0.60669-2.61122-1.81471-4.74576-3.5102-6.01617   c-3.79734-2.79276-10.69851-2.52726-14.485,2.35392c-1.14299,1.47902-3.26376,1.74988-4.74257,0.60133   c-1.4761-1.14305-1.74696-3.26674-0.60398-4.74304c6.25658-8.07211,17.37766-8.39986,23.86176-3.64326   c3.8244,2.8713,6.1537,7.6983,6.59784,13.41376c2.12891,0.91017,4.01943,2.07492,5.6391,3.49433   c4.00317,3.51061,6.12115,8.39179,6.12115,14.12354c0,5.36336-2.22636,10.4992-6.27286,14.45943   c-5.18941,5.07623-13.04403,7.95838-21.65704,7.95838c-0.28164,0-0.55793-0.00543-0.83422-0.01086   c-20.58716-0.36838-32.4016-13.12127-32.4016-34.9865c0-25.40826,10.81767-38.29115,32.15244-38.29115   c17.33432,0,27.25274,7.03742,32.16058,22.82138C82.63319,37.96102,81.63649,39.85446,79.85426,40.40704z"/>
-                                </svg>
-                              </a>
-                          </div>
-                        </div>
-                        <div className="filters-toggle">
-                            <button 
-                                className={`btn-modern btn-small filter-toggle-btn`}
-                                aria-expanded={!showFilters}
-                                aria-controls="filters-panel"
-                                onClick={() => setShowFilters(!showFilters)}
-                            >
-                                <span className="toggle-text">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
-                            </button>
-                            {savedPanelDismissed && (
-                                <button
-                                    className="btn-modern btn-small filter-toggle-btn"
-                                    onClick={() => { setUndismissSignal(s => s + 1); setShowTastingPanel(true); }}
-                                    title="Show Saved Wines"
-                                    aria-label="Show Saved Wines"
+    return (
+        <Fragment>
+            <div className="ad-placeholder">
+                <DFPSlotsProvider
+                dfpNetworkId="4054"
+                sizeMapping={[
+                    { viewport: [960, 0], sizes: [[970, 90], [728, 90]] },
+                    { viewport: [768, 0], sizes: [[728, 90], [728, 90]] },
+                    { viewport: [320, 0], sizes: [[450, 75], [300, 50], [320, 50]] },
+                    { viewport: [0, 0], sizes: [] }]}>
+                    <AdSlot
+                        className="top100-leaderboard-top"
+                        slotId="top100-leaderboard-top"
+                        sizes={[[1320, 330], [728, 90], [450, 75], [300, 250], [320, 50]]}
+                        adUnit="msha.ws.top100/msha.ws.top100"
+                        onSlotRender={eventData => document.getElementById(eventData.slotId).classList.add("adIsRendered")}  />
+                </DFPSlotsProvider>
+            </div>
+            
+            <Navigation />
+            <main>
+                <section id="wines" className="wines-section">
+                    <div className="container">
+                        <div className="section-header">
+                            <h2>Wine Spectator's Top 100 Lists</h2>
+                            <div className="section-description">
+                                <p>Each year, Wine Spectator editors survey the wines reviewed over the previous 12 months and select our Top 100 based on quality, value, availability and excitement. This annual list honors successful wineries, regions and vintages around the world.  The full Top 100 of 2025 will be revealed on Nov. 17.</p>
+                            </div>
+                            <div className="year-selector-container">
+                                <select 
+                                    value={selectedYear}
+                                    onChange={(e) => {
+                                        const y = parseInt(e.target.value, 10);
+                                        setSelectedYear(y);
+                                        // Reset all filters to prevent empty results when switching years
+                                        setFilters({ search: '', color: 'All', country: 'All', wineType: 'All' });
+                                        // Sync ?year= in URL (preserve other params)
+                                        const params = new URLSearchParams(window.location.search);
+                                        params.set('year', String(y));
+                                        const newUrl = `${window.location.pathname}?${params.toString()}`;
+                                        window.history.replaceState(null, '', newUrl);
+                                    }}
+                                    className="year-selector"
                                 >
-                                    <span className="toggle-text">Show Saved Wines</span>
+                                    {YEAR_RANGE.map(year => (
+                                        <option key={year} value={year}>{year} Top 100</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <div className="filter-toggle-row">
+                            <div className="left-tools">
+                            <div className={`view-segmented ${isCondensed ? 'list-active' : 'grid-active'}`} role="tablist" aria-label="View mode">
+                                <button
+                                    className={`seg ${!isCondensed ? 'active' : ''}`}
+                                    role="tab"
+                                    aria-selected={!isCondensed}
+                                    onClick={() => { if (isCondensed) { setIsCondensed(false); trackEvent('view_mode_changed', { mode: 'grid' }); } }}
+                                    title="Grid View"
+                                >
+                                    <Icons.Grid className="seg-icon" />
+                                    <span>Grid</span>
                                 </button>
+                                <button
+                                    className={`seg ${isCondensed ? 'active' : ''}`}
+                                    role="tab"
+                                    aria-selected={isCondensed}
+                                    onClick={() => { if (!isCondensed) { setIsCondensed(true); trackEvent('view_mode_changed', { mode: 'list' }); } }}
+                                    title="List View"
+                                >
+                                    <Icons.List className="seg-icon" />
+                                    <span>List</span>
+                                </button>
+                                <span className="seg-thumb" aria-hidden="true" />
+                            </div>
+                            <div className="share-links" aria-label="Share links">
+                                <span className="share-label">Share:</span>
+                                <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook" onClick={() => trackEvent('share_click', { network: 'facebook' })}>
+                                    <span className="sr-only">Facebook</span>
+                                    <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                                    <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z"/>
+                                    </svg>
+                                </a>
+                                <span className="sep">|</span>
+                                <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" title="Share on LinkedIn" onClick={() => trackEvent('share_click', { network: 'linkedin' })}>
+                                    <span className="sr-only">LinkedIn</span>
+                                    <svg className="share-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+                                    <path d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z"/>
+                                    </svg>
+                                </a>
+                                <span className="sep">|</span>
+                                <a href={shareUrls.threads} target="_blank" rel="noopener noreferrer" title="Share on Threads" onClick={() => trackEvent('share_click', { network: 'threads' })}>
+                                    <span className="sr-only">Threads</span>
+                                    <svg className="share-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                                    <path fill="currentColor" d="M48.7934,51.38299c-2.20473,0.29799-3.99773,1.23521-5.03513,2.64377   c-0.85042,1.14848-1.1457,2.54625-0.88026,4.139c0.24923,1.48438,0.70964,4.25273,7.99005,4.25273   c6.97164,0,8.89465-7.0103,9.42552-10.85673c-1.85255-0.36838-3.86773-0.55799-6.0182-0.55799   C52.52563,51.00376,50.69472,51.12833,48.7934,51.38299z"/>
+                                    <path fill="currentColor" d="M97.43239,20.54097c-1.66843-9.29382-8.73216-16.35288-17.9952-17.98354   C59.93605-0.87186,39.87434-0.83395,20.54925,2.56015C11.29171,4.22329,4.23333,11.28235,2.56761,20.55447   C0.86399,30.2573,0,40.19036,0,50.07738c0,9.77864,0.86399,19.66024,2.56761,29.35764   c1.63052,9.26398,8.68883,16.32846,17.99791,18.00245C30.27276,99.13859,40.20203,100,50.0826,100   c9.77221,0,19.64735-0.86141,29.35459-2.56253c9.4418-1.66314,16.33755-8.5597,18.00056-18.00245   C99.13873,69.72677,100,59.8506,100,50.07738C100,40.19579,99.13873,30.26543,97.43239,20.54097z M79.85426,40.40704   c-1.77131,0.59055-3.67812-0.43877-4.23062-2.22385c-3.98689-12.83149-11.4352-18.06478-25.70353-18.06478   c-17.32347,0-25.39205,10.01974-25.39205,31.53002c0,18.15958,8.91093,27.92203,25.77121,28.22537   c7.15041,0.24922,13.56954-2.04237,17.63224-6.01888c2.77351-2.71416,4.24147-6.04594,4.24147-9.62694   c0-3.77604-1.28378-6.81525-3.8189-9.03646c-0.49297-0.43342-1.02926-0.82886-1.60889-1.19724   c-1.77131,9.44275-7.69206,15.18534-15.87714,15.18534c-10.74999,0-13.90537-5.38506-14.65834-9.89787   c-0.57149-3.42387,0.15984-6.63106,2.1072-9.26941c2.13433-2.89293,5.53616-4.78909,9.58266-5.33088   c4.38232-0.58506,8.47758-0.5742,12.15569-0.03791c-0.60669-2.61122-1.81471-4.74576-3.5102-6.01617   c-3.79734-2.79276-10.69851-2.52726-14.485,2.35392c-1.14299,1.47902-3.26376,1.74988-4.74257,0.60133   c-1.4761-1.14305-1.74696-3.26674-0.60398-4.74304c6.25658-8.07211,17.37766-8.39986,23.86176-3.64326   c3.8244,2.8713,6.1537,7.6983,6.59784,13.41376c2.12891,0.91017,4.01943,2.07492,5.6391,3.49433   c4.00317,3.51061,6.12115,8.39179,6.12115,14.12354c0,5.36336-2.22636,10.4992-6.27286,14.45943   c-5.18941,5.07623-13.04403,7.95838-21.65704,7.95838c-0.28164,0-0.55793-0.00543-0.83422-0.01086   c-20.58716-0.36838-32.4016-13.12127-32.4016-34.9865c0-25.40826,10.81767-38.29115,32.15244-38.29115   c17.33432,0,27.25274,7.03742,32.16058,22.82138C82.63319,37.96102,81.63649,39.85446,79.85426,40.40704z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            </div>
+                            <div className="filters-toggle">
+                                <button 
+                                    className={`btn-modern btn-small filter-toggle-btn`}
+                                    aria-expanded={!showFilters}
+                                    aria-controls="filters-panel"
+                                    onClick={() => setShowFilters(!showFilters)}
+                                >
+                                    <span className="toggle-text">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                                </button>
+                                {savedPanelDismissed && (
+                                    <button
+                                        className="btn-modern btn-small filter-toggle-btn"
+                                        onClick={() => { setUndismissSignal(s => s + 1); setShowTastingPanel(true); }}
+                                        title="Show Saved Wines"
+                                        aria-label="Show Saved Wines"
+                                    >
+                                        <span className="toggle-text">Show Saved Wines</span>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        {showFilters && (
+                            <div id="filters-panel">
+                                <FilterBar 
+                                    filters={filters} 
+                                    onFiltersChange={setFilters} 
+                                    currentWines={wines} 
+                                />
+                            </div>
+                        )}
+                        
+                        <div id="wine-list-container" className="wine-list-container">
+                            {isLoading ? (
+                                <div className="loading-container">
+                                    <div className="spinner"></div>
+                                    <p>Loading {selectedYear} vintage...</p>
+                                </div>
+                            ) : (
+                                isCondensed ? (
+                                    <div className="wine-list-condensed">
+                                        {renderWithAds(currentWines, true)}
+                                    </div>
+                                ) : (
+                                    <div className="wine-grid">
+                                        {renderWithAds(currentWines, false)}
+                                    </div>
+                                )
                             )}
                         </div>
                     </div>
-                    {showFilters && (
-                        <div id="filters-panel">
-                            <FilterBar 
-                                filters={filters} 
-                                onFiltersChange={setFilters} 
-                                currentWines={wines} 
-                            />
-                        </div>
-                    )}
-                    
-                    <div id="wine-list-container" className="wine-list-container">
-                        {isLoading ? (
-                            <div className="loading-container">
-                                <div className="spinner"></div>
-                                <p>Loading {selectedYear} vintage...</p>
-                            </div>
-                        ) : (
-                            isCondensed ? (
-                                <div className="wine-list-condensed">
-                                    {renderWithAds(currentWines, true)}
-                                </div>
-                            ) : (
-                                <div className="wine-grid">
-                                    {renderWithAds(currentWines, false)}
-                                </div>
-                            )
-                        )}
-                    </div>
-                </div>
-            </section>
-        </main>
-            
-        {/* PWL Response modal */}
-        <PWLResponseModal
-            isOpen={pwlModalOpen}
-            onClose={() => setPwlModalOpen(false)}
-            wineName={pwlWineName}
-            responseData={pwlResponseData}
-        />
+                </section>
+            </main>
+                
+            {/* PWL Response modal */}
+            <PWLResponseModal
+                isOpen={pwlModalOpen}
+                onClose={() => setPwlModalOpen(false)}
+                wineName={pwlWineName}
+                responseData={pwlResponseData}
+            />
 
             {/* Back to Top Button */}
             {showBackToTop && !pwlModalOpen && (
