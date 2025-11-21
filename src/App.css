@@ -320,15 +320,19 @@
 }
 
 /* Match View Details button height to others in WineCard footer */
+.wine-footer .btn-modern.btn-small
+.wine-footer .btn-video.btn-small
+.wine-footer .btn-pwl.btn-small {
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+}
 .wine-footer .btn-modern.btn-small {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 14px;
-  font-size: 14px;
   line-height: 1;
   min-height: 36px;
-  border-radius: 12px;
   box-sizing: border-box;
 }
 
@@ -336,7 +340,7 @@
 /* View Details (btn-modern) */
 .wine-footer .btn-modern,
 .wine-details-condensed .btn-modern {
-  background: #6B1F2E; /* further muted wine red */
+  background: #8c3a3f; /* further muted wine red #6B1F2E */
   box-shadow: 0 1px 2px rgba(0,0,0,0.08);
 }
 .wine-footer .btn-modern:hover,
@@ -672,7 +676,7 @@ a.btn-modern {
 .logo-container {
   display: flex;
   align-items: center;
-  /* border-right: 1px solid #fff; */
+  border-right: 1px solid #fff;
   padding-right: 2%;
 }
 
@@ -687,8 +691,7 @@ a.btn-modern {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-/*
- * Main top100 navbar
+
 .menu {
   background: #333333;
   color: #ffffff;
@@ -696,9 +699,8 @@ a.btn-modern {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 15;
 }
-
 
 .menu a {
   color: #ffffff;
@@ -729,7 +731,7 @@ a.btn-modern {
       -ms-flex-pack: end;
           justify-content: flex-end;
   position: relative;
-} 
+}
 
 .menu__title {
   padding: 4px 10px;
@@ -873,16 +875,16 @@ a.btn-modern {
     .u-md-display-inline {
         display: inline !important;
     }
-} */
+}
 
 .navbar-logo {
-  height: 32px;
+  height: 50px;
   transition: all 0.3s ease;
 }
 
 @media (min-width: 768px) {
   .navbar-logo {
-    height: 40px;
+    height: 58px;
   }
 }
 
@@ -1411,14 +1413,16 @@ a.btn-modern {
 }
 
 .wine-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 @media (min-width: 768px) {
   .wine-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
 }
 
@@ -1688,6 +1692,38 @@ a.btn-modern {
   border-top: 1px solid #e2e8f0;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.wine-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: normal;
+}
+
+.wine-footer .btn-modern.btn-small,
+.wine-footer .btn-video.btn-small,
+.wine-footer .btn-pwl.btn-small {
+  display: block;
+  font-size: 14px;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: auto;
+  order: 0;
+  white-space: normal;
+  text-align: center;
+  overflow: visible;
+}
+
+@media ((max-width: 1100px) and (min-width: 1024px)) {
+  .wine-footer .btn-modern.btn-small,
+  .wine-footer .btn-video.btn-small,
+  .wine-footer .btn-pwl.btn-small {
+    font-size: 12px;
+  }
 }
 
 .wine-price-large {
@@ -2593,7 +2629,6 @@ a.btn-modern {
   gap: 6px;
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-  margin-left: 8px;
 }
 
 .btn-video:hover {

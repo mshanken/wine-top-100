@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, Fragment, useRef } from 'react';
 import { DFPSlotsProvider, AdSlot } from 'react-dfp';
-// import $ from 'jquery';
+import $ from 'jquery';
 import './App.css';
 import { CURRENT_TOP100_YEAR, YEAR_RANGE } from './config';
 import winesData from './data/wines-2025.json';
@@ -1222,10 +1222,12 @@ const PWLResponseModal = ({ isOpen, onClose, wineName, responseData }) => {
                             <div className="spinner"></div>
                             <p>Adding to your Personal Wine List...</p>
                         </div>
-                    ) : false ? (
+                    ) : responseData.success ? (
                         <div className="pwl-success">
                             <p>Successfully added to your Personal Wine List!</p>
-                            
+                            {responseData.stubbed && (
+                                <p className="pwl-stub-note">Local development: This request was stubbed; no network call was made.</p>
+                            )}
                             <hr />
                             <a
                                 className="btn-modern"
@@ -1379,6 +1381,8 @@ const WineDetailModal = ({ wine, isOpen, onClose, tastingRecord, onTasteChange, 
     );
 };
 
+/*
+ * Top 100 main navbar, runs witha warning on page load
 const Navigation = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -1411,7 +1415,7 @@ const Navigation = () => {
                             className="navbar-logo"
                         />
                 </a>
-                {/* Desktop menu */}
+                {/* Desktop menu * /}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
                     <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
                     <a href="https://top100-list.winespectator.com/" className={linkClass}>All Top 100 Lists</a>
@@ -1420,7 +1424,7 @@ const Navigation = () => {
                     <a href="https://www.winespectator.com/sweepstakes" className={linkClass}>Top 100 Sweepstakes</a>
                 </div>
 
-                {/* Mobile toggle button */}
+                {/* Mobile toggle button * /}
                 <button
                     className={`navbar-toggle light`}
                     aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
@@ -1431,7 +1435,7 @@ const Navigation = () => {
                 </button>
             </div>
 
-            {/* Mobile dropdown */}
+            {/* Mobile dropdown * /}
             {mobileOpen && (
                 <div className={`mobile-menu ${scrolled ? 'scrolled' : ''}`} role="menu">
                     <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className="mobile-menu-link" role="menuitem" onClick={() => setMobileOpen(false)}>Top 10 of {CURRENT_TOP100_YEAR}</a>
@@ -1443,53 +1447,55 @@ const Navigation = () => {
             )}
         </nav>
     );
-};
+}; */
 
-/*
- * Top 100 main navbar, runs witha warning on page load
+
 const Navigation2 = () => {
+     // Risize: list on window resize
     let $btn = $('.js-menu-toggle'),
-        $vlinks = $('.js-menu-list'),
-        $hlinks = $('.js-menu-dropdown'),
+        $hlinks = $('.js-menu-dropdown');
 
-        numOfItems = 0,
-        totalSpace = 0,
-        breakWidths = [];
-
-    // Get initial state
-    $vlinks.children().outerWidth(function (i, w) {
-        totalSpace += w;
-        numOfItems += 1;
-        breakWidths.push(totalSpace);
-    });
-
-    let availableSpace, numOfVisibleItems, requiredSpace;
-
-    const check = ()  => {
-        // Get instant state
-        availableSpace = $vlinks.width() - 10;
-        numOfVisibleItems = $vlinks.children().length;
-        requiredSpace = breakWidths[numOfVisibleItems - 1];
-
-        // There is not enought space
-        if (requiredSpace > availableSpace) {
-            $vlinks.children().last().prependTo($hlinks);
-            numOfVisibleItems -= 1;
-            check();
-            // There is more than enough space
-        } else if (availableSpace > breakWidths[numOfVisibleItems]) {
-            $hlinks.children().first().appendTo($vlinks);
-            numOfVisibleItems += 1;
-        }
-        // Update the button accordingly
-        $btn.attr("count", numOfItems - numOfVisibleItems);
-        if (numOfVisibleItems === numOfItems) {
-            $btn.addClass('is-hidden');
-        } else $btn.removeClass('is-hidden');
-    }
-    
-    // Risize: list on window resize
     useEffect(() => {
+        let $btn = $('.js-menu-toggle'),
+            $vlinks = $('.js-menu-list'),
+            $hlinks = $('.js-menu-dropdown'),
+
+            numOfItems = 0,
+            totalSpace = 0,
+            breakWidths = [];
+
+        // Get initial state
+        $vlinks.children().outerWidth(function (i, w) {
+            totalSpace += w;
+            numOfItems += 1;
+            breakWidths.push(totalSpace);
+        });
+
+        let availableSpace, numOfVisibleItems, requiredSpace;
+
+        const check = ()  => {
+            // Get instant state
+            availableSpace = $vlinks.width() - 10;
+            numOfVisibleItems = $vlinks.children().length;
+            requiredSpace = breakWidths[numOfVisibleItems - 1];
+
+            // There is not enought space
+            if (requiredSpace > availableSpace) {
+                $vlinks.children().last().prependTo($hlinks);
+                numOfVisibleItems -= 1;
+                check();
+                // There is more than enough space
+            } else if (availableSpace > breakWidths[numOfVisibleItems]) {
+                $hlinks.children().first().appendTo($vlinks);
+                numOfVisibleItems += 1;
+            }
+            // Update the button accordingly
+            $btn.attr("count", numOfItems - numOfVisibleItems);
+            if (numOfVisibleItems === numOfItems) {
+                $btn.addClass('is-hidden');
+            } else $btn.removeClass('is-hidden');
+        }
+
         const handleResize = () => {
             check();
         };
@@ -1500,9 +1506,7 @@ const Navigation2 = () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
-    check();
-
+    
     return (
         <nav className={`menu navbar-modern`}>
             <div className="menu__bar js-menu-bar">
@@ -1542,12 +1546,12 @@ const Navigation2 = () => {
                             Enter Our Sweepstakes</a>
                     </li>
                 </ul>
-                <button className="menu__toggle js-menu-toggle" onClick={() => {$hlinks.toggleClass('is-hidden');$btn.toggleClass('is-active')}}>Menu</button>
+                <button className="menu__toggle js-menu-toggle is-hidden" onClick={() => {$hlinks.toggleClass('is-hidden');$btn.toggleClass('is-active')}}>Menu</button>
             </div>
             <ul className="menu__dropdown js-menu-dropdown is-hidden"></ul>
         </nav>
     );
-}; */
+};
 
 const FilterBar = ({ filters, onFiltersChange, isCondensed, onViewChange, currentWines }) => {
     // Build option lists constrained by the other active selections
@@ -2088,7 +2092,7 @@ const App = () => {
                 </DFPSlotsProvider>
             </div>
             
-            <Navigation />
+            <Navigation2 />
             <main>
                 <section id="wines" className="wines-section">
                     <div className="container">
