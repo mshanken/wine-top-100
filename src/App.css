@@ -672,7 +672,7 @@ a.btn-modern {
 .logo-container {
   display: flex;
   align-items: center;
-  border-right: 1px solid #fff;
+  /* border-right: 1px solid #fff; */
   padding-right: 2%;
 }
 
@@ -687,7 +687,8 @@ a.btn-modern {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
+/*
+ * Main top100 navbar
 .menu {
   background: #333333;
   color: #ffffff;
@@ -698,9 +699,8 @@ a.btn-modern {
   z-index: 10;
 }
 
-/*
- * Main top100 navbar
- .menu a {
+
+.menu a {
   color: #ffffff;
 }
 
@@ -876,13 +876,13 @@ a.btn-modern {
 } */
 
 .navbar-logo {
-  height: 50px;
+  height: 32px;
   transition: all 0.3s ease;
 }
 
 @media (min-width: 768px) {
   .navbar-logo {
-    height: 58px;
+    height: 40px;
   }
 }
 

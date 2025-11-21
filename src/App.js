@@ -1411,10 +1411,6 @@ const Navigation = () => {
                             className="navbar-logo"
                         />
                 </a>
-                <a class="menu__title" href="https://top100.winespectator.com/">
-                    <div>Top</div>
-                    <div>100</div>
-                </a>
                 {/* Desktop menu */}
                 <div className="navbar-menu" role="navigation" aria-label="Primary">
                     <a href={`https://top100.winespectator.com/${CURRENT_TOP100_YEAR}`} className={linkClass}>Top 10 of {CURRENT_TOP100_YEAR}</a>
