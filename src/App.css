@@ -319,6 +319,36 @@
   min-height: 36px; /* enforce equal height for small variants too */
 }
 
+/* PWL Button */
+.btn-pwl {
+  background: #0066cc;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px 0 rgba(0, 102, 204, 0.3);
+}
+
+.btn-pwl:hover {
+  background: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px 0 rgba(0, 102, 204, 0.4);
+}
+
+.btn-pwl:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px 0 rgba(0, 102, 204, 0.3);
+}
+
+.btn-pwl-small {
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
 /* Match View Details button height to others in WineCard footer */
 .wine-footer .btn-modern.btn-small
 .wine-footer .btn-video.btn-small
@@ -1695,33 +1725,47 @@ a.btn-modern {
 }
 
 .wine-footer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: center;
-  align-items: stretch;
-  align-content: normal;
+  display: block;
 }
 
 .wine-footer .btn-modern.btn-small,
 .wine-footer .btn-video.btn-small,
-.wine-footer .btn-pwl.btn-small {
+.wine-footer .btn-pwl.btn-small,
+.wine-details-condensed .price-score-row .btn-modern.btn-small,
+.wine-details-condensed .price-score-row .btn-video.btn-small,
+.wine-details-condensed .price-score-row .btn-pwl.btn-small {
   display: block;
   font-size: 14px;
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto;
   align-self: auto;
-  order: 0;
-  white-space: normal;
-  text-align: center;
-  overflow: visible;
+  text-align: left;
+  color: #1a202c;
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: none;
+  box-shadow: none;
+}
+
+.wine-footer .btn-modern.btn-small:hover,
+.wine-footer .btn-video.btn-small:hover,
+.wine-footer .btn-pwl.btn-small:hover,
+.wine-details-condensed .price-score-row .btn-modern.btn-small:hover,
+.wine-details-condensed .price-score-row .btn-video.btn-small:hover,
+.wine-details-condensed .price-score-row .btn-pwl.btn-small:hover {
+  text-decoration: underline;
+  transform: none;
+  box-shadow: none;
 }
 
 @media ((max-width: 1100px) and (min-width: 1024px)) {
   .wine-footer .btn-modern.btn-small,
   .wine-footer .btn-video.btn-small,
-  .wine-footer .btn-pwl.btn-small {
+  .wine-footer .btn-pwl.btn-small,
+  .wine-details-condensed .price-score-row .btn-modern.btn-small,
+  .wine-details-condensed .price-score-row .btn-video.btn-small,
+  .wine-details-condensed .price-score-row .btn-pwl.btn-small {
     font-size: 12px;
   }
 }
@@ -2287,37 +2331,6 @@ a.btn-modern {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-}
-
-/* PWL Button */
-.btn-pwl {
-  background: #0066cc;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px 0 rgba(0, 102, 204, 0.3);
-}
-
-.btn-pwl:hover {
-  background: #0052a3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px 0 rgba(0, 102, 204, 0.4);
-}
-
-.btn-pwl:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 4px 0 rgba(0, 102, 204, 0.3);
-}
-
-.btn-pwl-small {
-  padding: 6px 12px;
-  font-size: 12px;
-  white-space: nowrap;
 }
 
 .response-preview {

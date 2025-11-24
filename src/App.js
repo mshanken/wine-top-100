@@ -1095,7 +1095,7 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             </button>
                         )}
                         <button
-                            className="btn-pwl btn-pwl-small"
+                            className="btn-pwl btn-small"
                             onClick={() => onAddToPWL(wine)}
                             aria-label="Save to Personal Wine List"
                             title="Save to Personal Wine List"
@@ -1159,10 +1159,6 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                         <span className="wine-tag">{wine.country || 'Unknown Country'}</span>
                         <span className="wine-tag">{wine.region || 'Unknown Region'}</span>
                     </div>
-                    <div className="tasting-options">
-                        <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
-                        <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
-                    </div>
                     <div className="wine-footer">
                         <button className="btn-modern btn-small" onClick={() => { console.log('[WineCard] View Details clicked', { id: wine.id, name: wine.wine_full }); onSelect(wine); trackEvent('view_details_clicked', { wineId: wine.id }); }}>View Details</button>
                         {showVideo && (
@@ -1175,11 +1171,15 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                             </button>
                         )}
                         <button 
-                            className="btn-pwl"
+                            className="btn-pwl btn-small"
                             onClick={() => onAddToPWL(wine)}
                         >
                             Save to Personal Wine List
                         </button>
+                    </div>
+                    <div className="tasting-options">
+                        <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
+                        <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
                     </div>
                 </div>
             </div>
