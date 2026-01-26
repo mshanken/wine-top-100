@@ -1105,6 +1105,11 @@ const WineCard = ({ wine, onSelect, compareWines, onCompareToggle, tastingRecord
                         </button>
                     </div>
                 </div>
+                {/* Mobile-only tasting options at bottom of card */}
+                <div className="tasting-options-condensed-mobile">
+                    <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="tasted" />
+                    <TastingCheckbox wineId={wine.id} tastingRecord={tastingRecord} onTasteChange={onTasteChange} status="want" />
+                </div>
             </div>
         );
     }

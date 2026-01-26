@@ -1855,7 +1855,76 @@ a.btn-modern {
   position: relative;
 }
 
-/* (reverted mobile-specific stacking for condensed rows) */
+/* Mobile-specific stacking for condensed rows */
+@media (max-width: 650px) {
+  .wine-card-condensed {
+    flex-wrap: wrap;
+  }
+
+  /* Wine info takes remaining space on the first row */
+  .wine-card-condensed .wine-info-condensed {
+    flex: 1 1 0;
+    min-width: 120px;
+  }
+
+  /* Hide original checkboxes on mobile (shown at bottom instead) */
+  .wine-card-condensed .tasting-options-condensed {
+    display: none;
+  }
+
+  /* Wine details goes to a new row, aligned under wine info */
+  .wine-card-condensed .wine-details-condensed {
+    flex: 0 0 100%;
+    padding-left: calc(36px + 48px + 2rem); /* rank width + image width + 2 gaps */
+    box-sizing: border-box;
+    align-items: flex-start;
+  }
+
+  /* On mobile, display buttons inline with pipe separators */
+  .wine-card-condensed .wine-details-condensed .price-score-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Score on its own line */
+  .wine-card-condensed .wine-details-condensed .price-score-row .wine-score-condensed {
+    flex: 0 0 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Style buttons as inline text links on mobile */
+  .wine-card-condensed .wine-details-condensed .price-score-row .btn-modern.btn-small,
+  .wine-card-condensed .wine-details-condensed .price-score-row .btn-video.btn-small,
+  .wine-card-condensed .wine-details-condensed .price-score-row .btn-pwl.btn-small {
+    background: none;
+    box-shadow: none;
+    padding: 4px 0;
+    min-height: auto;
+    width: auto;
+    min-width: auto;
+  }
+
+  /* Add pipe separators after buttons (except the last one) */
+  .wine-card-condensed .wine-details-condensed .price-score-row .btn-modern.btn-small::after,
+  .wine-card-condensed .wine-details-condensed .price-score-row .btn-video.btn-small::after {
+    content: " | ";
+    color: #718096;
+    margin: 0 4px;
+  }
+
+  /* Show mobile tasting options at bottom of card, stacked vertically */
+  .wine-card-condensed .tasting-options-condensed-mobile {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 100%;
+    padding-left: calc(36px + 48px + 2rem); /* align with wine info */
+    box-sizing: border-box;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+  }
+}
 
 .wine-card-condensed:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
