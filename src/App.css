@@ -117,12 +117,23 @@
   .left-tools {
     flex: 1 1 auto; /* allow share + view controls to occupy first row */
     min-width: 0;
+    flex-wrap: wrap; /* Allow sort section to wrap to new line */
+    row-gap: 8px;
   }
   .filters-toggle {
     flex-basis: 100%;
     display: flex;
     justify-content: flex-end; /* move to the right on the next line */
     margin-top: 4px;
+  }
+  /* Hide the thick separator on small screens when wrapping */
+  .sep-thick {
+    display: none;
+  }
+  /* Make sort section full width when wrapped */
+  .sort-links {
+    flex-basis: 100%;
+    justify-content: flex-start;
   }
 }
 
@@ -145,8 +156,9 @@
   height: 22px;
   display: inline-block;
   vertical-align: middle;
-  fill: currentColor;
+  fill: #1f2937; /* Ensure icons are visible */
 }
+
 
 @media (max-width: 420px) {
   .share-links {
@@ -168,7 +180,16 @@
 .filters-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem; /* space between Hide Filters and Show Saved Wines */
+  gap: 0.5rem; /* space between Show Filters and Show Saved Wines */
+}
+
+/* Hide Filters button positioned below the filter options */
+.filters-toggle-bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
 }
 
 /* Segmented view toggle */
@@ -212,6 +233,7 @@
   background: #e11d2f; /* brand red */
   border-radius: 999px;
   transition: transform 160ms ease;
+  pointer-events: none; /* Ensure clicks pass through to buttons */
 }
 
 .view-segmented.grid-active .seg-thumb {
